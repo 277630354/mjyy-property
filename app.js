@@ -2005,28 +2005,35 @@
     worksView({ scope: 'g', filters: ['enterprise', 'area', 'type', 'status'] });
   }
   function viewZoneTasks() {
-    worksView({ scope: 'enterprise', filters: ['type', 'status'] });
+    worksView({ scope: 'enterprise', filters: ['enterprise', 'type', 'status'] });
   }
   function worksView(opt) {
     const view = $('#view');
-    let state = { enterprise: '全部', area: '全部', type: '全部', status: '全部', page: 1, pageSize: 10 };
+    let state = { enterprise: '全部', enterpriseText: '', area: '全部', type: '全部', status: '全部', page: 1, pageSize: 10 };
     function render() {
       const filtersHtml = [];
-      if (opt.filters.includes('enterprise')) filtersHtml.push(`<div class="field"><span class="label">企业</span><select class="select" id="f-ent"><option>全部</option></select></div>`);
+      if (opt.filters.includes('enterprise')) filtersHtml.push(`<div class="field"><span class="label">企业</span><input class="input" id="f-ent-text" placeholder="输入企业搜索" style="width:200px" value="${esc(state.enterpriseText)}"></div>`);
       if (opt.filters.includes('area')) filtersHtml.push(`<div class="field"><span class="label">作业区域</span><select class="select" id="f-area"><option>全部</option></select></div>`);
       if (opt.filters.includes('type')) filtersHtml.push(`<div class="field"><span class="label">作业类型</span><select class="select" id="f-type"><option>全部</option><option>动火</option><option>高处</option><option>临电</option></select></div>`);
       if (opt.filters.includes('status')) filtersHtml.push(`<div class="field"><span class="label">作业状态</span><select class="select" id="f-status"><option>全部</option><option>待审核</option><option>待开始</option><option>进行中</option><option>已完成</option><option>已拒绝</option><option>已结束</option></select></div>`);
       view.innerHTML = `<div class="card"><div class="toolbar">${filtersHtml.join('')}<div class="spacer"></div><button class="btn" id="f-reset">${icon('refresh')}重置</button></div><div id="tbl"></div></div>`;
-      if (opt.filters.includes('enterprise')) { const s = $('#f-ent'); DB.enterprises.forEach((e) => s.add(new Option(e.name, e.id))); s.value = state.enterprise; s.onchange = (e) => { state.enterprise = e.target.value; state.page = 1; renderTbl(); }; }
+      if (opt.filters.includes('enterprise')) {
+        const t = $('#f-ent-text');
+        t.addEventListener('input', (e) => { state.enterpriseText = e.target.value; state.page = 1; renderTbl(); });
+      }
       if (opt.filters.includes('area')) { const s = $('#f-area'); DB.areas.forEach((a) => s.add(new Option(a.name, a.id))); s.value = state.area; s.onchange = (e) => { state.area = e.target.value; state.page = 1; renderTbl(); }; }
       if (opt.filters.includes('type')) { const s = $('#f-type'); s.value = state.type; s.onchange = (e) => { state.type = e.target.value; state.page = 1; renderTbl(); }; }
       if (opt.filters.includes('status')) { const s = $('#f-status'); s.value = state.status; s.onchange = (e) => { state.status = e.target.value; state.page = 1; renderTbl(); }; }
-      $('#f-reset').onclick = () => { state = { enterprise: '全部', area: '全部', type: '全部', status: '全部', page: 1, pageSize: 10 }; render(); };
+      $('#f-reset').onclick = () => { state = { enterprise: '全部', enterpriseText: '', area: '全部', type: '全部', status: '全部', page: 1, pageSize: 10 }; render(); };
       renderTbl();
     }
     function renderTbl() {
       API.listWorks({ enterpriseId: state.enterprise, areaId: state.area, type: state.type, status: state.status }).then((res) => {
-        const rows = res.data;
+        let rows = res.data;
+        if (opt.filters.includes('enterprise') && state.enterpriseText) {
+          const kw = state.enterpriseText.trim();
+          if (kw) rows = rows.filter((r) => ((DB.enterprises.find((e) => e.id === r.enterpriseId) || {}).name || '').indexOf(kw) > -1);
+        }
         const entName = (id) => (DB.enterprises.find((e) => e.id === id) || {}).name || '—';
         const areaName = (id) => (DB.areas.find((a) => a.id === id) || {}).name || '—';
         const storeName = (id) => (DB.stores.find((s) => s.id === id) || {}).name || '—';
@@ -2056,7 +2063,7 @@
           const desc = h(`<div class="card desc-panel desc-panel-sm">
             <div class="card-title">字段说明</div>
             <ul>
-              <li><b>1·搜索条件：</b>企业/作业区域取G端的所有企业和区域数据；选择作业后，企业只展示该区域下的数据。作业类型固定展示全部、动火、高处、临电，目前无配置入口；所有框选择内容后立即生效，点击叉号清除搜索条件且立即生效。</li>
+              <li><b>1·搜索条件：</b>企业/作业区域取G端的所有企业和区域数据；选择作业后，企业只展示该区域下的数据；作业类型固定展示全部、动火、高处、临电，目前无配置入口；企业搜索为文本框，输入企业搜索；所有框选择或输入内容后立即生效，点击叉号清除搜索条件且立即生效。</li>
               <li><b>2·列表数据来源：</b>所有数据信息全部都是作业人员扫描二维码录入的作业信息产生，作业人员提交完信息后，在G端和企业端都会展示。注意，G端只会展示绑定了区域的企业的作业</li>
               <li><b>3·状态：</b>待审核、待开始、进行中、已完成、已拒绝、已结束。</li>
             </ul>
