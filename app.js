@@ -467,6 +467,7 @@
   const MINI_PENDING_WORKS = [
     {
       id: 1, name: '未来科技城A栋动火作业', type: '动火作业', enterprise: '中建八局第一建设有限公司',
+      areaName: 'A区商业广场',
       store: 'A栋3楼装修门店', constructionUnit: '杭州鑫达建筑工程有限公司', address: '杭州市余杭区未来科技城A栋3楼',
       leader: '张伟', leaderPhone: '13800138000',
       startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待审核', fireCert: '已上传',
@@ -485,6 +486,7 @@
     },
     {
       id: 2, name: '紫荆花路B座高处作业', type: '高处作业', enterprise: '浙江华东工程建设有限公司',
+      areaName: 'B区住宅小区',
       store: 'B座外墙施工门店', constructionUnit: '浙江宏盛建设有限公司', address: '杭州市西湖区紫荆花路88号B座',
       leader: '李强', leaderPhone: '13900139000',
       startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '待审核', fireCert: '未上传',
@@ -500,6 +502,7 @@
     },
     {
       id: 3, name: '半山路厂区临时用电作业', type: '临时用电作业', enterprise: '中铁建工集团有限公司',
+      areaName: 'C区工业园区',
       store: '厂区配电改造门店', constructionUnit: '杭州万通机电安装有限公司', address: '杭州市拱墅区半山路122号厂区',
       leader: '王磊', leaderPhone: '13700137000',
       startTime: '2026-08-08 14:00', endTime: '2026-08-08 20:00', status: '待审核', fireCert: '未上传',
@@ -522,6 +525,7 @@
   const MINI_AREA_WORKS = [
     {
       id: 1, name: '未来科技城A栋动火作业', type: '动火作业', enterprise: '中建八局第一建设有限公司',
+      areaName: 'A区商业广场',
       store: 'A栋3楼装修门店', constructionUnit: '杭州鑫达建筑工程有限公司', address: '杭州市余杭区未来科技城A栋3楼',
       leader: '张伟', leaderPhone: '13800138000',
       startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待开始', fireCert: '已上传',
@@ -539,6 +543,7 @@
     },
     {
       id: 2, name: '紫荆花路B座高处作业', type: '高处作业', enterprise: '浙江华东工程建设有限公司',
+      areaName: 'B区住宅小区',
       store: 'B座外墙施工门店', constructionUnit: '浙江宏盛建设有限公司', address: '杭州市西湖区紫荆花路88号B座',
       leader: '李强', leaderPhone: '13900139000',
       startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '进行中', fireCert: '未上传',
@@ -557,6 +562,7 @@
     },
     {
       id: 3, name: '半山路厂区临时用电作业', type: '临时用电作业', enterprise: '中铁建工集团有限公司',
+      areaName: 'C区工业园区',
       store: '厂区配电改造门店', constructionUnit: '杭州万通机电安装有限公司', address: '杭州市拱墅区半山路122号厂区',
       leader: '王磊', leaderPhone: '13700137000',
       startTime: '2026-08-04 14:00', endTime: '2026-08-05 20:00', status: '已完成', fireCert: '未上传',
@@ -575,6 +581,7 @@
     },
     {
       id: 4, name: '钱江新城动火切割作业', type: '动火作业', enterprise: '中建八局第一建设有限公司',
+      areaName: 'A区商业广场',
       store: '钱江新城B栋施工门店', constructionUnit: '浙江东方建设工程有限公司', address: '杭州市江干区钱江新城B栋',
       leader: '陈刚', leaderPhone: '13600136000',
       startTime: '2026-08-03 09:00', endTime: '2026-08-03 18:00', status: '已拒绝', fireCert: '已上传',
@@ -592,6 +599,7 @@
     },
     {
       id: 5, name: '西湖文化广场临时用电作业', type: '临时用电作业', enterprise: '浙江华东工程建设有限公司',
+      areaName: 'B区住宅小区',
       store: '文化广场配电房门店', constructionUnit: '杭州光华电力工程有限公司', address: '杭州市下城区西湖文化广场',
       leader: '刘洋', leaderPhone: '13500135000',
       startTime: '2026-07-28 08:00', endTime: '2026-07-30 18:00', status: '已结束', fireCert: '未上传',
@@ -737,6 +745,7 @@
           <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
@@ -758,6 +767,7 @@
         <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status pending">待审核</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
@@ -884,6 +894,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业类型</span><span class="mini-li-val">${typeTag(w.type)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">门店名称</span><span class="mini-li-val">${esc(w.store)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
@@ -1009,6 +1020,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业类型</span><span class="mini-li-val">${typeTag(w.type)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">门店名称</span><span class="mini-li-val">${esc(w.store)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
@@ -1060,6 +1072,7 @@
         <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status pending">待审核</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
@@ -1077,6 +1090,7 @@
         <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
@@ -1227,6 +1241,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业类型</span><span class="mini-li-val">${typeTag(w.type)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">门店名称</span><span class="mini-li-val">${esc(w.store)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
@@ -1316,6 +1331,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业类型</span><span class="mini-li-val">${typeTag(w.type)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+<div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">门店名称</span><span class="mini-li-val">${esc(w.store)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
@@ -1411,6 +1427,14 @@
                 </select>
               </div>
               <div class="mini-form-row"><label class="mini-li-label">企业名称</label><input class="mini-form-input disabled" type="text" value="${esc(w.enterprise)}" disabled></div>
+              <div class="mini-form-row"><label class="mini-li-label">作业区域</label>
+                <select class="mini-form-select">
+                  <option value="${esc(w.areaName || 'A区商业广场')}" selected>${esc(w.areaName || 'A区商业广场')}</option>
+                  <option value="A区商业广场">A区商业广场</option>
+                  <option value="B区住宅小区">B区住宅小区</option>
+                  <option value="C区工业园区">C区工业园区</option>
+                </select>
+              </div>
               <div class="mini-form-row"><label class="mini-li-label">门店名称</label>
                 <select class="mini-form-select">
                   <option value="${esc(w.store)}" selected>${esc(w.store)}</option>
@@ -1460,18 +1484,19 @@
             <li><b>1·作业名称：</b>文本框。</li>
             <li><b>2·作业类型：</b>下拉框，选项为动火作业、高处作业、临时用电作业（暂时只会选动火作业，但可以先三个都展示）。</li>
             <li><b>3·企业名称：</b>置灰，由二维码带过来的企业名称。</li>
-            <li><b>4·门店名称：</b>下拉框，数据为该企业下的所有门店数据。</li>
-            <li><b>5·施工单位：</b>文本框，自由填写，没有校验。若不填写，所有该字段的展示都给横杠。</li>
-            <li><b>6·施工地址：</b>自动回填门店的施工地址，但支持修改，非必填，这个页面只有这一个字段是非必填。</li>
-            <li><b>7·施工负责人和负责人手机号：</b>两个信息自动回填当前登录的个人且姓名手机号身份证号自动填入施工人列表的第一行，标记为负责人。</li>
-            <li><b>8·开始时间/结束时间：</b>时间表格选取时间。</li>
-            <li><b>9·作业状态：</b>此处为作业人员上传作业信息的作业详情页面，状态一定为待审核。</li>
-            <li><b>10·动火作业证书：</b>状态标记，由施工人员列表在需要持证的前提下是否全部上传证件照判定，只要有人未上传，则直接显示未上传，全部上传则显示已上传。</li>
-            <li><b>11·动火票：</b>上传按钮，点击上传图片。</li>
-            <li><b>12·施工人列表：</b>统计总人数，点击加号可录入人员，操作列有编辑和删除，点击编辑按钮打开添加施工人页面但数据回填，点击删除直接删除整条该人员信息；是否持证如果在编辑时选的否，则此处展示横杠。</li>
-            <li><b>13·负责人：</b>作业信息里填写了施工负责人，这个人必须填写在施工人列表，且自动标记为负责人（以姓名加手机号判定，防重名）。</li>
-            <li><b>14·作业现场：</b>支持仅照片或仅视频或照片和视频，属于必填但至少有一项，都没有则无法提交。</li>
-            <li><b>15·提交校验：</b>点击提交按钮，需要判断除施工单位所有数据全部必填是否有未填，否则点击提交按钮页面提示存在未填信息。</li>
+            <li><b>4·作业区域：</b>由二维码带过来的该企业被G端绑定的区域信息，下拉框，选择被绑定的区域。</li>
+            <li><b>5·门店名称：</b>下拉框，数据为该企业下的所有门店数据。</li>
+            <li><b>6·施工单位：</b>文本框，自由填写，没有校验。若不填写，所有该字段的展示都给横杠。</li>
+            <li><b>7·施工地址：</b>自动回填门店的施工地址，但支持修改，非必填，这个页面只有这一个字段是非必填。</li>
+            <li><b>8·施工负责人和负责人手机号：</b>两个信息自动回填当前登录的个人且姓名手机号身份证号自动填入施工人列表的第一行，标记为负责人。</li>
+            <li><b>9·开始时间/结束时间：</b>时间表格选取时间。</li>
+            <li><b>10·作业状态：</b>此处为作业人员上传作业信息的作业详情页面，状态一定为待审核。</li>
+            <li><b>11·动火作业证书：</b>状态标记，由施工人员列表在需要持证的前提下是否全部上传证件照判定，只要有人未上传，则直接显示未上传，全部上传则显示已上传。</li>
+            <li><b>12·动火票：</b>上传按钮，点击上传图片。</li>
+            <li><b>13·施工人列表：</b>统计总人数，点击加号可录入人员，操作列有编辑和删除，点击编辑按钮打开添加施工人页面但数据回填，点击删除直接删除整条该人员信息；是否持证如果在编辑时选的否，则此处展示横杠。</li>
+            <li><b>14·负责人：</b>作业信息里填写了施工负责人，这个人必须填写在施工人列表，且自动标记为负责人（以姓名加手机号判定，防重名）。</li>
+            <li><b>15·作业现场：</b>支持仅照片或仅视频或照片和视频，属于必填但至少有一项，都没有则无法提交。</li>
+            <li><b>16·提交校验：</b>点击提交按钮，需要判断除施工单位所有数据全部必填是否有未填，否则点击提交按钮页面提示存在未填信息。</li>
           </ul>
         </div>
       </div>
@@ -2032,7 +2057,7 @@
             <div class="card-title">字段说明</div>
             <ul>
               <li><b>1·搜索条件：</b>企业/作业区域取G端的所有企业和区域数据；选择作业后，企业只展示该区域下的数据。作业类型固定展示全部、动火、高处、临电，目前无配置入口；所有框选择内容后立即生效，点击叉号清除搜索条件且立即生效。</li>
-              <li><b>2·列表数据来源：</b>所有数据信息全部都是作业人员扫描二维码录入的作业信息产生，作业人员提交完信息后，在G端和企业端都会展示。</li>
+              <li><b>2·列表数据来源：</b>所有数据信息全部都是作业人员扫描二维码录入的作业信息产生，作业人员提交完信息后，在G端和企业端都会展示。注意，G端只会展示绑定了区域的企业的作业</li>
               <li><b>3·状态：</b>待审核、待开始、进行中、已完成、已拒绝、已结束。</li>
             </ul>
           </div>`);
