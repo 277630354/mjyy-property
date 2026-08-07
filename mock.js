@@ -45,6 +45,7 @@ window.DB = (function () {
       id: 1, name: 'A区一号楼外墙动火作业', type: '动火作业', enterpriseId: 1, areaId: 1, storeId: 1,
       address: '江汉区建设大道100号', contractor: '某某建设集团', leader: '张师傅', workerCount: 3,
       startTime: '2026-08-04 08:00', endTime: '2026-08-10 18:00', status: '进行中',
+      fireTicket: true, fireTicketImg: 'assets/work-fireticket.jpg', fireCert: '已上传', fireCertImg: 'assets/cert-fire-1.jpg', aiStatus: '通过',
       workers: [
         { name: '张师傅', phone: '13900000001', idCard: '4201**********0011', task: '动火焊接', needCert: '是', hasCert: '是' },
         { name: '李师傅', phone: '13900000002', idCard: '4201**********0022', task: '现场监护', needCert: '否', hasCert: '否' },
@@ -63,6 +64,7 @@ window.DB = (function () {
       id: 2, name: 'B区二期高处作业', type: '高处作业', enterpriseId: 3, areaId: 2, storeId: 2,
       address: '武昌区中南路300号', contractor: '某某电力公司', leader: '李师傅', workerCount: 2,
       startTime: '2026-08-05 09:00', endTime: '2026-08-09 17:00', status: '进行中',
+      fireTicket: false, fireCert: '已上传', fireCertImg: 'assets/cert-photo-1.jpg', aiStatus: '通过',
       workers: [
         { name: '李师傅', phone: '13900000004', idCard: '4201**********0044', task: '高空安装', needCert: '是', hasCert: '是' },
         { name: '赵师傅', phone: '13900000005', idCard: '4201**********0055', task: '地面配合', needCert: '否', hasCert: '否' },
@@ -78,6 +80,7 @@ window.DB = (function () {
       id: 3, name: 'C区临时用电布线', type: '临时用电', enterpriseId: 4, areaId: 3, storeId: 3,
       address: '洪山区珞喻路400号', contractor: '某某消防工程', leader: '王师傅', workerCount: 2,
       startTime: '2026-08-01 08:00', endTime: '2026-08-03 18:00', status: '已完成',
+      fireTicket: false, fireCert: '未上传', aiStatus: '异常',
       workers: [
         { name: '王师傅', phone: '13900000006', idCard: '4201**********0066', task: '电路布线', needCert: '是', hasCert: '是' },
         { name: '钱师傅', phone: '13900000007', idCard: '4201**********0077', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -95,6 +98,7 @@ window.DB = (function () {
       id: 4, name: 'A区消防改造动火作业', type: '动火作业', enterpriseId: 2, areaId: 1, storeId: 4,
       address: '江汉区解放大道200号', contractor: '某某装饰公司', leader: '赵师傅', workerCount: 1,
       startTime: '2026-08-05 08:00', endTime: '2026-08-09 18:00', status: '待审核',
+      fireTicket: false, fireCert: '已上传', fireCertImg: 'assets/cert-fire-1.jpg', aiStatus: '通过',
       workers: [
         { name: '赵师傅', phone: '13900000008', idCard: '4201**********0088', task: '动火切割', needCert: '是', hasCert: '是' },
       ],
@@ -107,6 +111,7 @@ window.DB = (function () {
       id: 5, name: 'B区配电房临电作业', type: '临时用电', enterpriseId: 3, areaId: 2, storeId: 5,
       address: '武昌区中南路300号', contractor: '某某电力公司', leader: '刘师傅', workerCount: 2,
       startTime: '2026-08-03 14:00', endTime: '2026-08-08 20:00', status: '进行中',
+      fireTicket: false, fireCert: '未上传', aiStatus: '异常',
       workers: [
         { name: '刘师傅', phone: '13900000009', idCard: '4201**********0099', task: '配电改造', needCert: '是', hasCert: '是' },
         { name: '孙师傅', phone: '13900000010', idCard: '4201**********0100', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -122,6 +127,7 @@ window.DB = (function () {
       id: 6, name: 'C区车间高处作业', type: '高处作业', enterpriseId: 5, areaId: 3, storeId: 6,
       address: '洪山区关山大道500号', contractor: '某某机电安装', leader: '陈师傅', workerCount: 1,
       startTime: '2026-08-06 08:00', endTime: '2026-08-08 18:00', status: '待审核',
+      fireTicket: false, fireCert: '未上传', aiStatus: '异常',
       workers: [
         { name: '陈师傅', phone: '13900000011', idCard: '4201**********0111', task: '设备高空安装', needCert: '是', hasCert: '是' },
       ],
@@ -134,6 +140,7 @@ window.DB = (function () {
       id: 7, name: 'A区冷却塔检修作业', type: '高处作业', enterpriseId: 1, areaId: 1, storeId: 1,
       address: '江汉区建设大道100号', contractor: '某某建设集团', leader: '吴师傅', workerCount: 2,
       startTime: '2026-08-10 08:00', endTime: '2026-08-12 18:00', status: '待开始',
+      fireTicket: true, fireTicketImg: 'assets/work-fireticket.jpg', fireCert: '已上传', fireCertImg: 'assets/cert-photo-2.jpg', aiStatus: '通过',
       workers: [
         { name: '吴师傅', phone: '13900000012', idCard: '4201**********0122', task: '冷却塔检修', needCert: '是', hasCert: '是' },
         { name: '郑师傅', phone: '13900000013', idCard: '4201**********0133', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -147,6 +154,7 @@ window.DB = (function () {
       id: 8, name: 'B区地下车库焊接作业', type: '动火作业', enterpriseId: 2, areaId: 2, storeId: 2,
       address: '武昌区中南路300号', contractor: '某某装饰公司', leader: '冯师傅', workerCount: 2,
       startTime: '2026-08-06 09:00', endTime: '2026-08-12 17:00', status: '已拒绝',
+      fireTicket: true, fireTicketImg: 'assets/work-fireticket.jpg', fireCert: '未上传', aiStatus: '异常',
       workers: [
         { name: '冯师傅', phone: '13900000014', idCard: '4201**********0144', task: '管道焊接', needCert: '是', hasCert: '是' },
         { name: '何师傅', phone: '13900000015', idCard: '4201**********0155', task: '现场监护', needCert: '否', hasCert: '否' },
@@ -160,6 +168,7 @@ window.DB = (function () {
       id: 9, name: 'C区仓库清理作业', type: '临时用电', enterpriseId: 4, areaId: 3, storeId: 3,
       address: '洪山区珞喻路400号', contractor: '某某消防工程', leader: '许师傅', workerCount: 3,
       startTime: '2026-08-01 08:00', endTime: '2026-08-04 18:00', status: '已结束',
+      fireTicket: false, fireCert: '未上传', aiStatus: '异常',
       workers: [
         { name: '许师傅', phone: '13900000016', idCard: '4201**********0166', task: '仓库清理', needCert: '否', hasCert: '否' },
         { name: '马师傅', phone: '13900000017', idCard: '4201**********0177', task: '设备搬运', needCert: '否', hasCert: '否' },

@@ -117,6 +117,23 @@
     return { node, close };
   }
 
+  // 图片预览弹窗
+  function showImagePreview(src, title) {
+    const old = document.querySelector('.img-preview-overlay');
+    if (old) old.remove();
+    const overlay = h(`<div class="overlay img-preview-overlay" style="align-items:center;justify-content:center;padding:20px">
+      <div class="modal" style="width:auto;max-width:90vw;max-height:90vh;display:flex;flex-direction:column">
+        <div class="modal-head"><span class="mt">${esc(title || '图片预览')}</span><span class="close" id="img-preview-close">×</span></div>
+        <div class="modal-body" style="padding:12px;overflow:auto;display:flex;align-items:center;justify-content:center">
+          <img src="${esc(src)}" alt="${esc(title || '')}" style="max-width:80vw;max-height:70vh;border-radius:6px;display:block">
+        </div>
+      </div>
+    </div>`);
+    document.body.appendChild(overlay);
+    overlay.querySelector('#img-preview-close').onclick = () => overlay.remove();
+    overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  }
+
   // 状态标签
   function statusTag(status) {
     const map = { '启用': 'success', '进行中': 'success', '禁用': 'danger', '已完成': 'info', '待审核': 'warning', '通过': 'success', '未通过': 'danger', '未核查': 'info', '待开始': 'info', '已拒绝': 'danger', '已结束': 'info' };
@@ -2049,6 +2066,19 @@
           { title: '施工人数', key: 'workerCount' },
           { title: '开始时间', key: 'startTime' },
           { title: '结束时间', key: 'endTime' },
+          { title: '作业票', render: (r) => {
+              const uploaded = r.fireTicket || r.fireTicketImg;
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
+            } },
+          { title: '自动检测状态', render: (r) => {
+              const st = r.aiStatus || (r.fireCert === '已上传' ? '通过' : '异常');
+              const cls = st === '通过' ? 'tag-success' : 'tag-danger';
+              return `<span class="tag ${cls}">${esc(st)}</span>`;
+            } },
+          { title: '特种作业证书', render: (r) => {
+              const uploaded = r.fireCert === '已上传';
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-cert="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
+            } },
           { title: '作业状态', render: (r) => statusTag(r.status) },
           { title: '操作', render: () => `<div class="actions"><button class="btn-text" data-act="view">查看</button></div>` },
         ];
@@ -2057,6 +2087,26 @@
           onAction: (act, id) => { const r = rows.find((x) => x.id === id); if (act === 'view') modalWorkDetail(r, opt.scope); },
         });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
+        // 作业票点击展开图片
+        node.querySelectorAll('[data-fire-ticket]').forEach((el) => {
+          el.style.cursor = 'pointer';
+          el.onclick = () => {
+            const r = rows.find((x) => x.id === Number(el.dataset.fireTicket));
+            if (r && (r.fireTicketImg || r.fireTicket)) {
+              showImagePreview(r.fireTicketImg || 'assets/work-fireticket.jpg', '作业票');
+            }
+          };
+        });
+        // 特种作业证书点击展开图片
+        node.querySelectorAll('[data-fire-cert]').forEach((el) => {
+          el.style.cursor = 'pointer';
+          el.onclick = () => {
+            const r = rows.find((x) => x.id === Number(el.dataset.fireCert));
+            if (r && r.fireCert === '已上传') {
+              showImagePreview(r.fireCertImg || 'assets/cert-fire-1.jpg', '特种作业证书');
+            }
+          };
+        });
         const slot = $('#tbl'); slot.innerHTML = ''; slot.appendChild(node);
         // G端作业管理字段说明
         if (opt.scope === 'g') {
@@ -2066,6 +2116,8 @@
               <li><b>1·搜索条件：</b>企业/作业区域取G端的所有企业和区域数据；选择作业后，企业只展示该区域下的数据；作业类型固定展示全部、动火、高处、临电，目前无配置入口；企业搜索为文本框，输入企业搜索；所有框选择或输入内容后立即生效，点击叉号清除搜索条件且立即生效。</li>
               <li><b>2·列表数据来源：</b>所有数据信息全部都是作业人员扫描二维码录入的作业信息产生，作业人员提交完信息后，在G端和企业端都会展示。注意，G端只会展示绑定了区域的企业的作业</li>
               <li><b>3·状态：</b>待审核、待开始、进行中、已完成、已拒绝、已结束。</li>
+              <li><b>4·作业票/特种作业证书：</b>都显示已上传或未上传，根据详情页是否有对应的照片判定，显示已上传时，点击该标签出现弹框，展示对应的作业票或证书；其中特种作业证书需要所有该上传的人全都上传才会显示已上传。</li>
+              <li><b>5·自动检测状态：</b>由详情的现场核查记录判定，当记录中存在异常，则列表页就是异常，如果有多条记录，只要记录中有一条是异常，则整体状态就是异常。</li>
             </ul>
           </div>`);
           slot.parentElement.appendChild(desc);
