@@ -193,6 +193,39 @@
   }
 
   // 柱状图（内联 SVG）
+  function lineChart(data) {
+    const W = 560, H = 280, pad = 40;
+    const max = Math.max(1, ...data.map((d) => d.count));
+    const baseY = H - pad;
+    const totalW = pad * 2 + Math.max(1, data.length - 1) * 100;
+    // 计算每个点的坐标
+    const points = data.map((d, i) => {
+      const x = pad + i * 100;
+      const y = baseY - (d.count / max) * (H - pad * 2);
+      return { x, y, ...d };
+    });
+    // 折线路径
+    const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    // 区域填充路径
+    const areaD = points.length > 0
+      ? `${pathD} L ${points[points.length - 1].x} ${baseY} L ${points[0].x} ${baseY} Z`
+      : '';
+    let dots = '';
+    let labels = '';
+    points.forEach((p) => {
+      dots += `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#409EFF" stroke="#fff" stroke-width="2"><title>${p.type}: ${p.count}</title></circle>`;
+      dots += `<text x="${p.x}" y="${p.y - 12}" text-anchor="middle" font-size="13" font-weight="600" fill="#303133">${p.count}</text>`;
+      labels += `<text x="${p.x}" y="${baseY + 22}" text-anchor="middle" font-size="13" fill="#606266">${p.type}</text>`;
+    });
+    // y 轴刻度
+    let yAxis = '';
+    for (let k = 0; k <= max; k++) {
+      const y = baseY - (k / max) * (H - pad * 2);
+      yAxis += `<line x1="${pad - 6}" y1="${y}" x2="${totalW}" y2="${y}" stroke="#ebeef5" stroke-dasharray="3 3"/>`;
+      yAxis += `<text x="${pad - 10}" y="${y + 4}" text-anchor="end" font-size="11" fill="#909399">${k}</text>`;
+    }
+    return `<svg class="bar-chart" viewBox="0 0 ${totalW + 20} ${H}" preserveAspectRatio="xMidYMid meet"><line x1="${pad}" y1="${baseY}" x2="${totalW}" y2="${baseY}" stroke="#dcdfe6"/>${yAxis}<path d="${areaD}" fill="rgba(64,158,255,0.15)"/><path d="${pathD}" fill="none" stroke="#409EFF" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>${dots}${labels}</svg>`;
+  }
   function barChart(data) {
     const W = 560, H = 280, pad = 40, bw = 80, gap = 60;
     const max = Math.max(1, ...data.map((d) => d.count));
@@ -238,7 +271,7 @@
             <li><b>2·企业数量：</b>企业管理数据总计；</li>
             <li><b>3·作业数量：</b>作业管理数据总计；</li>
             <li><b>4·进行中的作业：</b>作业管理所有数据状态为进行中的总计；</li>
-            <li><b>5·作业按类型统计：</b>所有作业数量按作业类型进行统计。</li>
+            <li><b>5·作业按类型统计：</b>目前只有动火，可以以折线图的方式让页面丰富些，前端自由发挥。</li>
           </ul>
         </div>` : '';
       const enterpriseDesc = scope === 'enterprise' ? `
@@ -255,7 +288,7 @@
         <div class="stat-grid ${cols}">${cards}</div>
         <div class="chart-card">
           <div class="chart-title">${scope === 'g' ? '<span class="pin-num pin-inline"><span>5</span></span>' : ''}${scope === 'officer' ? '审核的作业按类型统计' : '作业按类型统计'}</div>
-          ${barChart(d.types)}
+          ${scope === 'officer' ? barChart(d.types) : lineChart(d.types)}
         </div>
         ${descPanel}
         ${enterpriseDesc}`;
@@ -685,10 +718,12 @@
   }
 
   function bindMiniAddVerify(container) {
-    const btn = container.querySelector('[data-add-verify]');
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-      const body = `<div class="mini-worker-form">
+    const btns = container.querySelectorAll('[data-add-verify]');
+    if (!btns.length) return;
+    btns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const body = `<div class="mini-worker-form">
         <div class="mini-form-row"><label class="mini-li-label">作业区域<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="vf-area" placeholder="请输入作业区域"></div>
         <div class="mini-form-row"><label class="mini-li-label">现场图片</label>
           <div class="mini-upload-box" id="vf-img-upload">点击上传图片</div>
@@ -697,25 +732,26 @@
           <div class="mini-upload-box" id="vf-video-upload">点击上传视频</div>
         </div>
       </div>`;
-      const foot = `<button class="btn" id="vf-cancel" style="flex:1">取消</button><button class="btn btn-primary" id="vf-ok" style="flex:1">提交</button>`;
-      const { node, close } = openModal('现场核查上传', body, foot);
-      let imgUploaded = false;
-      let videoUploaded = false;
-      node.querySelector('#vf-img-upload').addEventListener('click', () => {
-        imgUploaded = true;
-        node.querySelector('#vf-img-upload').textContent = '已上传 ✓';
+        const foot = `<button class="btn" id="vf-cancel" style="flex:1">取消</button><button class="btn btn-primary" id="vf-ok" style="flex:1">提交</button>`;
+        const { node, close } = openModal('现场核查上传', body, foot);
+        let imgUploaded = false;
+        let videoUploaded = false;
+        node.querySelector('#vf-img-upload').addEventListener('click', () => {
+          imgUploaded = true;
+          node.querySelector('#vf-img-upload').textContent = '已上传 ✓';
+        });
+        node.querySelector('#vf-video-upload').addEventListener('click', () => {
+          videoUploaded = true;
+          node.querySelector('#vf-video-upload').textContent = '已上传 ✓';
+        });
+        node.querySelector('#vf-cancel').onclick = close;
+        node.querySelector('#vf-ok').onclick = () => {
+          const area = node.querySelector('#vf-area').value.trim();
+          if (!area) { toast('请输入作业区域', 'error'); return; }
+          close();
+          toast('核查记录已上传，AI判定中...', 'success');
+        };
       });
-      node.querySelector('#vf-video-upload').addEventListener('click', () => {
-        videoUploaded = true;
-        node.querySelector('#vf-video-upload').textContent = '已上传 ✓';
-      });
-      node.querySelector('#vf-cancel').onclick = close;
-      node.querySelector('#vf-ok').onclick = () => {
-        const area = node.querySelector('#vf-area').value.trim();
-        if (!area) { toast('请输入作业区域', 'error'); return; }
-        close();
-        toast('核查记录已上传，AI判定中...', 'success');
-      };
     });
   }
 
@@ -759,7 +795,7 @@
       const list = areaFilter === '全部' ? MINI_AREA_WORKS : MINI_AREA_WORKS.filter((w) => w.status === areaFilter);
       const html = list.map((w) => `
         <div class="mini-list-item" data-id="${w.id}">
-          <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span></div>
+          <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><div style="display:flex;align-items:center;gap:8px"><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span>${(w.status === '待开始' || w.status === '进行中') ? '<span class="mini-add-btn" data-add-verify style="margin-left:0">+</span>' : ''}</div></div>
           <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
 <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
@@ -778,10 +814,11 @@
           location.hash = '#/officer/mini/area-work-detail?id=' + item.dataset.id;
         });
       });
+      bindMiniAddVerify(view.querySelector('#officerTab1'));
     };
     const items = MINI_PENDING_WORKS.map((w) => `
       <div class="mini-list-item" data-id="${w.id}">
-        <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status pending">待审核</span></div>
+        <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><div style="display:flex;align-items:center;gap:8px"><span class="mini-li-status pending">待审核</span><span class="mini-add-btn" data-add-verify style="margin-left:0">+</span></div></div>
         <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
 <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
@@ -836,6 +873,7 @@
             <li><b>1·待审核作业：</b>展示所有扫描该企业二维码上传的作业信息。状态全部为待审核，根据上传时间倒序。</li>
             <li><b>2·区域作业：</b>展示所有已审核的作业信息，该列表数据状态包括：待开始、进行中、已完成、已结束、已拒绝。该列表排序规则为：进行中、待开始、已完成、已拒绝、已结束，然后每个状态里又按上传时间倒序。</li>
             <li><b>3·作业区域：</b>支持状态搜索。</li>
+            <li><b>4·待审核和区域作业的列表：</b>待审核、待开始、进行中都加上一个加号，点击可以直接上传现场核查照片和视频，功能与详情里的加号一致。</li>
           </ul>
         </div>
       </div>
@@ -853,6 +891,7 @@
         location.hash = '#/officer/mini/work-detail?id=' + item.dataset.id;
       });
     });
+    bindMiniAddVerify(view.querySelector('#officerTab0'));
     const filterSel = view.querySelector('#areaStatusFilter');
     filterSel.value = areaFilter;
     filterSel.addEventListener('change', () => {
@@ -1231,7 +1270,7 @@
     const siteVideoCount = 1;
     const sitePhotoHtml = Array.from({ length: sitePhotoCount }).map((_, pi) => {
       const src = MINI_PHOTO_POOL[(w.id * 3 + pi) % MINI_PHOTO_POOL.length];
-      return `<div class="mini-photo-item" style="background-image:url('${src}')" onclick="window.open('${src}','_blank')"></div>`;
+      return `<div class="mini-photo-item" style="background-image:url('${src}')" data-site-photo="${pi}"></div>`;
     }).join('');
     view.innerHTML = `
       <div class="mini-office-wrap">
@@ -1281,24 +1320,112 @@
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title">作业现场</div>
-              <div class="mini-sub-title">现场照片 <span class="mini-count">${sitePhotoCount}张</span></div>
-              <div class="mini-photo-grid">${sitePhotoHtml}</div>
-              <div class="mini-sub-title">现场视频 <span class="mini-count">${siteVideoCount}个</span></div>
-              <div class="mini-video-item">${icon('play')}<span>点击播放</span></div>
+              <div class="mini-rec-card open" data-collapsible="site-photo">
+                <div class="mini-rec-head">
+                  <div class="mini-rec-summary"><span class="mini-rec-idx" style="background:#fff7e6;color:#fa8c16">🖼</span><span class="mini-rec-name">现场照片</span><span class="mini-count">${sitePhotoCount}张</span></div>
+                  <span class="mini-rec-arrow">${icon('chevron-down')}</span>
+                </div>
+                <div class="mini-rec-body">
+                  <div class="mini-photo-grid">${sitePhotoHtml}</div>
+                </div>
+              </div>
+              <div class="mini-rec-card open" data-collapsible="site-video">
+                <div class="mini-rec-head">
+                  <div class="mini-rec-summary"><span class="mini-rec-idx" style="background:#e6f7ff;color:#1890ff">▶</span><span class="mini-rec-name">现场视频</span><span class="mini-count">${siteVideoCount}个</span></div>
+                  <span class="mini-rec-arrow">${icon('chevron-down')}</span>
+                </div>
+                <div class="mini-rec-body">
+                  <div class="mini-video-item" data-site-video="0">${icon('play')}<span>点击播放</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div class="side-desc-panel mini-side-panel">
           <div class="sdp-title">作业详情说明</div>
           <ul>
-            <li>展示作业人员扫码录入的全部作业信息。</li>
+            <li><b>1·</b>展示作业人员扫码录入的全部作业信息。</li>
+            <li><b>2·作业现场：</b>点击任意照片或视频打开弹框，展示所有照片或视频抽帧出的每张截图的全部ai审核是否异常的结果（pc和小程序所有的审核记录和现场核查记录的照片和视频全部都加上这个交互）。</li>
           </ul>
         </div>
       </div>
     `;
+    // 作业现场照片/视频点击 → AI审核结果弹框
+    const showSiteAiReview = () => {
+      // 基于作业id生成确定性的AI审核结果数据
+      const photoResults = Array.from({ length: sitePhotoCount }).map((_, pi) => {
+        const src = MINI_PHOTO_POOL[(w.id * 3 + pi) % MINI_PHOTO_POOL.length];
+        const abnormal = (w.id + pi) % 3 === 0; // 每3项中有1项异常
+        return {
+          src,
+          label: `现场照片${pi + 1}`,
+          status: abnormal ? '异常' : '通过',
+          reason: abnormal ? '未佩戴安全帽' : ''
+        };
+      });
+      // 视频抽帧(每段视频抽3帧)
+      const frameCount = 3;
+      const videoResults = Array.from({ length: siteVideoCount * frameCount }).map((_, fi) => {
+        const src = MINI_PHOTO_POOL[(w.id * 3 + fi + 2) % MINI_PHOTO_POOL.length];
+        const abnormal = (w.id + fi + 1) % 4 === 0;
+        return {
+          src,
+          label: `视频${Math.floor(fi / frameCount) + 1} - 抽帧${(fi % frameCount) + 1}`,
+          status: abnormal ? '异常' : '通过',
+          reason: abnormal ? '未穿戴反光衣' : ''
+        };
+      });
+      const allResults = [...photoResults, ...videoResults];
+      const abnormalCount = allResults.filter((r) => r.status === '异常').length;
+      const overallStatus = abnormalCount > 0 ? '异常' : '通过';
+      const itemHtml = allResults.map((r) => {
+        const isAbnormal = r.status === '异常';
+        return `<div class="ai-review-item">
+          <div class="ai-review-thumb" style="background-image:url('${r.src}')"></div>
+          <div class="ai-review-info">
+            <div class="ai-review-label">${esc(r.label)}</div>
+            <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
+              <span class="ai-status-icon">${isAbnormal ? '✕' : '✓'}</span>
+              <span>${esc(r.status)}</span>
+              ${isAbnormal && r.reason ? `<span class="ai-reason">${esc(r.reason)}</span>` : ''}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      const body = `<div class="ai-review-summary">
+          <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
+          <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
+          <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+        </div>
+        <div class="ai-review-list">${itemHtml}</div>`;
+      openModal('智慧应急审核结果', body);
+    };
+    view.querySelectorAll('[data-site-photo]').forEach(el => {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showSiteAiReview();
+      });
+    });
+    const videoEl = view.querySelector('[data-site-video]');
+    if (videoEl) {
+      videoEl.style.cursor = 'pointer';
+      videoEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showSiteAiReview();
+      });
+    }
+    // 作业现场-现场照片/视频 折叠展开
+    view.querySelectorAll('[data-collapsible]').forEach(card => {
+      const head = card.querySelector('.mini-rec-head');
+      if (head) {
+        head.addEventListener('click', (e) => {
+          // 防止点击内部事件时触发折叠(这里head内部无其他交互,简单处理)
+          card.classList.toggle('open');
+        });
+      }
+    });
   }
-
-  // ============ 小程序端作业人员 - 区域作业详情页 ============
   function viewWorkerMiniAreaWorkDetail() {
     const view = $('#view');
     const id = parseInt((location.hash.split('?')[1] || '').replace('id=', '')) || 1;
@@ -1504,7 +1631,7 @@
             <li><b>4·作业区域：</b>由二维码带过来的该企业被G端绑定的区域信息，下拉框，选择被绑定的区域。</li>
             <li><b>5·门店名称：</b>下拉框，数据为该企业下的所有门店数据。</li>
             <li><b>6·施工单位：</b>文本框，自由填写，没有校验。若不填写，所有该字段的展示都给横杠。</li>
-            <li><b>7·施工地址：</b>自动回填门店的施工地址，但支持修改，非必填，这个页面只有这一个字段是非必填。</li>
+            <li><b>7·施工地址：</b>自动回填门店的施工地址，但支持修改。</li>
             <li><b>8·施工负责人和负责人手机号：</b>两个信息自动回填当前登录的个人且姓名手机号身份证号自动填入施工人列表的第一行，标记为负责人。</li>
             <li><b>9·开始时间/结束时间：</b>时间表格选取时间。</li>
             <li><b>10·作业状态：</b>此处为作业人员上传作业信息的作业详情页面，状态一定为待审核。</li>
