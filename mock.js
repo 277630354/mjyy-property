@@ -13,11 +13,11 @@ window.DB = (function () {
 
   // ---- 企业 ----
   const enterprises = [
-    { id: 1, name: '某某建设集团', areaId: 1, legalPerson: '张三', address: '江汉区建设大道100号' },
-    { id: 2, name: '某某装饰公司', areaId: 1, legalPerson: '李四', address: '江汉区解放大道200号' },
-    { id: 3, name: '某某电力公司', areaId: 2, legalPerson: '王五', address: '武昌区中南路300号' },
-    { id: 4, name: '某某消防工程', areaId: 3, legalPerson: '赵六', address: '洪山区珞喻路400号' },
-    { id: 5, name: '某某机电安装', areaId: 3, legalPerson: '孙七', address: '洪山区关山大道500号' },
+    { id: 1, name: '某某建设集团', areaId: 1, legalPerson: '张三', province: '湖北省', city: '武汉市', district: '江汉区', street: '北湖街道', address: '江汉区建设大道100号' },
+    { id: 2, name: '某某装饰公司', areaId: 1, legalPerson: '李四', province: '湖北省', city: '武汉市', district: '江汉区', street: '万松街道', address: '江汉区解放大道200号' },
+    { id: 3, name: '某某电力公司', areaId: 2, legalPerson: '王五', province: '湖北省', city: '武汉市', district: '武昌区', street: '中南路街道', address: '武昌区中南路300号' },
+    { id: 4, name: '某某消防工程', areaId: 3, legalPerson: '赵六', province: '湖北省', city: '武汉市', district: '洪山区', street: '珞南街道', address: '洪山区珞喻路400号' },
+    { id: 5, name: '某某机电安装', areaId: 3, legalPerson: '孙七', province: '湖北省', city: '武汉市', district: '洪山区', street: '关东街道', address: '洪山区关山大道500号' },
   ];
 
   // ---- 门店 ----

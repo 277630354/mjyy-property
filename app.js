@@ -2046,6 +2046,7 @@
           { title: '企业名称', key: 'name' },
           { title: '所属区域', render: (r) => esc((DB.areas.find((a) => a.id === r.areaId) || {}).name || '—') },
           { title: '法人名称', key: 'legalPerson' },
+          { title: '区域', render: (r) => esc([r.province, r.city, r.district, r.street].filter(Boolean).join('') || '—') },
           { title: '企业地址', key: 'address' },
           { title: '操作', render: () => `<div class="actions"><button class="btn-text danger" data-act="unbind">解绑</button></div>` },
         ];
@@ -2078,6 +2079,15 @@
           </ul>
         </div>`);
         slot.parentElement.appendChild(descAdd);
+        // 区域与企业地址说明
+        const descAddr = h(`<div class="card desc-panel desc-panel-sm">
+          <div class="card-title">区域与企业地址说明</div>
+          <ul>
+            <li><b>1·区域：</b>取管理后台该企业的省市区和街道的拼接。</li>
+            <li><b>2·企业地址：</b>取管理总台该企业的具体地址，总台该企业变更了地址，这里也需要同步更新。</li>
+          </ul>
+        </div>`);
+        slot.parentElement.appendChild(descAddr);
       });
     }
     render();
