@@ -371,6 +371,8 @@ textarea.input{height:80px;padding:8px 12px;resize:vertical;line-height:1.5}
 .ai-review-status.normal .ai-status-icon{background:#52C41A}
 .ai-review-status.abnormal .ai-status-icon{background:#F5222D}
 .ai-reason{margin-left:4px;padding:1px 6px;background:#FFF1F0;color:#F5222D;border-radius:4px;font-size:11px}
+.view-detail-link{display:inline-block;margin-top:6px;font-size:12px;color:#409EFF;cursor:pointer;text-decoration:underline;user-select:none}
+.view-detail-link:hover{color:#66b1ff}
 .mini-action-bar{position:absolute;bottom:0;left:0;right:0;height:56px;background:#fff;border-top:1px solid #eee;display:flex;align-items:center;padding:0 16px;gap:12px;flex:none;box-shadow:0 -2px 8px rgba(0,0,0,.04)}
 .mini-btn{flex:1;height:40px;border:none;border-radius:20px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s}
 .mini-btn:active{opacity:.85}
