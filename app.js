@@ -1137,9 +1137,6 @@
         <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
-        <div class="mini-li-actions">
-          <button class="mini-btn-mini resubmit" data-id="${w.id}">重新提交</button>
-        </div>
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`).join('');
     const areaStatuses = ['全部', '待开始', '进行中', '已完成', '已拒绝', '已结束'];
@@ -1155,7 +1152,6 @@
         <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
-        ${w.status === '已拒绝' ? `<div class="mini-li-actions"><button class="mini-btn-mini resubmit" data-id="${w.id}">重新提交</button></div>` : ''}
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`).join('');
     const areaStatusOptions = areaStatuses.map((s) => `<option value="${s}">${s}</option>`).join('');
@@ -1192,8 +1188,7 @@
         <div class="mspd-title">待审核作业列表说明</div>
         <ul>
           <li><b>1·</b>扫码进入作业详情提交的作业信息全都展示在这里，都是待审核状态。</li>
-          <li><b>2·</b>重新提交：点击按钮跳转至作业详情编辑页，所有数据回填。</li>
-          <li><b>3·</b>列表页点击列表数据进入详情页，详情页展示所有上传的作业信息。</li>
+          <li><b>2·</b>列表页点击列表数据进入详情页，详情页展示所有上传的作业信息。</li>
         </ul>
       </div>
       <div class="mini-side-panel">
@@ -1218,21 +1213,9 @@
         location.hash = '#/worker/mini/work-detail?id=' + item.dataset.id;
       });
     });
-    view.querySelectorAll('#workerTab0 .resubmit').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        location.hash = '#/worker/mini/work-info?id=' + btn.dataset.id;
-      });
-    });
     view.querySelectorAll('#workerTab1 .mini-list-item').forEach(item => {
       item.addEventListener('click', () => {
         location.hash = '#/worker/mini/area-work-detail?id=' + item.dataset.id;
-      });
-    });
-    view.querySelectorAll('#workerTab1 .resubmit').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        location.hash = '#/worker/mini/work-info?id=' + btn.dataset.id;
       });
     });
     const statusFilter = view.querySelector('#areaStatusFilter');
