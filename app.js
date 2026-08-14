@@ -701,7 +701,7 @@
           <span class="mini-rec-arrow">${icon('chevron-down')}</span>
         </div>
         <div class="mini-rec-body">
-          <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val">${esc(a.content)}</span></div>
+          <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val"><span class="mini-view-detail-btn" data-mini-ai-review="audit-${workId}-${i}-${a.photos}-${a.videos}">查看详情</span></span></div>
           ${fireTicketHtml}
           ${reasonHtml}
           ${a.photos > 0 ? `<div class="mini-sub-title">现场图片 <span class="mini-count">${a.photos}张</span></div><div class="mini-photo-grid">${photoHtml}</div>` : ''}
@@ -780,13 +780,70 @@
         </div>
         <div class="mini-rec-body">
           <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(v.area)}</span></div>
-          <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val">${esc(v.content)}</span></div>
+          <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val"><span class="mini-view-detail-btn" data-mini-ai-review="verify-${workId}-${i}-${v.photos}-${v.videos}">查看详情</span></span></div>
           ${reasonHtml}
           ${v.photos > 0 ? `<div class="mini-sub-title">现场图片 <span class="mini-count">${v.photos}张</span></div><div class="mini-photo-grid">${photoHtml}</div>` : ''}
           ${v.videos > 0 ? `<div class="mini-sub-title">现场视频 <span class="mini-count">${v.videos}个</span></div>${videoHtml}` : ''}
         </div>
       </div>`;
     }).join('');
+  }
+
+  // 小程序端AI审核结果弹窗
+  const MINI_AI_PHOTO_POOL = ['assets/work-hot-1.jpg', 'assets/work-hot-2.jpg', 'assets/work-hot-3.jpg', 'assets/work-high-1.jpg', 'assets/work-electric-1.jpg'];
+  function showMiniAiReview(photoCount, videoCount, seedBase) {
+    const photoResults = Array.from({ length: photoCount }).map((_, pi) => {
+      const src = MINI_AI_PHOTO_POOL[(seedBase + pi) % MINI_AI_PHOTO_POOL.length];
+      const abnormal = (seedBase + pi) % 3 === 0;
+      return { src, label: `现场照片${pi + 1}`, status: abnormal ? '异常' : '通过', reason: abnormal ? ((pi + seedBase) % 2 === 0 ? '未佩戴安全帽' : '未穿戴反光衣') : '' };
+    });
+    const frameCount = 3;
+    const videoResults = Array.from({ length: videoCount * frameCount }).map((_, fi) => {
+      const src = MINI_AI_PHOTO_POOL[(seedBase + fi + 5) % MINI_AI_PHOTO_POOL.length];
+      const abnormal = (seedBase + fi + 1) % 4 === 0;
+      return { src, label: `视频${Math.floor(fi / frameCount) + 1} - 抽帧${(fi % frameCount) + 1}`, status: abnormal ? '异常' : '通过', reason: abnormal ? ((fi + seedBase) % 2 === 0 ? '未佩戴安全帽' : '违规使用明火') : '' };
+    });
+    const allResults = [...photoResults, ...videoResults];
+    if (allResults.length === 0) { toast('暂无审核数据', 'warning'); return; }
+    const abnormalCount = allResults.filter((r) => r.status === '异常').length;
+    const overallStatus = abnormalCount > 0 ? '异常' : '通过';
+    const itemHtml = allResults.map((r) => {
+      const isAbnormal = r.status === '异常';
+      return `<div class="ai-review-item">
+        <div class="ai-review-thumb" style="background-image:url('${r.src}')"></div>
+        <div class="ai-review-info">
+          <div class="ai-review-label">${esc(r.label)}</div>
+          <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
+            <span class="ai-status-icon">${isAbnormal ? '✕' : '✓'}</span>
+            <span>${esc(r.status)}</span>
+            ${isAbnormal && r.reason ? `<span class="ai-reason">${esc(r.reason)}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    const body = `<div class="ai-review-summary">
+        <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
+        <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
+        <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+      </div>
+      <div class="ai-review-list">${itemHtml}</div>`;
+    openModal('智慧应急审核结果', body);
+  }
+
+  function bindMiniAiReviewButtons(container) {
+    container.querySelectorAll('[data-mini-ai-review]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const parts = el.dataset.miniAiReview.split('-');
+        const recordType = parts[0];
+        const workId = Number(parts[1]);
+        const recordIndex = Number(parts[2]);
+        const photoCount = Number(parts[3]);
+        const videoCount = Number(parts[4]);
+        if (photoCount === 0 && videoCount === 0) { toast('暂无审核数据', 'warning'); return; }
+        const seedBase = workId * 10 + (recordType === 'audit' ? 100 : 200) + recordIndex * 10;
+        showMiniAiReview(photoCount, videoCount, seedBase);
+      });
+    });
   }
 
   function viewOfficerMiniDetail() {
@@ -1005,6 +1062,7 @@
     `;
     bindMiniAuditToggle(view);
     bindMiniAddVerify(view);
+    bindMiniAiReviewButtons(view);
     // 通过/拒绝都需填写理由
     const openReasonDialog = (type) => {
       const isPass = type === 'pass';
@@ -1119,6 +1177,7 @@
       </div>
     `;
     bindMiniAuditToggle(view);
+    bindMiniAiReviewButtons(view);
     if (w.status === '待开始' || w.status === '进行中') bindMiniAddVerify(view);
   }
 
@@ -1501,6 +1560,7 @@
       </div>
     `;
     bindMiniAuditToggle(view);
+    bindMiniAiReviewButtons(view);
   }
 
   // ============ 小程序端作业人员 - 作业详情（待填写，无交互） ============
