@@ -568,6 +568,7 @@
       verify: [
         { time: '2026-08-08 15:00', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 2, videos: 0, status: '未通过', reason: '配电箱接地不规范', content: '需重新做接地处理,确保用电安全' },
         { time: '2026-08-08 18:00', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 1, videos: 1, status: '未通过', reason: '部分线路接线不规范', content: '需重新整理接线,确保绝缘包裹到位' },
+        { time: '2026-08-08 19:30', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 1, videos: 0, status: '', reason: '', content: '' },
       ],
     },
   ];
@@ -760,8 +761,14 @@
     if (!verifies || verifies.length === 0) return '<div class="mini-rec-empty">暂无核查记录</div>';
     return verifies.map((v, i) => {
       const isOpen = i === 0;
-      const statusIcon = v.status === '未通过' ? '✕' : '✓';
-      const statusCls = v.status === '未通过' ? 'rejected' : 'passed';
+      let statusHtml;
+      if (v.status === '未通过' || v.status === '通过') {
+        const statusIcon = v.status === '未通过' ? '✕' : '✓';
+        const statusCls = v.status === '未通过' ? 'rejected' : 'passed';
+        statusHtml = `<span class="mini-rec-status ${statusCls}">${statusIcon} ${esc(v.status)}</span>`;
+      } else {
+        statusHtml = `<span class="mini-rec-status">—</span>`;
+      }
       const photoHtml = v.photos > 0 ? Array.from({ length: v.photos }).map((_, pi) => {
         const src = MINI_PHOTO_POOL[(workId * 3 + i + pi + 5) % MINI_PHOTO_POOL.length];
         return `<div class="mini-photo-item" style="background-image:url('${src}')" onclick="window.open('${src}','_blank')"></div>`;
@@ -774,7 +781,7 @@
             <span class="mini-rec-idx">${i + 1}</span>
             <span class="mini-rec-name">${esc(v.name)}</span>
             <span class="mini-rec-time">${esc(v.time)}</span>
-            <span class="mini-rec-status ${statusCls}">${statusIcon} ${esc(v.status)}</span>
+            ${statusHtml}
           </div>
           <span class="mini-rec-arrow">${icon('chevron-down')}</span>
         </div>
@@ -1055,7 +1062,7 @@
             <li><b>5·现场核查记录：</b>作业区域为安管员现场核查时手动输入的具体地址，检测记录和不通过原因都是ai结果，因为安管员上传现场照片视频后，交由ai评判，没有后续的人为操作。</li>
             <li><b>6·多条记录：</b>审核记录和现场核查记录都可能存在多条，默认展开第一条，其余折叠，按上传时间倒序。</li>
             <li><b>7·时间：</b>审核记录里的时间是作业人员上传作业信息提交时间；现场核查记录里的时间是安管员点击加号上传现场照片视频后提交的时间。</li>
-            <li><b>8·AI检测失败或未检测：</b>如果ai检测失败或未检测，则给审核记录和现场核查记录的检测记录回填【ai未检测，请进行人工审核】。现场核查记录的状态除了通过和未通过，再加上一个【ai识别失败，请重新上传】。</li>
+            <li><b>8·AI检测失败或未检测：</b>如果ai检测失败或未检测，则给审核记录和现场核查记录的检测记录回填【ai未检测】。现场核查记录除了通过和未通过两个状态，如果因为ai未检测，则状态标记直接给个横杠。</li>
           </ul>
         </div>
       </div>
