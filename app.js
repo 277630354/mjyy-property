@@ -586,7 +586,7 @@
         { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '' },
       ],
       audit: [
-        { time: '2026-08-06 08:50', name: '张伟', content: '动火前检查,现场防护措施已布置', photos: 3, videos: 1, status: '通过', reason: '', fireTicket: '动火票编号:DH20260806001' },
+        { time: '2026-08-06 08:50', name: '张伟', reviewer: '赵安管', content: '动火前检查,现场防护措施已布置', photos: 3, videos: 1, status: '通过', reason: '', fireTicket: '动火票编号:DH20260806001' },
       ],
       verify: [
         { time: '2026-08-06 09:30', name: '赵安管', phone: '13800138001', area: 'A栋3楼装修区域', photos: 2, videos: 1, status: '通过', reason: '', content: '现场防护到位,动火票据齐全' },
@@ -603,8 +603,8 @@
         { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg' },
       ],
       audit: [
-        { time: '2026-08-07 08:20', name: '李强', content: '安全带、安全帽佩戴齐全,脚手架搭建合格', photos: 2, videos: 1, status: '通过', reason: '', fireTicket: '—' },
-        { time: '2026-08-07 12:30', name: '李强', content: '午后安全复查,作业状态正常', photos: 1, videos: 0, status: '已拒绝', reason: '复查时发现安全带挂钩松动,存在高空坠落风险', fireTicket: '—' },
+        { time: '2026-08-07 08:20', name: '李强', reviewer: '孙安管', content: '安全带、安全帽佩戴齐全,脚手架搭建合格', photos: 2, videos: 1, status: '通过', reason: '', fireTicket: '—' },
+        { time: '2026-08-07 12:30', name: '李强', reviewer: '孙安管', content: '午后安全复查,作业状态正常', photos: 1, videos: 0, status: '已拒绝', reason: '复查时发现安全带挂钩松动,存在高空坠落风险', fireTicket: '—' },
       ],
       verify: [
         { time: '2026-08-07 09:00', name: '孙安管', phone: '13900139002', area: 'B座外墙施工区域', photos: 3, videos: 1, status: '通过', reason: '', content: '安全带系挂规范,脚手架验收合格' },
@@ -623,8 +623,8 @@
         { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
       ],
       audit: [
-        { time: '2026-08-04 13:50', name: '王磊', content: '漏电保护器检测合格,绝缘电阻测试达标', photos: 2, videos: 0, status: '通过', reason: '', fireTicket: '—' },
-        { time: '2026-08-05 19:00', name: '王磊', content: '布线完成,通电测试正常,作业完工', photos: 2, videos: 0, status: '已拒绝', reason: '完工核查时发现部分线缆未做标识,不符合规范要求', fireTicket: '—' },
+        { time: '2026-08-04 13:50', name: '王磊', reviewer: '吴安管', content: '漏电保护器检测合格,绝缘电阻测试达标', photos: 2, videos: 0, status: '通过', reason: '', fireTicket: '—' },
+        { time: '2026-08-05 19:00', name: '王磊', reviewer: '郑安管', content: '布线完成,通电测试正常,作业完工', photos: 2, videos: 0, status: '已拒绝', reason: '完工核查时发现部分线缆未做标识,不符合规范要求', fireTicket: '—' },
       ],
       verify: [
         { time: '2026-08-04 15:00', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 2, videos: 0, status: '通过', reason: '', content: '配电改造区域安全防护到位' },
@@ -641,8 +641,8 @@
         { name: '陈刚', phone: '13600136000', idCard: '3301**********0066', task: '动火切割', needCert: '是', hasCert: '否', certImg: '' },
       ],
       audit: [
-        { time: '2026-08-03 08:30', name: '陈刚', content: '动火前现场环境检查,防护措施初步到位', photos: 2, videos: 0, status: '通过', reason: '', fireTicket: '动火票编号:DH20260803001' },
-        { time: '2026-08-03 08:40', name: '陈刚', content: '动火前资质审核,施工人员未持有效动火作业证', photos: 1, videos: 0, status: '已拒绝', reason: '施工人员未持有效动火作业证,不具备动火作业资格', fireTicket: '动火票编号:DH20260803001' },
+        { time: '2026-08-03 08:30', name: '陈刚', reviewer: '郑安管', content: '动火前现场环境检查,防护措施初步到位', photos: 2, videos: 0, status: '通过', reason: '', fireTicket: '动火票编号:DH20260803001' },
+        { time: '2026-08-03 08:40', name: '陈刚', reviewer: '郑安管', content: '动火前资质审核,施工人员未持有效动火作业证', photos: 1, videos: 0, status: '已拒绝', reason: '施工人员未持有效动火作业证,不具备动火作业资格', fireTicket: '动火票编号:DH20260803001' },
       ],
       verify: [
         { time: '2026-08-03 08:45', name: '郑安管', phone: '13600136004', area: '钱江新城B栋施工区域', photos: 2, videos: 0, status: '未通过', reason: '施工人员未持有效动火作业证', content: '立即停止作业,待人员资质审核通过后方可恢复' },
@@ -660,8 +660,8 @@
         { name: '周强', phone: '13500135001', idCard: '3301**********0088', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
       ],
       audit: [
-        { time: '2026-07-28 07:50', name: '刘洋', content: '配电改造前安全检查,符合开工条件', photos: 2, videos: 1, status: '通过', reason: '', fireTicket: '—' },
-        { time: '2026-07-30 17:30', name: '刘洋', content: '改造完工验收,设备运行正常', photos: 3, videos: 1, status: '已拒绝', reason: '验收时发现接地线连接不牢固,需整改后复检', fireTicket: '—' },
+        { time: '2026-07-28 07:50', name: '刘洋', reviewer: '冯安管', content: '配电改造前安全检查,符合开工条件', photos: 2, videos: 1, status: '通过', reason: '', fireTicket: '—' },
+        { time: '2026-07-30 17:30', name: '刘洋', reviewer: '孙安管', content: '改造完工验收,设备运行正常', photos: 3, videos: 1, status: '已拒绝', reason: '验收时发现接地线连接不牢固,需整改后复检', fireTicket: '—' },
       ],
       verify: [
         { time: '2026-07-28 09:00', name: '冯安管', phone: '13500135005', area: '文化广场配电房区域', photos: 2, videos: 1, status: '通过', reason: '', content: '配电改造区域隔离到位,警示标志齐全' },
@@ -695,7 +695,7 @@
         <div class="mini-rec-head">
           <div class="mini-rec-summary">
             <span class="mini-rec-idx">${i + 1}</span>
-            <span class="mini-rec-name">${esc(a.name)}</span>
+            <span class="mini-rec-name">${esc(a.reviewer || a.name)}</span>
             <span class="mini-rec-time">${esc(a.time)}</span>
             <span class="mini-rec-status ${statusCls}">${statusIcon} ${esc(a.status)}</span>
           </div>
@@ -703,7 +703,7 @@
         </div>
         <div class="mini-rec-body">
           <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val"><span class="mini-view-detail-btn" data-mini-ai-review="audit-${workId}-${i}-${a.photos}-${a.videos}">查看详情</span></span></div>
-          <div class="mini-li-row"><span class="mini-li-label">审核人员</span><span class="mini-li-val">${esc(a.name)}</span></div>
+          <div class="mini-li-row"><span class="mini-li-label">审核人员</span><span class="mini-li-val">${esc(a.reviewer || a.name)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">审核时间</span><span class="mini-li-val">${esc(a.time)}</span></div>
           ${fireTicketHtml}
           ${reasonHtml}
@@ -1566,7 +1566,7 @@
           <ul>
             <li><b>1·</b>展示作业人员扫码录入的全部作业信息和安管员现场核查上传的信息，现场核查记录可能有多条，默认展示第一条，其余折叠。</li>
             <li><b>2·</b>所有地方的现场核查记录全都设计为，有才展示，没有则不展示这个模块，后期可能会做成每个物业单独设置核查规则去上传现场照片视频，同时也支持不需要上传。</li>
-            <li><b>3·审核人员和审核时间：</b>由安管员审核时产生；由于安管员有企业后台直接添加，无权限之分，所有这里的审核人员可以是不同的安管员，现场核查记录也展示该企业下所有安管员对该条作业的操作记录。</li>
+            <li><b>3·审核人员和审核时间：</b>由安管员审核时产生；由于安管员是企业后台直接添加，无权限之分，所以这里的审核人员可以是不同的安管员，现场核查记录也展示该企业下所有安管员对该条作业的操作记录。</li>
           </ul>
         </div>
       </div>
