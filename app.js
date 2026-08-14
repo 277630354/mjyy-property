@@ -703,6 +703,8 @@
         </div>
         <div class="mini-rec-body">
           <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val"><span class="mini-view-detail-btn" data-mini-ai-review="audit-${workId}-${i}-${a.photos}-${a.videos}">查看详情</span></span></div>
+          <div class="mini-li-row"><span class="mini-li-label">审核人员</span><span class="mini-li-val">${esc(a.name)}</span></div>
+          <div class="mini-li-row"><span class="mini-li-label">审核时间</span><span class="mini-li-val">${esc(a.time)}</span></div>
           ${fireTicketHtml}
           ${reasonHtml}
           ${a.photos > 0 ? `<div class="mini-sub-title">现场图片 <span class="mini-count">${a.photos}张</span></div><div class="mini-photo-grid">${photoHtml}</div>` : ''}
@@ -1564,6 +1566,7 @@
           <ul>
             <li><b>1·</b>展示作业人员扫码录入的全部作业信息和安管员现场核查上传的信息，现场核查记录可能有多条，默认展示第一条，其余折叠。</li>
             <li><b>2·</b>所有地方的现场核查记录全都设计为，有才展示，没有则不展示这个模块，后期可能会做成每个物业单独设置核查规则去上传现场照片视频，同时也支持不需要上传。</li>
+            <li><b>3·审核人员和审核时间：</b>由安管员审核时产生；由于安管员有企业后台直接添加，无权限之分，所有这里的审核人员可以是不同的安管员，现场核查记录也展示该企业下所有安管员对该条作业的操作记录。</li>
           </ul>
         </div>
       </div>
