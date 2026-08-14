@@ -695,7 +695,7 @@
         <div class="mini-rec-head">
           <div class="mini-rec-summary">
             <span class="mini-rec-idx">${i + 1}</span>
-            <span class="mini-rec-name">${esc(a.reviewer || a.name)}</span>
+            <span class="mini-rec-name">${esc(a.name)}</span>
             <span class="mini-rec-time">${esc(a.time)}</span>
             <span class="mini-rec-status ${statusCls}">${statusIcon} ${esc(a.status)}</span>
           </div>
