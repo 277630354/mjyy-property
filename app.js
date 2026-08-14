@@ -1383,13 +1383,22 @@
                 </div>
               </div>
             </div>
+            ${(w.audit && w.audit.length > 0) ? `<div class="mini-detail-card">
+              <div class="mini-card-title">审核记录 <span class="mini-count">${w.audit.length}条</span></div>
+              ${auditCardsHtml}
+            </div>` : ''}
+            ${(w.verify && w.verify.length > 0) ? `<div class="mini-detail-card">
+              <div class="mini-card-title">现场核查记录 <span class="mini-count">${w.verify.length}条</span></div>
+              ${verifyCardsHtml}
+            </div>` : ''}
           </div>
         </div>
         <div class="side-desc-panel mini-side-panel">
           <div class="sdp-title">作业详情说明</div>
           <ul>
             <li><b>1·</b>展示作业人员扫码录入的全部作业信息。</li>
-            <li><b>2·作业现场：</b>展示查看详情按钮，点击可以查看审核记录或现场核查记录现场图片和视频由ai返回的所有结果。</li>
+            <li><b>2·作业现场：</b>展示提交作业时上传的照片和视频。</li>
+            <li><b>3·如果是已拒绝的作业再次提交：</b>则作业现场下面可能会存在审核记录和现场核查记录两个模块，如果有则展示，没有就隐藏。</li>
           </ul>
         </div>
       </div>
@@ -1469,6 +1478,7 @@
         });
       }
     });
+    bindMiniAiReviewButtons(view);
   }
   function viewWorkerMiniAreaWorkDetail() {
     const view = $('#view');
@@ -1540,10 +1550,10 @@
                 </table>
               </div>
             </div>
-            <div class="mini-detail-card">
+            ${(w.audit && w.audit.length > 0) ? `<div class="mini-detail-card">
               <div class="mini-card-title">审核记录 <span class="mini-count">${w.audit.length}条</span></div>
               ${auditCardsHtml}
-            </div>
+            </div>` : ''}
             ${(w.verify && w.verify.length > 0) ? `<div class="mini-detail-card">
               <div class="mini-card-title">现场核查记录 <span class="mini-count">${w.verify.length}条</span></div>
               ${verifyCardsHtml}
