@@ -2457,7 +2457,7 @@
                 <div class="detail-item"><div class="dk">动火作业证书</div><div class="dv">${esc(a.fireCert)}</div></div>
                 <div class="detail-item"><div class="dk">审核状态</div><div class="dv">${statusTag(a.status)}</div></div>
                 <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${esc(a.reason || '—')}</div></div>
-                <div class="detail-item"><div class="dk">检测记录</div><div class="dv">${esc(a.records)}<div class="view-detail-link" data-pc-ai-review="audit-${i}-${a.photos}-${a.videos}">查看详情</div></div></div>
+                <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-pc-ai-review="audit-${i}-${a.photos}-${a.videos}">查看详情</div></div></div>
               </div>
             </div>
           </div>`).join('')}
@@ -2482,7 +2482,7 @@
                 <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${v.videos} 个</div></div>
                 <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
                 <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${esc(v.reason || '—')}</div></div>
-                <div class="detail-item"><div class="dk">检测记录</div><div class="dv">${esc(v.records)}<div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
+                <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
               </div>
             </div>
           </div>`).join('')}
