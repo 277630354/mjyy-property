@@ -2452,12 +2452,12 @@
                 <div class="detail-item"><div class="dk">安全员姓名</div><div class="dv">${esc(a.name)}</div></div>
                 <div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(a.phone)}</div></div>
                 <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(a.org)}</div></div>
-                <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, a.photos)}<div class="view-detail-link" data-pc-ai-review="audit-${i}-photo">查看详情</div></div></div>
-                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${a.videos} 个<div class="view-detail-link" data-pc-ai-review="audit-${i}-video">查看详情</div></div></div>
+                <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, a.photos)}</div></div>
+                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${a.videos} 个</div></div>
                 <div class="detail-item"><div class="dk">动火作业证书</div><div class="dv">${esc(a.fireCert)}</div></div>
                 <div class="detail-item"><div class="dk">审核状态</div><div class="dv">${statusTag(a.status)}</div></div>
                 <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${esc(a.reason || '—')}</div></div>
-                <div class="detail-item"><div class="dk">检测记录</div><div class="dv">${esc(a.records)}</div></div>
+                <div class="detail-item"><div class="dk">检测记录</div><div class="dv">${esc(a.records)}<div class="view-detail-link" data-pc-ai-review="audit-${i}-${a.photos}-${a.videos}">查看详情</div></div></div>
               </div>
             </div>
           </div>`).join('')}
@@ -2478,11 +2478,11 @@
                 <div class="detail-item"><div class="dk">核查人姓名</div><div class="dv">${esc(v.name)}</div></div>
                 <div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(v.phone)}</div></div>
                 <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(v.org)}</div></div>
-                <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, v.photos, VERIFY_POOL)}<div class="view-detail-link" data-pc-ai-review="verify-${i}-photo">查看详情</div></div></div>
-                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${v.videos} 个<div class="view-detail-link" data-pc-ai-review="verify-${i}-video">查看详情</div></div></div>
+                <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, v.photos, VERIFY_POOL)}</div></div>
+                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${v.videos} 个</div></div>
                 <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
                 <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${esc(v.reason || '—')}</div></div>
-                <div class="detail-item"><div class="dk">检测记录</div><div class="dv">${esc(v.records)}</div></div>
+                <div class="detail-item"><div class="dk">检测记录</div><div class="dv">${esc(v.records)}<div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
               </div>
             </div>
           </div>`).join('')}
@@ -2497,14 +2497,9 @@
         const parts = el.dataset.pcAiReview.split('-');
         const recordType = parts[0];
         const recordIndex = Number(parts[1]);
-        const mediaType = parts[2];
-        const list = recordType === 'audit' ? audits : verifies;
-        const rec = list[recordIndex];
-        if (!rec) return;
-        const photoCnt = mediaType === 'photo' ? (rec.photos || 0) : 0;
-        const videoCnt = mediaType === 'video' ? (rec.videos || 0) : 0;
-        if (mediaType === 'photo' && photoCnt === 0) { toast('暂无现场图片', 'warning'); return; }
-        if (mediaType === 'video' && videoCnt === 0) { toast('暂无现场视频', 'warning'); return; }
+        const photoCnt = Number(parts[2]);
+        const videoCnt = Number(parts[3]);
+        if (photoCnt === 0 && videoCnt === 0) { toast('暂无审核数据', 'warning'); return; }
         showPcAiReview(photoCnt, videoCnt, recordType, recordIndex);
       };
     });
