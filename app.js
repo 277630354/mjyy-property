@@ -2594,7 +2594,7 @@
     worksView({ scope: 'g', filters: ['enterprise', 'area', 'type', 'status'] });
   }
   function viewZoneTasks() {
-    worksView({ scope: 'enterprise', filters: ['enterprise', 'type', 'status'] });
+    worksView({ scope: 'enterprise', filters: ['type', 'status'] });
   }
   function worksView(opt) {
     const view = $('#view');
