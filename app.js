@@ -823,8 +823,8 @@
           <div class="ai-review-label">${esc(r.label)}</div>
           <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
             <span class="ai-status-icon">${isAbnormal ? '✕' : '✓'}</span>
-            <span>${esc(r.status)}</span>
-            ${isAbnormal && r.reason ? `<span class="ai-reason">${esc(r.reason)}</span>` : ''}
+            <span>${isAbnormal ? '异常' : '通过'}</span>
+            ${isAbnormal ? `<span class="ai-violation-count">违规1项</span>` : ''}
           </div>
         </div>
       </div>`;
@@ -1493,8 +1493,8 @@
             <div class="ai-review-label">${esc(r.label)}</div>
             <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
               <span class="ai-status-icon">${isAbnormal ? '✕' : '✓'}</span>
-              <span>${esc(r.status)}</span>
-              ${isAbnormal && r.reason ? `<span class="ai-reason">${esc(r.reason)}</span>` : ''}
+              <span>${isAbnormal ? '异常' : '通过'}</span>
+              ${isAbnormal ? `<span class="ai-violation-count">违规1项</span>` : ''}
             </div>
           </div>
         </div>`;
@@ -2775,8 +2775,8 @@
             <div class="ai-review-label">${esc(r.label)}</div>
             <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
               <span class="ai-status-icon">${isAbnormal ? '✕' : '✓'}</span>
-              <span>${esc(r.status)}</span>
-              ${isAbnormal && r.reason ? `<span class="ai-reason">${esc(r.reason)}</span>` : ''}
+              <span>${isAbnormal ? '异常' : '通过'}</span>
+              ${isAbnormal ? `<span class="ai-violation-count">违规1项</span>` : ''}
             </div>
           </div>
         </div>`;
