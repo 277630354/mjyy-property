@@ -817,7 +817,7 @@
     const itemHtml = allResults.map((r) => {
       const isAbnormal = r.status === '异常';
       return `<div class="ai-review-item">
-        <div class="ai-review-thumb" style="background-image:url('${r.src}')"></div>
+        <div class="ai-review-thumb" data-src="${r.src}" style="background-image:url('${r.src}');cursor:pointer"></div>
         <div class="ai-review-info">
           <div class="ai-review-label">${esc(r.label)}</div>
           <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
@@ -834,7 +834,10 @@
         <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
       </div>
       <div class="ai-review-list">${itemHtml}</div>`;
-    openModal('智慧应急审核结果', body);
+    const { node } = openModal('智慧应急审核结果', body);
+    node.querySelectorAll('.ai-review-thumb').forEach((thumb) => {
+      thumb.onclick = () => showImagePreview(thumb.dataset.src, '检测记录详情');
+    });
   }
 
   function bindMiniAiReviewButtons(container) {
@@ -1433,7 +1436,7 @@
       const itemHtml = allResults.map((r) => {
         const isAbnormal = r.status === '异常';
         return `<div class="ai-review-item">
-          <div class="ai-review-thumb" style="background-image:url('${r.src}')"></div>
+          <div class="ai-review-thumb" data-src="${r.src}" style="background-image:url('${r.src}');cursor:pointer"></div>
           <div class="ai-review-info">
             <div class="ai-review-label">${esc(r.label)}</div>
             <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
@@ -1450,7 +1453,10 @@
           <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
         </div>
         <div class="ai-review-list">${itemHtml}</div>`;
-      openModal('智慧应急审核结果', body);
+      const { node } = openModal('智慧应急审核结果', body);
+      node.querySelectorAll('.ai-review-thumb').forEach((thumb) => {
+        thumb.onclick = () => showImagePreview(thumb.dataset.src, '检测记录详情');
+      });
     };
     view.querySelectorAll('[data-site-photo]').forEach(el => {
       el.style.cursor = 'pointer';
@@ -2390,7 +2396,7 @@
       const itemHtml = allResults.map((r) => {
         const isAbnormal = r.status === '异常';
         return `<div class="ai-review-item">
-          <div class="ai-review-thumb" style="background-image:url('${r.src}')"></div>
+          <div class="ai-review-thumb" data-src="${r.src}" style="background-image:url('${r.src}');cursor:pointer"></div>
           <div class="ai-review-info">
             <div class="ai-review-label">${esc(r.label)}</div>
             <div class="ai-review-status ${isAbnormal ? 'abnormal' : 'normal'}">
@@ -2407,7 +2413,10 @@
           <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
         </div>
         <div class="ai-review-list">${itemHtml}</div>`;
-      openModal('智慧应急审核结果', body);
+      const { node } = openModal('智慧应急审核结果', body);
+      node.querySelectorAll('.ai-review-thumb').forEach((thumb) => {
+        thumb.onclick = () => showImagePreview(thumb.dataset.src, '检测记录详情');
+      });
     };
     const entName = (DB.enterprises.find((e) => e.id === w.enterpriseId) || {}).name || '—';
     const storeName = (DB.stores.find((s) => s.id === w.storeId) || {}).name || '—';
