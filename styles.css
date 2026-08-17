@@ -183,6 +183,7 @@ table.tbl .actions{display:flex;gap:4px;flex-wrap:wrap}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:8vh 16px;overflow-y:auto;animation:fadein .2s}
 .modal{background:#fff;border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.3);width:480px;max-width:100%;animation:modalin .2s}
 .modal.wide{width:760px}
+.modal.ai-wide{width:1040px}
 @keyframes modalin{from{opacity:0;transform:translateY(-20px) scale(.98)}to{opacity:1;transform:none}}
 .modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border)}
 .modal-head .mt{font-size:18px;font-weight:600;color:var(--text)}
@@ -373,7 +374,13 @@ textarea.input{height:80px;padding:8px 12px;resize:vertical;line-height:1.5}
 .ai-reason{margin-left:4px;padding:1px 6px;background:#FFF1F0;color:#F5222D;border-radius:4px;font-size:11px}
 .ai-review-body{display:flex;gap:16px}
 .ai-review-left{flex:1;min-width:0;display:flex;flex-direction:column}
-.ai-review-right{flex:1;min-width:0;border:1px solid #ebeef5;border-radius:8px;background:#fafbfc;display:flex;flex-direction:column;overflow:hidden}
+.ai-review-right{flex:1.2;min-width:0;border:1px solid #ebeef5;border-radius:8px;background:#fafbfc;display:flex;flex-direction:column;overflow:hidden}
+.ai-review-desc{width:260px;flex:none;background:#FFF9E6;border:1px solid #FFE58F;border-radius:10px;padding:14px 16px;font-size:12.5px;color:#606266;line-height:1.7}
+.ai-review-desc .ard-title{font-size:13.5px;font-weight:700;color:#D48806;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #FFD591}
+.ai-review-desc ul{list-style:none;padding:0;margin:0}
+.ai-review-desc li{margin-bottom:6px}
+.ai-review-desc li:last-child{margin-bottom:0}
+.ai-review-desc b{color:#303133}
 .ai-preview-img{width:100%;aspect-ratio:16/10;background-size:cover;background-position:center;background-color:#f0f0f0;flex:none}
 .ai-preview-info{padding:12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1}
 .ai-preview-title{font-size:14px;font-weight:600;color:#303133}

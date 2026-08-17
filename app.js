@@ -108,8 +108,8 @@
     node.addEventListener('click', (e) => { if (e.target === node) close(); });
   }
 
-  function openModal(title, bodyHtml, footHtml, wide) {
-    const node = h(`<div class="overlay"><div class="modal ${wide ? 'wide' : ''}"><div class="modal-head"><span class="mt">${esc(title)}</span><span class="close">${icon('x')}</span></div><div class="modal-body">${bodyHtml}</div>${footHtml ? `<div class="modal-foot">${footHtml}</div>` : ''}</div></div>`);
+  function openModal(title, bodyHtml, footHtml, wide, extraClass) {
+    const node = h(`<div class="overlay"><div class="modal ${wide ? 'wide' : ''}${extraClass ? ' ' + extraClass : ''}"><div class="modal-head"><span class="mt">${esc(title)}</span><span class="close">${icon('x')}</span></div><div class="modal-body">${bodyHtml}</div>${footHtml ? `<div class="modal-foot">${footHtml}</div>` : ''}</div></div>`);
     document.body.appendChild(node);
     const close = () => node.remove();
     node.querySelector('.close').onclick = close;
@@ -828,6 +828,14 @@
         </div>
       </div>`;
     }).join('');
+    const descHtml = `<div class="ai-review-desc">
+      <div class="ard-title">操作说明</div>
+      <ul>
+        <li><b>1·</b>点击左侧列表中的照片缩略图，可在右侧查看该照片或视频的大图预览。</li>
+        <li><b>2·</b>点击大图可再次打开弹框，展示该照片具体的检测记录信息、检测依据、法律法规、整改措施。</li>
+        <li><b>3·</b>右侧详情区域展示检测时间、是否违规、检测依据及违章记录等完整信息。</li>
+      </ul>
+    </div>`;
     const body = `<div class="ai-review-body">
         <div class="ai-review-left">
           <div class="ai-review-summary">
@@ -838,8 +846,9 @@
           <div class="ai-review-list">${itemHtml}</div>
         </div>
         <div class="ai-review-right" id="ai-preview-panel"></div>
+        ${descHtml}
       </div>`;
-    const { node } = openModal('智慧应急审核结果', body);
+    const { node } = openModal('智慧应急审核结果', body, '', true, 'ai-wide');
     const previewPanel = node.querySelector('#ai-preview-panel');
     const renderPreview = (r) => {
       const isAbnormal = r.status === '异常';
@@ -1480,6 +1489,14 @@
           </div>
         </div>`;
       }).join('');
+      const descHtml = `<div class="ai-review-desc">
+        <div class="ard-title">操作说明</div>
+        <ul>
+          <li><b>1·</b>点击左侧列表中的照片缩略图，可在右侧查看该照片或视频的大图预览。</li>
+          <li><b>2·</b>点击大图可再次打开弹框，展示该照片具体的检测记录信息、检测依据、法律法规、整改措施。</li>
+          <li><b>3·</b>右侧详情区域展示检测时间、是否违规、检测依据及违章记录等完整信息。</li>
+        </ul>
+      </div>`;
       const body = `<div class="ai-review-body">
         <div class="ai-review-left">
           <div class="ai-review-summary">
@@ -1490,8 +1507,9 @@
           <div class="ai-review-list">${itemHtml}</div>
         </div>
         <div class="ai-review-right" id="ai-preview-panel"></div>
+        ${descHtml}
       </div>`;
-      const { node } = openModal('智慧应急审核结果', body);
+      const { node } = openModal('智慧应急审核结果', body, '', true, 'ai-wide');
       const previewPanel = node.querySelector('#ai-preview-panel');
       const renderPreview = (r) => {
         const isAbnormal = r.status === '异常';
@@ -2473,6 +2491,14 @@
           </div>
         </div>`;
       }).join('');
+      const descHtml = `<div class="ai-review-desc">
+        <div class="ard-title">操作说明</div>
+        <ul>
+          <li><b>1·</b>点击左侧列表中的照片缩略图，可在右侧查看该照片或视频的大图预览。</li>
+          <li><b>2·</b>点击大图可再次打开弹框，展示该照片具体的检测记录信息、检测依据、法律法规、整改措施。</li>
+          <li><b>3·</b>右侧详情区域展示检测时间、是否违规、检测依据及违章记录等完整信息。</li>
+        </ul>
+      </div>`;
       const body = `<div class="ai-review-body">
         <div class="ai-review-left">
           <div class="ai-review-summary">
@@ -2483,8 +2509,9 @@
           <div class="ai-review-list">${itemHtml}</div>
         </div>
         <div class="ai-review-right" id="ai-preview-panel"></div>
+        ${descHtml}
       </div>`;
-      const { node } = openModal('智慧应急审核结果', body);
+      const { node } = openModal('智慧应急审核结果', body, '', true, 'ai-wide');
       const previewPanel = node.querySelector('#ai-preview-panel');
       const renderPreview = (r) => {
         const isAbnormal = r.status === '异常';
