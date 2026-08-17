@@ -814,9 +814,9 @@
     if (allResults.length === 0) { toast('暂无审核数据', 'warning'); return; }
     const abnormalCount = allResults.filter((r) => r.status === '异常').length;
     const overallStatus = abnormalCount > 0 ? '异常' : '通过';
-    const itemHtml = allResults.map((r) => {
+    const itemHtml = allResults.map((r, idx) => {
       const isAbnormal = r.status === '异常';
-      return `<div class="ai-review-item">
+      return `<div class="ai-review-item" data-idx="${idx}">
         <div class="ai-review-thumb" data-src="${r.src}" style="background-image:url('${r.src}');cursor:pointer"></div>
         <div class="ai-review-info">
           <div class="ai-review-label">${esc(r.label)}</div>
@@ -828,15 +828,48 @@
         </div>
       </div>`;
     }).join('');
-    const body = `<div class="ai-review-summary">
-        <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
-        <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
-        <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
-      </div>
-      <div class="ai-review-list">${itemHtml}</div>`;
+    const body = `<div class="ai-review-body">
+        <div class="ai-review-left">
+          <div class="ai-review-summary">
+            <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
+            <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
+            <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+          </div>
+          <div class="ai-review-list">${itemHtml}</div>
+        </div>
+        <div class="ai-review-right" id="ai-preview-panel"></div>
+      </div>`;
     const { node } = openModal('智慧应急审核结果', body);
-    node.querySelectorAll('.ai-review-thumb').forEach((thumb) => {
-      thumb.onclick = () => showImagePreview(thumb.dataset.src, '检测记录详情');
+    const previewPanel = node.querySelector('#ai-preview-panel');
+    const renderPreview = (r) => {
+      const isAbnormal = r.status === '异常';
+      const timeStr = new Date().toLocaleString('zh-CN', { hour12: false });
+      const records = isAbnormal ? `<div class="ai-preview-records"><div class="ai-preview-record"><span class="dot"></span>检测到画面中存在异常：${esc(r.reason || '违规行为')}</div><div class="ai-preview-record"><span class="dot" style="background:#fa8c16"></span>整改措施：立即停止作业，清理隐患，加强现场巡检与培训宣传</div></div>` : `<div class="ai-preview-records"><div class="ai-preview-record"><span class="dot" style="background:#52C41A"></span>画面未检测到违规行为，作业状态正常</div></div>`;
+      const basisText = isAbnormal ? `图像中识别到异常特征：${esc(r.reason || '违规行为')}，符合相关安全规范判定标准。` : '图像中未识别到违规特征，符合安全作业规范要求。';
+      previewPanel.innerHTML = `
+        <div class="ai-preview-img" style="background-image:url('${r.src}')"></div>
+        <div class="ai-preview-info">
+          <div class="ai-preview-title">${esc(r.label)}</div>
+          <div class="ai-preview-meta">
+            <span><span class="label">检测时间：</span>${timeStr}</span>
+            <span><span class="label">是否违规：</span><span style="color:${isAbnormal ? '#F5222D' : '#52C41A'};font-weight:600">${isAbnormal ? '违规' : '正常'}</span></span>
+          </div>
+          <div class="ai-preview-basis"><b>检测依据：</b>${basisText}</div>
+          <div><b style="font-size:12px;color:#606266">违章记录（${isAbnormal ? 1 : 0}条）</b>${records}</div>
+        </div>`;
+    };
+    const items = node.querySelectorAll('.ai-review-item');
+    if (items.length > 0) {
+      items[0].classList.add('active');
+      renderPreview(allResults[0]);
+    }
+    items.forEach((item) => {
+      item.querySelector('.ai-review-thumb').onclick = () => {
+        const idx = Number(item.dataset.idx);
+        items.forEach((i) => i.classList.remove('active'));
+        item.classList.add('active');
+        renderPreview(allResults[idx]);
+      };
     });
   }
 
@@ -1433,9 +1466,9 @@
       const allResults = [...photoResults, ...videoResults];
       const abnormalCount = allResults.filter((r) => r.status === '异常').length;
       const overallStatus = abnormalCount > 0 ? '异常' : '通过';
-      const itemHtml = allResults.map((r) => {
+      const itemHtml = allResults.map((r, idx) => {
         const isAbnormal = r.status === '异常';
-        return `<div class="ai-review-item">
+        return `<div class="ai-review-item" data-idx="${idx}">
           <div class="ai-review-thumb" data-src="${r.src}" style="background-image:url('${r.src}');cursor:pointer"></div>
           <div class="ai-review-info">
             <div class="ai-review-label">${esc(r.label)}</div>
@@ -1447,15 +1480,48 @@
           </div>
         </div>`;
       }).join('');
-      const body = `<div class="ai-review-summary">
-          <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
-          <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
-          <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+      const body = `<div class="ai-review-body">
+        <div class="ai-review-left">
+          <div class="ai-review-summary">
+            <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
+            <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
+            <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+          </div>
+          <div class="ai-review-list">${itemHtml}</div>
         </div>
-        <div class="ai-review-list">${itemHtml}</div>`;
+        <div class="ai-review-right" id="ai-preview-panel"></div>
+      </div>`;
       const { node } = openModal('智慧应急审核结果', body);
-      node.querySelectorAll('.ai-review-thumb').forEach((thumb) => {
-        thumb.onclick = () => showImagePreview(thumb.dataset.src, '检测记录详情');
+      const previewPanel = node.querySelector('#ai-preview-panel');
+      const renderPreview = (r) => {
+        const isAbnormal = r.status === '异常';
+        const timeStr = new Date().toLocaleString('zh-CN', { hour12: false });
+        const records = isAbnormal ? `<div class="ai-preview-records"><div class="ai-preview-record"><span class="dot"></span>检测到画面中存在异常：${esc(r.reason || '违规行为')}</div><div class="ai-preview-record"><span class="dot" style="background:#fa8c16"></span>整改措施：立即停止作业，清理隐患，加强现场巡检与培训宣传</div></div>` : `<div class="ai-preview-records"><div class="ai-preview-record"><span class="dot" style="background:#52C41A"></span>画面未检测到违规行为，作业状态正常</div></div>`;
+        const basisText = isAbnormal ? `图像中识别到异常特征：${esc(r.reason || '违规行为')}，符合相关安全规范判定标准。` : '图像中未识别到违规特征，符合安全作业规范要求。';
+        previewPanel.innerHTML = `
+          <div class="ai-preview-img" style="background-image:url('${r.src}')"></div>
+          <div class="ai-preview-info">
+            <div class="ai-preview-title">${esc(r.label)}</div>
+            <div class="ai-preview-meta">
+              <span><span class="label">检测时间：</span>${timeStr}</span>
+              <span><span class="label">是否违规：</span><span style="color:${isAbnormal ? '#F5222D' : '#52C41A'};font-weight:600">${isAbnormal ? '违规' : '正常'}</span></span>
+            </div>
+            <div class="ai-preview-basis"><b>检测依据：</b>${basisText}</div>
+            <div><b style="font-size:12px;color:#606266">违章记录（${isAbnormal ? 1 : 0}条）</b>${records}</div>
+          </div>`;
+      };
+      const items = node.querySelectorAll('.ai-review-item');
+      if (items.length > 0) {
+        items[0].classList.add('active');
+        renderPreview(allResults[0]);
+      }
+      items.forEach((item) => {
+        item.querySelector('.ai-review-thumb').onclick = () => {
+          const idx = Number(item.dataset.idx);
+          items.forEach((i) => i.classList.remove('active'));
+          item.classList.add('active');
+          renderPreview(allResults[idx]);
+        };
       });
     };
     view.querySelectorAll('[data-site-photo]').forEach(el => {
@@ -2393,9 +2459,9 @@
       }
       const abnormalCount = allResults.filter((r) => r.status === '异常').length;
       const overallStatus = abnormalCount > 0 ? '异常' : '通过';
-      const itemHtml = allResults.map((r) => {
+      const itemHtml = allResults.map((r, idx) => {
         const isAbnormal = r.status === '异常';
-        return `<div class="ai-review-item">
+        return `<div class="ai-review-item" data-idx="${idx}">
           <div class="ai-review-thumb" data-src="${r.src}" style="background-image:url('${r.src}');cursor:pointer"></div>
           <div class="ai-review-info">
             <div class="ai-review-label">${esc(r.label)}</div>
@@ -2407,15 +2473,48 @@
           </div>
         </div>`;
       }).join('');
-      const body = `<div class="ai-review-summary">
-          <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
-          <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
-          <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+      const body = `<div class="ai-review-body">
+        <div class="ai-review-left">
+          <div class="ai-review-summary">
+            <div class="ai-summary-row"><span class="ai-summary-label">总截图数</span><span class="ai-summary-val">${allResults.length}张</span></div>
+            <div class="ai-summary-row"><span class="ai-summary-label">异常数量</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${abnormalCount}张</span></div>
+            <div class="ai-summary-row"><span class="ai-summary-label">整体状态</span><span class="ai-summary-val ${abnormalCount > 0 ? 'abnormal' : 'normal'}">${overallStatus}</span></div>
+          </div>
+          <div class="ai-review-list">${itemHtml}</div>
         </div>
-        <div class="ai-review-list">${itemHtml}</div>`;
+        <div class="ai-review-right" id="ai-preview-panel"></div>
+      </div>`;
       const { node } = openModal('智慧应急审核结果', body);
-      node.querySelectorAll('.ai-review-thumb').forEach((thumb) => {
-        thumb.onclick = () => showImagePreview(thumb.dataset.src, '检测记录详情');
+      const previewPanel = node.querySelector('#ai-preview-panel');
+      const renderPreview = (r) => {
+        const isAbnormal = r.status === '异常';
+        const timeStr = new Date().toLocaleString('zh-CN', { hour12: false });
+        const records = isAbnormal ? `<div class="ai-preview-records"><div class="ai-preview-record"><span class="dot"></span>检测到画面中存在异常：${esc(r.reason || '违规行为')}</div><div class="ai-preview-record"><span class="dot" style="background:#fa8c16"></span>整改措施：立即停止作业，清理隐患，加强现场巡检与培训宣传</div></div>` : `<div class="ai-preview-records"><div class="ai-preview-record"><span class="dot" style="background:#52C41A"></span>画面未检测到违规行为，作业状态正常</div></div>`;
+        const basisText = isAbnormal ? `图像中识别到异常特征：${esc(r.reason || '违规行为')}，符合相关安全规范判定标准。` : '图像中未识别到违规特征，符合安全作业规范要求。';
+        previewPanel.innerHTML = `
+          <div class="ai-preview-img" style="background-image:url('${r.src}')"></div>
+          <div class="ai-preview-info">
+            <div class="ai-preview-title">${esc(r.label)}</div>
+            <div class="ai-preview-meta">
+              <span><span class="label">检测时间：</span>${timeStr}</span>
+              <span><span class="label">是否违规：</span><span style="color:${isAbnormal ? '#F5222D' : '#52C41A'};font-weight:600">${isAbnormal ? '违规' : '正常'}</span></span>
+            </div>
+            <div class="ai-preview-basis"><b>检测依据：</b>${basisText}</div>
+            <div><b style="font-size:12px;color:#606266">违章记录（${isAbnormal ? 1 : 0}条）</b>${records}</div>
+          </div>`;
+      };
+      const items = node.querySelectorAll('.ai-review-item');
+      if (items.length > 0) {
+        items[0].classList.add('active');
+        renderPreview(allResults[0]);
+      }
+      items.forEach((item) => {
+        item.querySelector('.ai-review-thumb').onclick = () => {
+          const idx = Number(item.dataset.idx);
+          items.forEach((i) => i.classList.remove('active'));
+          item.classList.add('active');
+          renderPreview(allResults[idx]);
+        };
       });
     };
     const entName = (DB.enterprises.find((e) => e.id === w.enterpriseId) || {}).name || '—';
