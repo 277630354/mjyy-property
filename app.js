@@ -83,6 +83,7 @@
     '#/worker/mini/work-detail': { view: viewWorkerMiniWorkDetail, group: 4, crumb: ['小程序端作业人员', '作业详情'] },
     '#/worker/mini/area-work-detail': { view: viewWorkerMiniAreaWorkDetail, group: 4, crumb: ['小程序端作业人员', '作业详情'] },
     '#/worker/mini/work-info': { view: viewWorkerMiniWorkInfo, group: 4, crumb: ['小程序端作业人员', '作业详情'] },
+    '#/worker/mini/resubmit': { view: viewWorkerMiniResubmit, group: 4, crumb: ['小程序端作业人员', '重新提交作业'] },
   };
 
   // ============ 工具函数 ============
@@ -1250,8 +1251,9 @@
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`).join('');
     const areaStatuses = ['全部', '待开始', '进行中', '已完成', '已拒绝', '已结束'];
-    const areaItems = MINI_AREA_WORKS.map((w) => `
-      <div class="mini-list-item" data-id="${w.id}" data-status="${esc(w.status)}">
+    const areaItems = MINI_AREA_WORKS.map((w) => {
+      const resubmitBtn = w.status === '已拒绝' ? `<div class="mini-li-actions"><span class="mini-btn-mini primary" data-resubmit="${w.id}">重新提交</span></div>` : '';
+      return `<div class="mini-list-item" data-id="${w.id}" data-status="${esc(w.status)}">
         <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
@@ -1262,8 +1264,10 @@
         <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+        ${resubmitBtn}
         <div class="mini-li-arrow">${icon('chevron')}</div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
     const areaStatusOptions = areaStatuses.map((s) => `<option value="${s}">${s}</option>`).join('');
     view.innerHTML = `
       <div class="mini-office-wrap">
@@ -1307,6 +1311,7 @@
           <li><b>1·</b>列表有状态搜索。</li>
           <li><b>2·</b>状态有：待开始，进行中，已完成，已拒绝，已结束；排序为已拒绝，待开始，进行中，已完成，已结束，然后每个状态又按上传时间倒序。</li>
           <li><b>3·</b>每个作业都有上传时间，上传时间即作业详情点击提交按钮时间，但该时间不在页面展示。</li>
+          <li><b>4·</b>已拒绝的作业列表和详情增加"重新提交"按钮，点击该按钮跳转至小程序端作业人员的二级菜单作业详情页面，内容回填，可再次发起作业申请。</li>
         </ul>
       </div>
     `;
@@ -1324,8 +1329,15 @@
       });
     });
     view.querySelectorAll('#workerTab1 .mini-list-item').forEach(item => {
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        if (e.target.closest('[data-resubmit]')) return;
         location.hash = '#/worker/mini/area-work-detail?id=' + item.dataset.id;
+      });
+    });
+    view.querySelectorAll('[data-resubmit]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        location.hash = '#/worker/mini/resubmit?id=' + btn.dataset.resubmit;
       });
     });
     const statusFilter = view.querySelector('#areaStatusFilter');
@@ -1644,6 +1656,7 @@
               ${verifyCardsHtml}
             </div>` : ''}
           </div>
+          ${w.status === '已拒绝' ? `<div class="mini-action-bar"><button class="mini-btn primary" id="resubmitBtn">重新提交</button></div>` : ''}
         </div>
         <div class="side-desc-panel mini-side-panel">
           <div class="sdp-title">作业详情说明</div>
@@ -1657,6 +1670,12 @@
     `;
     bindMiniAuditToggle(view);
     bindMiniAiReviewButtons(view);
+    const resubmitBtn = view.querySelector('#resubmitBtn');
+    if (resubmitBtn) {
+      resubmitBtn.addEventListener('click', () => {
+        location.hash = '#/worker/mini/resubmit?id=' + w.id;
+      });
+    }
   }
 
   // ============ 小程序端作业人员 - 作业详情（待填写，无交互） ============
@@ -1914,6 +1933,281 @@
         close();
         viewWorkerMiniWorkInfo();
       };
+    }
+  }
+
+  // ============ 小程序端作业人员 - 重新提交作业 ============
+  function viewWorkerMiniResubmit() {
+    const view = $('#view');
+    const id = parseInt((location.hash.split('?')[1] || '').replace('id=', '')) || 4;
+    const src = MINI_AREA_WORKS.find((x) => x.id === id) || MINI_AREA_WORKS[3];
+    const w = {
+      id: src.id, name: src.name, type: src.type, enterprise: src.enterprise,
+      areaName: src.areaName, store: src.store, constructionUnit: src.constructionUnit,
+      address: src.address, leader: src.leader, leaderPhone: src.leaderPhone,
+      startTime: src.startTime, endTime: src.endTime, fireCert: src.fireCert,
+      status: '待审核', workers: src.workers.map((p) => ({ ...p })),
+    };
+    const wrows = w.workers.map((p, idx) => {
+      const isLeader = p.name === w.leader;
+      const certCell = p.certImg
+        ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img">`
+        : '—';
+      return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
+        <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
+        <td>${esc(p.phone)}</td>
+        <td class="mono">${esc(p.idCard)}</td>
+        <td>${esc(p.task)}</td>
+        <td>${esc(p.needCert)}</td>
+        <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
+        <td>${certCell}</td>
+        <td class="mini-tbl-actions">
+          <span class="mini-tbl-edit" data-edit-idx="${idx}">编辑</span>
+          <span class="mini-tbl-del" data-del-idx="${idx}">删除</span>
+        </td>
+      </tr>`;
+    }).join('');
+    view.innerHTML = `
+      <div class="mini-office-wrap">
+        <div class="mini-phone">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right">
+              <span class="sig"></span>
+              <span class="wifi"></span>
+              <span class="batt">88</span>
+            </span>
+          </div>
+          <div class="mini-navheader">
+            <span class="back-btn" onclick="location.hash='#/worker/mini/detail'">‹</span>
+            <span class="nav-title">重新提交作业</span>
+            <span></span>
+          </div>
+          <div class="mini-tab-content mini-detail-content">
+            <div class="mini-status-banner rejected">
+              <span class="mini-status-text">已拒绝</span>
+              <span class="mini-status-tip">您的作业申请已被拒绝，修改后重新提交</span>
+            </div>
+            <div class="mini-detail-card">
+              <div class="mini-card-title">作业信息</div>
+              <div class="mini-form-row"><label class="mini-li-label">作业名称</label><input class="mini-form-input" type="text" value="${esc(w.name)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label">作业类型</label>
+                <select class="mini-form-select">
+                  <option value="动火作业" ${w.type === '动火作业' ? 'selected' : ''}>动火作业</option>
+                  <option value="高处作业" ${w.type === '高处作业' ? 'selected' : ''}>高处作业</option>
+                  <option value="临时用电作业" ${w.type === '临时用电作业' ? 'selected' : ''}>临时用电作业</option>
+                  <option value="受限空间作业" ${w.type === '受限空间作业' ? 'selected' : ''}>受限空间作业</option>
+                  <option value="吊装作业" ${w.type === '吊装作业' ? 'selected' : ''}>吊装作业</option>
+                </select>
+              </div>
+              <div class="mini-form-row"><label class="mini-li-label">企业名称</label><input class="mini-form-input disabled" type="text" value="${esc(w.enterprise)}" disabled></div>
+              <div class="mini-form-row"><label class="mini-li-label">作业区域</label>
+                <select class="mini-form-select">
+                  <option value="${esc(w.areaName || '')}" selected>${esc(w.areaName || '请选择')}</option>
+                  <option value="A区商业广场">A区商业广场</option>
+                  <option value="B区住宅小区">B区住宅小区</option>
+                  <option value="C区工业园区">C区工业园区</option>
+                </select>
+              </div>
+              <div class="mini-form-row"><label class="mini-li-label">门店名称</label>
+                <select class="mini-form-select">
+                  <option value="${esc(w.store)}" selected>${esc(w.store)}</option>
+                  <option value="A栋1楼装修门店">A栋1楼装修门店</option>
+                  <option value="A栋2楼装修门店">A栋2楼装修门店</option>
+                  <option value="B栋3楼装修门店">B栋3楼装修门店</option>
+                </select>
+              </div>
+              <div class="mini-form-row"><label class="mini-li-label">施工单位</label><input class="mini-form-input" type="text" value="${esc(w.constructionUnit || '')}" placeholder="请输入施工单位"></div>
+              <div class="mini-form-row"><label class="mini-li-label">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
+              <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+            </div>
+            <div class="mini-detail-card">
+              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span>
+                <span class="mini-add-btn" data-add-worker>+</span>
+              </div>
+              <div class="mini-tbl-wrap">
+                <table class="mini-tbl">
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>操作</th></tr></thead>
+                  <tbody>${wrows}</tbody>
+                </table>
+              </div>
+            </div>
+            <div class="mini-detail-card">
+              <div class="mini-card-title">作业现场</div>
+              <div class="mini-form-row">
+                <div class="mini-upload-box" data-upload-site-photo>点击上传现场照片</div>
+              </div>
+              <div class="mini-form-row">
+                <div class="mini-upload-box" data-upload-site-video>点击上传现场视频</div>
+              </div>
+            </div>
+          </div>
+          <div class="mini-action-bar">
+            <button class="mini-btn pass" style="flex:1" id="resubmit-ok">提交</button>
+          </div>
+        </div>
+        <div class="side-desc-panel mini-side-panel">
+          <div class="sdp-title">重新提交说明</div>
+          <ul>
+            <li><b>1·</b>原作业信息已自动回填，请核对后修改需要更新的内容。</li>
+            <li><b>2·</b>修改完成后点击提交按钮，作业将重新进入待审核状态。</li>
+            <li><b>3·</b>施工人员信息可点击编辑或删除进行调整，也可点击加号新增人员。</li>
+          </ul>
+        </div>
+      </div>
+    `;
+    const addBtn = view.querySelector('[data-add-worker]');
+    if (addBtn) addBtn.addEventListener('click', () => openWorkerForm(null));
+    view.querySelectorAll('.mini-tbl-edit').forEach(el => {
+      el.addEventListener('click', () => openWorkerForm(parseInt(el.dataset.editIdx, 10)));
+    });
+    view.querySelectorAll('.mini-tbl-del').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.dataset.delIdx, 10);
+        const target = w.workers[idx];
+        if (!target) return;
+        const delBody = `<div style="text-align:center;padding:10px 0;font-size:14px;color:#606266">确定要删除施工人「${esc(target.name)}」吗？此操作不可撤销。</div>`;
+        const delFoot = `<button class="btn" id="del-cancel" style="flex:1">取消</button><button class="btn btn-danger" id="del-ok" style="flex:1">删除</button>`;
+        const { node, close } = openModal('删除施工人', delBody, delFoot);
+        node.querySelector('#del-cancel').onclick = close;
+        node.querySelector('#del-ok').onclick = () => {
+          w.workers.splice(idx, 1);
+          close();
+          toast('施工人已删除', 'success');
+          viewWorkerMiniResubmit();
+        };
+      });
+    });
+    const sitePhotoBox = view.querySelector('[data-upload-site-photo]');
+    if (sitePhotoBox) sitePhotoBox.addEventListener('click', () => {
+      toast('现场照片已上传', 'success');
+      sitePhotoBox.textContent = '已上传 ✓';
+      sitePhotoBox.classList.add('uploaded');
+    });
+    const siteVideoBox = view.querySelector('[data-upload-site-video]');
+    if (siteVideoBox) siteVideoBox.addEventListener('click', () => {
+      toast('现场视频已上传', 'success');
+      siteVideoBox.textContent = '已上传 ✓';
+      siteVideoBox.classList.add('uploaded');
+    });
+
+    function openWorkerForm(editIdx) {
+      const editing = typeof editIdx === 'number';
+      const p = editing ? w.workers[editIdx] : null;
+      const wasLeader = editing && p.name === w.leader;
+      const body = `<div class="mini-worker-form">
+          <div class="mini-form-row"><label class="mini-li-label">姓名<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-name" placeholder="请输入姓名" value="${p ? esc(p.name) : ''}"></div>
+          <div class="mini-form-row"><label class="mini-li-label">手机号<span class="mini-req">*</span></label><input class="mini-form-input" type="tel" id="wk-phone" placeholder="请输入手机号" value="${p ? esc(p.phone) : ''}"></div>
+          <div class="mini-form-row"><label class="mini-li-label">身份证号<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-idcard" placeholder="请输入身份证号" value="${p ? esc(p.idCard) : ''}"></div>
+          <div class="mini-form-row"><label class="mini-li-label">工作内容<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-task" placeholder="请输入工作内容" value="${p ? esc(p.task) : ''}"></div>
+          <div class="mini-form-row"><label class="mini-li-label">是否需要持证<span class="mini-req">*</span></label>
+            <select class="mini-form-select" id="wk-needcert">
+              <option value="是" ${!p || p.needCert === '是' ? 'selected' : ''}>是</option>
+              <option value="否" ${p && p.needCert === '否' ? 'selected' : ''}>否</option>
+            </select>
+          </div>
+          <div class="mini-form-row"><label class="mini-li-label">是否持证<span class="mini-req">*</span></label>
+            <select class="mini-form-select" id="wk-hascert">
+              <option value="" ${!p || !p.hasCert ? 'selected' : ''}>请选择</option>
+              <option value="是" ${p && p.hasCert === '是' ? 'selected' : ''}>是</option>
+              <option value="否" ${p && p.hasCert === '否' ? 'selected' : ''}>否</option>
+            </select>
+          </div>
+          <div class="mini-form-row" id="wk-cert-row" style="display:${p && p.hasCert === '是' ? 'flex' : 'none'}">
+            <label class="mini-li-label">证件照<span class="mini-req">*</span></label>
+            <div class="mini-upload-box" id="wk-upload">${p && p.certImg ? '已上传 ✓' : '点击上传图片'}</div>
+          </div>
+        </div>`;
+      const foot = `<button class="btn btn-primary" id="wk-ok" style="width:100%">确认</button>`;
+      const desc = `<div class="modal-desc">
+          <div class="md-title">添加施工人说明</div>
+          <ul>
+            <li><b>1·</b>所有信息都是必填。</li>
+            <li><b>2·</b>身份证号填写完后再列表展示为脱敏。</li>
+            <li><b>3·</b>是否需要持证默认为是。</li>
+            <li><b>4·</b>是否持证：没有默认值，选是则出现证件照上传图片，必填，如果选否或未选择，都不展示证件照字段。</li>
+          </ul>
+        </div>`;
+      const overlayNode = h(`<div class="overlay"><div class="modal wide modal-with-desc">
+        <div class="modal-main">
+          <div class="modal-head"><span class="mt">${esc(editing ? '编辑施工人' : '添加施工人')}</span><span class="close">${icon('x')}</span></div>
+          <div class="modal-body">${body}</div>
+          <div class="modal-foot">${foot}</div>
+        </div>
+        ${desc}
+      </div></div>`);
+      document.body.appendChild(overlayNode);
+      const close = () => overlayNode.remove();
+      overlayNode.querySelector('.close').onclick = close;
+      overlayNode.addEventListener('click', (e) => { if (e.target === overlayNode) close(); });
+      const node = overlayNode;
+      const hasCertSelect = node.querySelector('#wk-hascert');
+      const certRow = node.querySelector('#wk-cert-row');
+      let certUploaded = editing ? !!(p && p.certImg) : false;
+      hasCertSelect.addEventListener('change', () => {
+        const show = hasCertSelect.value === '是';
+        certRow.style.display = show ? 'flex' : 'none';
+      });
+      const uploadBox = node.querySelector('#wk-upload');
+      uploadBox.addEventListener('click', () => {
+        toast('证件照已上传', 'success');
+        uploadBox.textContent = '已上传 ✓';
+        certUploaded = true;
+      });
+      node.querySelector('#wk-ok').onclick = () => {
+        const name = node.querySelector('#wk-name').value.trim();
+        const phone = node.querySelector('#wk-phone').value.trim();
+        const idCard = node.querySelector('#wk-idcard').value.trim();
+        const task = node.querySelector('#wk-task').value.trim();
+        const needCert = node.querySelector('#wk-needcert').value;
+        const hasCert = hasCertSelect.value;
+        if (!name || !phone || !idCard || !task || !hasCert) {
+          toast('请填写完整信息', 'error');
+          return;
+        }
+        if (hasCert === '是' && !certUploaded) {
+          toast('请上传证件照', 'error');
+          return;
+        }
+        const certImg = hasCert === '是' ? (editing && p ? p.certImg : 'assets/cert-default.jpg') : '';
+        if (editing) {
+          w.workers[editIdx] = { name, phone, idCard, task, needCert, hasCert: hasCert === '否' ? '否' : (hasCert || ''), certImg };
+        } else {
+          w.workers.push({ name, phone, idCard, task, needCert, hasCert: hasCert === '否' ? '否' : (hasCert || ''), certImg });
+        }
+        close();
+        toast(editing ? '施工人已更新' : '施工人已添加', 'success');
+        viewWorkerMiniResubmit();
+      };
+    }
+
+    const submitBtn = view.querySelector('#resubmit-ok');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        toast('作业已重新提交，等待审核', 'success');
+        MINI_PENDING_WORKS.unshift({
+          ...w,
+          id: Math.max(...MINI_PENDING_WORKS.map(x => x.id)) + 1,
+          status: '待审核',
+          audit: [{
+            time: new Date().toLocaleString('zh-CN', { hour12: false }),
+            name: w.leader,
+            reviewer: '',
+            content: '重新提交作业，等待审核',
+            photos: 0, videos: 0, status: '待审核', reason: '',
+            fireTicket: w.fireCert === '已上传' ? '动火票编号:' + 'DH' + Date.now() : '—'
+          }],
+          verify: [],
+        });
+        setTimeout(() => {
+          location.hash = '#/worker/mini/detail';
+        }, 800);
+      });
     }
   }
 
