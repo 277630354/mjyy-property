@@ -776,7 +776,6 @@
         return `<div class="mini-photo-item" style="background-image:url('${src}')" onclick="window.open('${src}','_blank')"></div>`;
       }).join('') : '';
       const videoHtml = v.videos > 0 ? `<div class="mini-video-item">${icon('play')}<span>点击播放</span></div>` : '';
-      const reasonHtml = v.status === '未通过' && v.reason ? `<div class="mini-li-row"><span class="mini-li-label">不通过原因</span><span class="mini-li-val">${esc(v.reason)}</span></div>` : '';
       return `<div class="mini-rec-card ${isOpen ? 'open' : ''}" data-idx="${i}">
         <div class="mini-rec-head">
           <div class="mini-rec-summary">
@@ -790,7 +789,6 @@
         <div class="mini-rec-body">
           <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(v.area)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val"><span class="mini-view-detail-btn" data-mini-ai-review="verify-${workId}-${i}-${v.photos}-${v.videos}">查看详情</span></span></div>
-          ${reasonHtml}
           ${v.photos > 0 ? `<div class="mini-sub-title">现场图片 <span class="mini-count">${v.photos}张</span></div><div class="mini-photo-grid">${photoHtml}</div>` : ''}
           ${v.videos > 0 ? `<div class="mini-sub-title">现场视频 <span class="mini-count">${v.videos}个</span></div>${videoHtml}` : ''}
         </div>
@@ -2493,7 +2491,6 @@
                 <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, v.photos, VERIFY_POOL)}</div></div>
                 <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${v.videos} 个</div></div>
                 <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
-                <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${esc(v.reason || '—')}</div></div>
                 <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
               </div>
             </div>
