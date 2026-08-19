@@ -344,7 +344,8 @@ textarea.input{height:80px;padding:8px 12px;resize:vertical;line-height:1.5}
 .mini-status-banner .mini-status-tip{font-size:12px;opacity:.85}
 .mini-detail-card{background:#fff;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .mini-sub-title{font-size:12px;font-weight:600;color:#606266;margin:12px 0 8px;padding-bottom:6px;border-bottom:1px dashed #ebeef5;display:flex;justify-content:space-between;align-items:center}
-.mini-card-title{font-size:14px;font-weight:600;color:#333;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f5f5f5;display:flex;justify-content:space-between;align-items:center}
+.mini-card-title{font-size:14px;font-weight:600;color:#333;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #f5f5f5;display:flex;justify-content:flex-start;align-items:center}
+.mini-card-title .mini-add-btn{margin-left:auto}
 .mini-count{font-size:12px;color:#999;font-weight:400}
 .mini-worker-item{background:#fafbfc;border-radius:8px;padding:10px 12px;margin-bottom:8px}
 .mini-worker-item:last-child{margin-bottom:0}
