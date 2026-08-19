@@ -1069,10 +1069,10 @@
               <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
+              <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
                   <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
@@ -1198,10 +1198,10 @@
               <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
+              <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
                   <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
@@ -1413,11 +1413,11 @@
               <div class="mini-li-row"><span class="mini-li-label">开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
+              <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
                   <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
@@ -1426,7 +1426,7 @@
               </div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">作业现场</div>
+              <div class="mini-card-title required">作业现场</div>
               <div class="mini-rec-card open" data-collapsible="site-photo">
                 <div class="mini-rec-head">
                   <div class="mini-rec-summary"><span class="mini-rec-idx" style="background:#fff7e6;color:#fa8c16">🖼</span><span class="mini-rec-name">现场照片</span><span class="mini-count">${sitePhotoCount}张</span></div>
@@ -1636,10 +1636,10 @@
               <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
+              <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
                   <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
@@ -1720,8 +1720,8 @@
           <div class="mini-tab-content mini-detail-content">
             <div class="mini-detail-card">
               <div class="mini-card-title">作业信息</div>
-              <div class="mini-form-row"><label class="mini-li-label">作业名称</label><input class="mini-form-input" type="text" value="${esc(w.name)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">作业类型</label>
+              <div class="mini-form-row"><label class="mini-li-label required">作业名称</label><input class="mini-form-input" type="text" value="${esc(w.name)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业类型</label>
                 <select class="mini-form-select">
                   <option value="动火作业" ${w.type === '动火作业' ? 'selected' : ''}>动火作业</option>
                   <option value="高处作业" ${w.type === '高处作业' ? 'selected' : ''}>高处作业</option>
@@ -1730,8 +1730,8 @@
                   <option value="吊装作业" ${w.type === '吊装作业' ? 'selected' : ''}>吊装作业</option>
                 </select>
               </div>
-              <div class="mini-form-row"><label class="mini-li-label">企业名称</label><input class="mini-form-input disabled" type="text" value="${esc(w.enterprise)}" disabled></div>
-              <div class="mini-form-row"><label class="mini-li-label">作业区域</label>
+              <div class="mini-form-row"><label class="mini-li-label required">企业名称</label><input class="mini-form-input disabled" type="text" value="${esc(w.enterprise)}" disabled></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业区域</label>
                 <select class="mini-form-select">
                   <option value="${esc(w.areaName || 'A区商业广场')}" selected>${esc(w.areaName || 'A区商业广场')}</option>
                   <option value="A区商业广场">A区商业广场</option>
@@ -1739,7 +1739,7 @@
                   <option value="C区工业园区">C区工业园区</option>
                 </select>
               </div>
-              <div class="mini-form-row"><label class="mini-li-label">门店名称</label>
+              <div class="mini-form-row"><label class="mini-li-label required">门店名称</label>
                 <select class="mini-form-select">
                   <option value="${esc(w.store)}" selected>${esc(w.store)}</option>
                   <option value="A栋1楼装修门店">A栋1楼装修门店</option>
@@ -1748,17 +1748,17 @@
                 </select>
               </div>
               <div class="mini-form-row"><label class="mini-li-label">施工单位</label><input class="mini-form-input" type="text" value="${esc(w.constructionUnit || '')}" placeholder="请输入施工单位"></div>
-              <div class="mini-form-row"><label class="mini-li-label">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span>
+              <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span>
                 <span class="mini-add-btn" data-add-worker>+</span>
               </div>
               <div class="mini-tbl-wrap">
@@ -1769,7 +1769,7 @@
               </div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">作业现场</div>
+              <div class="mini-card-title required">作业现场</div>
               <div class="mini-form-row">
                 <div class="mini-upload-box" data-upload-site-photo>点击上传现场照片</div>
               </div>
@@ -1797,7 +1797,7 @@
             <li><b>10·作业状态：</b>此处为作业人员上传作业信息的作业详情页面，状态一定为待审核。</li>
             <li><b>11·动火作业证书：</b>状态标记，由施工人员列表在需要持证的前提下是否全部上传证件照判定，只要有人未上传，则直接显示未上传，全部上传则显示已上传。</li>
             <li><b>12·动火票：</b>上传按钮，点击上传图片。</li>
-            <li><b>13·施工人列表：</b>统计总人数，点击加号可录入人员，操作列有编辑和删除，点击编辑按钮打开添加施工人页面但数据回填，点击删除直接删除整条该人员信息；是否持证如果在编辑时选的否，则此处展示横杠。</li>
+            <li><b>13·施工人列表：</b>统计总人数，点击加号可录入人员，操作列有编辑和删除，点击编辑按钮打开添加施工人页面但数据回填，点击删除直接删除整条该人员信息；是否持证如果在编辑时选的否，则此处展示横杠。注意只能添加已认证的成员。</li>
             <li><b>14·负责人：</b>作业信息里填写了施工负责人，这个人必须填写在施工人列表，且自动标记为负责人（以姓名加手机号判定，防重名）。</li>
             <li><b>15·作业现场：</b>支持仅照片或仅视频或照片和视频，属于必填但至少有一项，都没有则无法提交。</li>
             <li><b>16·提交校验：</b>点击提交按钮，需要判断除施工单位所有数据全部必填是否有未填，否则点击提交按钮页面提示存在未填信息。</li>
@@ -1990,8 +1990,8 @@
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title">作业信息</div>
-              <div class="mini-form-row"><label class="mini-li-label">作业名称</label><input class="mini-form-input" type="text" value="${esc(w.name)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">作业类型</label>
+              <div class="mini-form-row"><label class="mini-li-label required">作业名称</label><input class="mini-form-input" type="text" value="${esc(w.name)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业类型</label>
                 <select class="mini-form-select">
                   <option value="动火作业" ${w.type === '动火作业' ? 'selected' : ''}>动火作业</option>
                   <option value="高处作业" ${w.type === '高处作业' ? 'selected' : ''}>高处作业</option>
@@ -2000,8 +2000,8 @@
                   <option value="吊装作业" ${w.type === '吊装作业' ? 'selected' : ''}>吊装作业</option>
                 </select>
               </div>
-              <div class="mini-form-row"><label class="mini-li-label">企业名称</label><input class="mini-form-input disabled" type="text" value="${esc(w.enterprise)}" disabled></div>
-              <div class="mini-form-row"><label class="mini-li-label">作业区域</label>
+              <div class="mini-form-row"><label class="mini-li-label required">企业名称</label><input class="mini-form-input disabled" type="text" value="${esc(w.enterprise)}" disabled></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业区域</label>
                 <select class="mini-form-select">
                   <option value="${esc(w.areaName || '')}" selected>${esc(w.areaName || '请选择')}</option>
                   <option value="A区商业广场">A区商业广场</option>
@@ -2009,7 +2009,7 @@
                   <option value="C区工业园区">C区工业园区</option>
                 </select>
               </div>
-              <div class="mini-form-row"><label class="mini-li-label">门店名称</label>
+              <div class="mini-form-row"><label class="mini-li-label required">门店名称</label>
                 <select class="mini-form-select">
                   <option value="${esc(w.store)}" selected>${esc(w.store)}</option>
                   <option value="A栋1楼装修门店">A栋1楼装修门店</option>
@@ -2018,16 +2018,16 @@
                 </select>
               </div>
               <div class="mini-form-row"><label class="mini-li-label">施工单位</label><input class="mini-form-input" type="text" value="${esc(w.constructionUnit || '')}" placeholder="请输入施工单位"></div>
-              <div class="mini-form-row"><label class="mini-li-label">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">施工人列表 <span class="mini-count">${w.workers.length}人</span>
+              <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span>
                 <span class="mini-add-btn" data-add-worker>+</span>
               </div>
               <div class="mini-tbl-wrap">
@@ -2038,7 +2038,7 @@
               </div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">作业现场</div>
+              <div class="mini-card-title required">作业现场</div>
               <div class="mini-form-row">
                 <div class="mini-upload-box" data-upload-site-photo>点击上传现场照片</div>
               </div>
