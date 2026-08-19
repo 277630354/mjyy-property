@@ -2317,36 +2317,56 @@
     const isEdit = !!area;
     const a = area || { name: '', region: '', province: '湖北省', city: '武汉市', district: '江汉区', officer: '', phone: '', bounds: { north: 30.59, south: 30.58, east: 114.31, west: 114.29 } };
     const body = `
-      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>区域名称<span class="req">*</span></div><div class="fr"><input class="input" id="m-name" value="${esc(a.name)}" placeholder="请输入区域名称"></div></div>
-      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>2</span></span>所属区域<span class="req">*</span></div><div class="fr">
-        <div class="cascader">
-          <select class="select" id="m-prov"><option>湖北省</option><option>湖南省</option><option>河南省</option></select>
-          <select class="select" id="m-city"><option>武汉市</option><option>宜昌市</option><option>襄阳市</option></select>
-          <select class="select" id="m-dist"><option>江汉区</option><option>武昌区</option><option>洪山区</option><option>江岸区</option></select>
-        </div></div></div>
-      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>安管员姓名</div><div class="fr"><input class="input" id="m-officer" value="${esc(a.officer)}" placeholder="请输入安管员姓名（选填）"></div></div>
-      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>联系方式</div><div class="fr"><input class="input" id="m-phone" value="${esc(a.phone)}" placeholder="请输入联系方式（选填）"></div></div>
-      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>4</span></span>地图定位</div><div class="fr">
-        <div class="map-box"><div class="grid"></div><div class="road" style="left:0;top:55%;width:100%;height:6px;transform:rotate(-8deg)"></div><div class="road" style="left:40%;top:0;width:6px;height:100%;transform:rotate(6deg)"></div><div class="pin">${icon('map-pin')}</div><div class="scale">500m</div></div>
-        <div class="coord-row">
-          <div class="coord"><div class="cl">北纬</div><input class="input" id="m-north" value="${a.bounds.north}"></div>
-          <div class="coord"><div class="cl">南纬</div><input class="input" id="m-south" value="${a.bounds.south}"></div>
-          <div class="coord"><div class="cl">东经</div><input class="input" id="m-east" value="${a.bounds.east}"></div>
-          <div class="coord"><div class="cl">西经</div><input class="input" id="m-west" value="${a.bounds.west}"></div>
+      <div class="modal-with-desc">
+        <div class="modal-main">
+          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>区域名称<span class="req">*</span></div><div class="fr"><input class="input" id="m-name" value="${esc(a.name)}" placeholder="请输入区域名称"></div></div>
+          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>2</span></span>所属区域<span class="req">*</span></div><div class="fr">
+            <div class="cascader">
+              <select class="select" id="m-prov"><option>湖北省</option><option>湖南省</option><option>河南省</option></select>
+              <select class="select" id="m-city"><option>武汉市</option><option>宜昌市</option><option>襄阳市</option></select>
+              <select class="select" id="m-dist"><option>江汉区</option><option>武昌区</option><option>洪山区</option><option>江岸区</option></select>
+            </div></div></div>
+          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>安管员姓名</div><div class="fr"><input class="input" id="m-officer" value="${esc(a.officer)}" placeholder="请输入安管员姓名（选填）"></div></div>
+          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>联系方式</div><div class="fr"><input class="input" id="m-phone" value="${esc(a.phone)}" placeholder="请输入联系方式（选填）"></div></div>
+          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>4</span></span>地图定位</div><div class="fr">
+            <div class="map-box"><div class="grid"></div><div class="road" style="left:0;top:55%;width:100%;height:6px;transform:rotate(-8deg)"></div><div class="road" style="left:40%;top:0;width:6px;height:100%;transform:rotate(6deg)"></div><div class="pin">${icon('map-pin')}</div><div class="scale">500m</div></div>
+            <div class="coord-row">
+              <div class="coord"><div class="cl">北纬</div><input class="input" id="m-north" value="${a.bounds.north}"></div>
+              <div class="coord"><div class="cl">南纬</div><input class="input" id="m-south" value="${a.bounds.south}"></div>
+              <div class="coord"><div class="cl">东经</div><input class="input" id="m-east" value="${a.bounds.east}"></div>
+              <div class="coord"><div class="cl">西经</div><input class="input" id="m-west" value="${a.bounds.west}"></div>
+            </div>
+            <div class="form-tip">支持矩形绘制，点击地图确定左上角和右下角</div>
+          </div></div>
         </div>
-        <div class="form-tip">支持矩形绘制，点击地图确定左上角和右下角</div>
-      </div></div>`;
+        <div class="modal-desc">
+          <div class="md-title">账号说明</div>
+          <ul>
+            <li>G端登录账号由总台的用户管理--用户列表进行配置，会选定区域，比如杭州市，在G端新增区域时，若地图选点不在杭州市，则最后点击确定按钮提交时，给出弹框提示【当前地图定位不在xx，请重新绘图】</li>
+          </ul>
+        </div>
+      </div>`;
     const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="m-ok">确定</button>`;
-    const { node, close } = openModal(isEdit ? '编辑区域' : '新增区域', body, foot);
+    const { node, close } = openModal(isEdit ? '编辑区域' : '新增区域', body, foot, true);
     $('#m-prov').value = a.province; $('#m-city').value = a.city; $('#m-dist').value = a.district;
     node.querySelectorAll('.btn')[0].onclick = close;
     $('#m-ok').onclick = () => {
       const name = $('#m-name').value.trim();
       if (!name) { toast('请输入区域名称', 'error'); return; }
+      const currentCity = $('#m-city').value;
+      if (currentCity !== '杭州市') {
+        const alertNode = h(`<div class="overlay confirm"><div class="modal"><div class="modal-head"><span class="mt">提示</span><span class="close">${icon('x')}</span></div><div class="modal-body" style="display:flex;align-items:center;gap:10px">${icon('alert')}<span>当前地图定位不在${esc(currentCity)}，请重新绘图</span></div><div class="modal-foot"><button class="btn btn-primary" id="alert-ok">我知道了</button></div></div></div>`);
+        document.body.appendChild(alertNode);
+        const closeAlert = () => alertNode.remove();
+        alertNode.querySelector('.close').onclick = closeAlert;
+        alertNode.querySelector('#alert-ok').onclick = closeAlert;
+        alertNode.addEventListener('click', (e) => { if (e.target === alertNode) closeAlert(); });
+        return;
+      }
       const data = {
         id: a.id, name,
-        province: $('#m-prov').value, city: $('#m-city').value, district: $('#m-dist').value,
-        region: `${$('#m-prov').value}${$('#m-city').value}${$('#m-dist').value}`,
+        province: $('#m-prov').value, city: currentCity, district: $('#m-dist').value,
+        region: `${$('#m-prov').value}${currentCity}${$('#m-dist').value}`,
         officer: $('#m-officer').value.trim(), phone: $('#m-phone').value.trim(),
         bounds: { north: +$('#m-north').value, south: +$('#m-south').value, east: +$('#m-east').value, west: +$('#m-west').value },
       };
