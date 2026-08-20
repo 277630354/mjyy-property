@@ -400,6 +400,7 @@
               <li><b>3·二维码与作业区域：</b>安管员二维码包含企业名称和作业区域，G端未绑定企业时作业区域为空，作业信息仅存在于企业端。</li>
               <li><b>4·后台管理：</b>安管员的新增、修改、删除均在企业端「安管员管理」页面操作，删除需谨慎，会影响历史审核记录。</li>
               <li><b>5·请尽快完成核查：</b>企业配置了核查规则后，安管员到达指定时间超时未上传核查信息，则进入小程序自动出现弹框提醒，且在区域作业列表，进行中的作业会打上【请尽快完成核查】的标签。</li>
+              <li><b>6·当安管员返回到首页或重新进入小程序，只要有超时未核查的作业，就一直弹核查提醒弹框。</li>
             </ul>
           </div>
           <!-- 核查提醒弹框展示 -->
@@ -2790,6 +2791,10 @@
           { title: '施工人数', key: 'workerCount' },
           { title: '开始时间', key: 'startTime' },
           { title: '结束时间', key: 'endTime' },
+          ...(opt.scope === 'enterprise' ? [
+            { title: '核查规则', render: (r) => esc(r.auditRuleLabel || '—') },
+            { title: '安管员', render: (r) => esc((r.assignedOfficerNames && r.assignedOfficerNames.length) ? r.assignedOfficerNames.join('、') : '—') },
+          ] : []),
           { title: '作业票', render: (r) => {
               const uploaded = r.fireTicket || r.fireTicketImg;
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
@@ -2812,7 +2817,7 @@
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-cert="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
             } },
           { title: '作业状态', render: (r) => statusTag(r.status) },
-          { title: '操作', render: (r) => `<div class="actions"><button class="btn-text" data-act="view">查看</button>${opt.scope === 'enterprise' ? '<button class="btn-text" data-act="rule">核查规则</button><button class="btn-text" data-act="assign">分配安管员</button>' : ''}</div>` },
+          { title: '操作', render: (r) => `<div class="actions"><button class="btn-text" data-act="view">查看</button>${opt.scope === 'enterprise' && r.status === '待审核' ? '<button class="btn-text" data-act="rule">核查规则</button><button class="btn-text" data-act="assign">分配安管员</button>' : ''}</div>` },
         ];
         const { node } = renderTable({
           columns, rows, page: state.page, pageSize: state.pageSize,
@@ -2881,7 +2886,8 @@
             <ul>
               <li><b>作业管理所有数据来源都是作业人员扫描二维码录入的信息上传。</b></li>
               <li><b>1·作业类型条件搜索：</b>作业类型有动火，高处，临电，但目前只有动火可以三个都放进去。</li>
-              <li><b>2·作业状态条件搜索：</b>待审核，待开始，进行中，已完成，已拒绝，已结束。</li>
+              <li><b>2·操作列的核查规则和分配安管员只有待审核的作业才展示，企业管理员将作业分配给安管员后，安管员才能在小程序上看到作业。</b></li>
+              <li><b>3·作业状态条件搜索：</b>待审核，待开始，进行中，已完成，已拒绝，已结束。</li>
               <li><b>待审核：</b>作业人员上传的作业信息初始为待审核状态。</li>
               <li><b>待开始：</b>审核通过但未到作业开始时间。</li>
               <li><b>进行中：</b>作业已处于开始时间和结束时间之间。</li>
@@ -2981,14 +2987,14 @@
       { label: '一小时核查一次', value: '1h', hours: 1 },
       { label: '两小时核查一次', value: '2h', hours: 2 },
       { label: '四小时核查一次', value: '4h', hours: 4 },
-      { label: '从不核查', value: 'never', hours: 0 },
+      { label: '自由核查', value: 'free', hours: 0 },
     ];
-    const currentRule = work.auditRule || '2h';
+    const currentRule = work.auditRule || 'free';
     const currentIsCustom = work.auditRuleCustom === true || !presets.find((p) => p.value === currentRule);
-    const currentIsNever = currentRule === 'never';
+    const currentIsFree = currentRule === 'free';
     const customHours = work.auditCustomHours || 3;
-    const notifySms = currentIsNever ? false : (work.auditNotifySms === true);
-    const notifyMini = currentIsNever ? false : (work.auditNotifyMini === true);
+    const notifySms = currentIsFree ? false : (work.auditNotifySms === true);
+    const notifyMini = currentIsFree ? false : (work.auditNotifyMini === true);
     const body = `
       <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>作业名称</div><div class="fr"><div style="padding:6px 0;color:#606266">${esc(work.name)}</div></div></div>
       <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>2</span></span>核查规则<span class="req">*</span></div><div class="fr">
@@ -3007,18 +3013,18 @@
       </div>
       <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>4</span></span>核查提醒</div><div class="fr" style="display:flex;align-items:center;gap:20px">
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
-          <input type="checkbox" id="notify-sms" ${notifySms ? 'checked' : ''} ${currentIsNever ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+          <input type="checkbox" id="notify-sms" ${notifySms ? 'checked' : ''} ${currentIsFree ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
           <span>短信提醒</span>
         </label>
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
-          <input type="checkbox" id="notify-mini" ${notifyMini ? 'checked' : ''} ${currentIsNever ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+          <input type="checkbox" id="notify-mini" ${notifyMini ? 'checked' : ''} ${currentIsFree ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
           <span>小程序提醒</span>
         </label>
       </div></div>
       <div class="modal-desc" style="margin-top:16px;width:auto;background:#FFF9E6;border:1px solid #FFE58F;border-radius:6px;padding:14px 16px;font-size:13px;color:#606266;line-height:1.7">
         <div class="md-title" style="font-size:14px;font-weight:700;color:#D48806;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #FFD591">说明</div>
         <ul style="list-style:none;padding:0;margin:0">
-          <li style="margin-bottom:8px">设置核查规则，用于管控安管员按规则去进行现场核查，下拉框选项的1、2、4小时及从不核查为内置选项</li>
+          <li style="margin-bottom:8px">设置核查规则，用于管控安管员按规则去进行现场核查，下拉框选项的1、2、4小时及自由核查为内置选项，自由核查为默认选中，如果选了自由核查，则不会产生核查提醒，即使勾选了也无效</li>
           <li style="margin-bottom:8px">自定义规则可以由企业自己填写核查间隔时间，支持一位小数（如0.5、1.5）</li>
           <li style="margin-bottom:0">核查提醒默认不勾选，短信提醒暂时不发短信，小程序提醒会在区域作业列表进行中的作业打上提醒标签</li>
         </ul>
@@ -3033,10 +3039,10 @@
     presetSel.onchange = () => {
       const val = presetSel.value;
       customRow.style.display = val === 'custom' ? 'flex' : 'none';
-      const isNever = val === 'never';
-      notifySmsCk.disabled = isNever;
-      notifyMiniCk.disabled = isNever;
-      if (isNever) {
+      const isFree = val === 'free';
+      notifySmsCk.disabled = isFree;
+      notifyMiniCk.disabled = isFree;
+      if (isFree) {
         notifySmsCk.checked = false;
         notifyMiniCk.checked = false;
       }
@@ -3046,7 +3052,7 @@
       const preset = presetSel.value;
       if (!preset) { toast('请选择核查规则', 'error'); return; }
       let ruleLabel = '', ruleValue = '', isCustom = false;
-      const isNever = preset === 'never';
+      const isFree = preset === 'free';
       if (preset === 'custom') {
         const h = parseFloat(customHoursInput.value);
         if (!h || h < 0.5 || h > 168) { toast('请输入0.5-168之间的有效小时数', 'error'); return; }
@@ -3058,9 +3064,9 @@
         ruleLabel = p.label;
         ruleValue = p.value;
       }
-      const sms = isNever ? false : notifySmsCk.checked;
-      const mini = isNever ? false : notifyMiniCk.checked;
-      if (!isNever && !sms && !mini) { toast('请至少选择一种核查提醒方式', 'error'); return; }
+      const sms = isFree ? false : notifySmsCk.checked;
+      const mini = isFree ? false : notifyMiniCk.checked;
+      if (!isFree && !sms && !mini) { toast('请至少选择一种核查提醒方式', 'error'); return; }
       work.auditRule = ruleValue;
       work.auditRuleLabel = ruleLabel;
       work.auditRuleCustom = isCustom;
@@ -3068,7 +3074,7 @@
       work.auditNotifySms = sms;
       work.auditNotifyMini = mini;
       close();
-      if (isNever) {
+      if (isFree) {
         toast(`核查规则已设置：${ruleLabel}`);
       } else {
         const notifyParts = [];
