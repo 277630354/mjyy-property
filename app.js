@@ -391,14 +391,44 @@
             </div>
           </div>
         </div>
-        <div class="side-desc-panel mini-side-panel">
-          <div class="sdp-title">账号权限和作用</div>
-          <ul>
-            <li><b>1·账号来源：</b>当前登录账号为企业端或G端手动添加的账号，该账号可直接登录小程序，不需认证，默认进入作业列表页面。</li>
-            <li><b>2·身份与权限：</b>该账号是安管员身份，在小程序主要功能是审核作业人员的作业提交、核查现场数据、拍照取证等。</li>
-            <li><b>3·二维码与作业区域：</b>安管员二维码包含企业名称和作业区域，G端未绑定企业时作业区域为空，作业信息仅存在于企业端。</li>
-            <li><b>4·后台管理：</b>安管员的新增、修改、删除均在企业端「安管员管理」页面操作，删除需谨慎，会影响历史审核记录。</li>
-          </ul>
+        <div style="display:flex;gap:16px">
+          <div class="side-desc-panel mini-side-panel">
+            <div class="sdp-title">账号权限和作用</div>
+            <ul>
+              <li><b>1·账号来源：</b>当前登录账号为企业端或G端手动添加的账号，该账号可直接登录小程序，不需认证，默认进入作业列表页面。</li>
+              <li><b>2·身份与权限：</b>该账号是安管员身份，在小程序主要功能是审核作业人员的作业提交、核查现场数据、拍照取证等。</li>
+              <li><b>3·二维码与作业区域：</b>安管员二维码包含企业名称和作业区域，G端未绑定企业时作业区域为空，作业信息仅存在于企业端。</li>
+              <li><b>4·后台管理：</b>安管员的新增、修改、删除均在企业端「安管员管理」页面操作，删除需谨慎，会影响历史审核记录。</li>
+              <li><b>5·请尽快完成核查：</b>企业配置了核查规则后，安管员到达指定时间超时未上传核查信息，则进入小程序自动出现弹框提醒，且在区域作业列表，进行中的作业会打上【请尽快完成核查】的标签。</li>
+            </ul>
+          </div>
+          <!-- 核查提醒弹框展示 -->
+          <div style="width:320px;flex-shrink:0">
+            <div class="modal" style="width:100%">
+              <div class="modal-head" style="text-align:center">
+                <span class="mt">核查提醒</span>
+              </div>
+              <div class="modal-body" style="padding:16px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+                  <span style="font-size:18px">🔔</span>
+                  <span style="font-size:14px;font-weight:600;color:#333">以下作业请尽快完成现场核查</span>
+                </div>
+                <div style="max-height:300px;overflow-y:auto">
+                  ${(() => {
+                    const remindWorks = MINI_AREA_WORKS.filter((w) => w.status === '待审核' || w.status === '待开始' || w.status === '进行中');
+                    if (remindWorks.length === 0) return '<div style="text-align:center;color:#999;padding:20px 0">暂无需要核查的作业</div>';
+                    return remindWorks.map((w) => `
+                      <div style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:14px;color:#333;line-height:1.6;text-align:center">
+                        ${esc(w.name)}
+                      </div>`).join('');
+                  })()}
+                </div>
+              </div>
+              <div class="modal-foot" style="border-top:1px solid #f0f0f0;padding:10px 16px;text-align:center">
+                <button class="btn btn-primary" style="width:100%;cursor:pointer" onclick="toast('已确认核查提醒', 'success')">我已知晓</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -522,7 +552,7 @@
       areaName: 'A区商业广场',
       store: 'A栋3楼装修门店', constructionUnit: '杭州鑫达建筑工程有限公司', address: '杭州市余杭区未来科技城A栋3楼',
       leader: '张伟', leaderPhone: '13800138000',
-      startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待审核', fireCert: '已上传',
+      startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待审核', fireCert: '已上传', insuranceCert: '已上传',
       workers: [
         { name: '张伟', phone: '13800138000', idCard: '3301**********0011', task: '动火焊接', needCert: '是', hasCert: '是', certImg: 'assets/cert-fire-1.jpg' },
         { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '' },
@@ -541,7 +571,7 @@
       areaName: 'B区住宅小区',
       store: 'B座外墙施工门店', constructionUnit: '浙江宏盛建设有限公司', address: '杭州市西湖区紫荆花路88号B座',
       leader: '李强', leaderPhone: '13900139000',
-      startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '待审核', fireCert: '未上传',
+      startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '待审核', fireCert: '未上传', insuranceCert: '未上传',
       workers: [
         { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg' },
       ],
@@ -557,7 +587,7 @@
       areaName: 'C区工业园区',
       store: '厂区配电改造门店', constructionUnit: '杭州万通机电安装有限公司', address: '杭州市拱墅区半山路122号厂区',
       leader: '王磊', leaderPhone: '13700137000',
-      startTime: '2026-08-08 14:00', endTime: '2026-08-08 20:00', status: '待审核', fireCert: '未上传',
+      startTime: '2026-08-08 14:00', endTime: '2026-08-08 20:00', status: '待审核', fireCert: '未上传', insuranceCert: '未上传',
       workers: [
         { name: '王磊', phone: '13700137000', idCard: '3301**********0044', task: '电路布线', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-2.jpg' },
         { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
@@ -581,7 +611,7 @@
       areaName: 'A区商业广场',
       store: 'A栋3楼装修门店', constructionUnit: '杭州鑫达建筑工程有限公司', address: '杭州市余杭区未来科技城A栋3楼',
       leader: '张伟', leaderPhone: '13800138000',
-      startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待开始', fireCert: '已上传',
+      startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待开始', fireCert: '已上传', insuranceCert: '已上传',
       workers: [
         { name: '张伟', phone: '13800138000', idCard: '3301**********0011', task: '动火焊接', needCert: '是', hasCert: '是', certImg: 'assets/cert-fire-1.jpg' },
         { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '' },
@@ -590,7 +620,7 @@
         { time: '2026-08-06 08:50', name: '张伟', reviewer: '赵安管', content: '动火前检查,现场防护措施已布置', photos: 3, videos: 1, status: '通过', reason: '', fireTicket: '动火票编号:DH20260806001' },
       ],
       verify: [
-        { time: '2026-08-06 09:30', name: '赵安管', phone: '13800138001', area: 'A栋3楼装修区域', photos: 2, videos: 1, status: '通过', reason: '', content: '现场防护到位,动火票据齐全' },
+        { time: '2026-08-06 09:30', name: '赵安管', phone: '13800138001', area: 'A栋3楼装修区域', photos: 2, videos: 1, status: '', reason: '', content: '现场防护到位,动火票据齐全' },
       ],
       reason: '',
     },
@@ -599,7 +629,7 @@
       areaName: 'B区住宅小区',
       store: 'B座外墙施工门店', constructionUnit: '浙江宏盛建设有限公司', address: '杭州市西湖区紫荆花路88号B座',
       leader: '李强', leaderPhone: '13900139000',
-      startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '进行中', fireCert: '未上传',
+      startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '进行中', fireCert: '未上传', insuranceCert: '未上传',
       workers: [
         { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg' },
       ],
@@ -618,7 +648,7 @@
       areaName: 'C区工业园区',
       store: '厂区配电改造门店', constructionUnit: '杭州万通机电安装有限公司', address: '杭州市拱墅区半山路122号厂区',
       leader: '王磊', leaderPhone: '13700137000',
-      startTime: '2026-08-04 14:00', endTime: '2026-08-05 20:00', status: '已完成', fireCert: '未上传',
+      startTime: '2026-08-04 14:00', endTime: '2026-08-05 20:00', status: '已完成', fireCert: '未上传', insuranceCert: '已上传',
       workers: [
         { name: '王磊', phone: '13700137000', idCard: '3301**********0044', task: '电路布线', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-2.jpg' },
         { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
@@ -637,7 +667,7 @@
       areaName: 'A区商业广场',
       store: '钱江新城B栋施工门店', constructionUnit: '浙江东方建设工程有限公司', address: '杭州市江干区钱江新城B栋',
       leader: '陈刚', leaderPhone: '13600136000',
-      startTime: '2026-08-03 09:00', endTime: '2026-08-03 18:00', status: '已拒绝', fireCert: '已上传',
+      startTime: '2026-08-03 09:00', endTime: '2026-08-03 18:00', status: '已拒绝', fireCert: '已上传', insuranceCert: '未上传',
       workers: [
         { name: '陈刚', phone: '13600136000', idCard: '3301**********0066', task: '动火切割', needCert: '是', hasCert: '否', certImg: '' },
       ],
@@ -655,7 +685,7 @@
       areaName: 'B区住宅小区',
       store: '文化广场配电房门店', constructionUnit: '杭州光华电力工程有限公司', address: '杭州市下城区西湖文化广场',
       leader: '刘洋', leaderPhone: '13500135000',
-      startTime: '2026-07-28 08:00', endTime: '2026-07-30 18:00', status: '已结束', fireCert: '未上传',
+      startTime: '2026-07-28 08:00', endTime: '2026-07-30 18:00', status: '已结束', fireCert: '未上传', insuranceCert: '已上传',
       workers: [
         { name: '刘洋', phone: '13500135000', idCard: '3301**********0077', task: '配电改造', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-3.jpg' },
         { name: '周强', phone: '13500135001', idCard: '3301**********0088', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
@@ -730,8 +760,21 @@
         e.stopPropagation();
         const body = `<div class="mini-worker-form">
         <div class="mini-form-row"><label class="mini-li-label">作业区域<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="vf-area" placeholder="请输入作业区域"></div>
+        <div class="mini-form-row"><label class="mini-li-label">当前定位<span class="mini-req">*</span></label>
+          <div style="display:flex;align-items:center;gap:8px;flex:1">
+            <button type="button" class="btn btn-primary" id="vf-location-btn" style="white-space:nowrap">点击获取当前定位</button>
+            <span id="vf-location-text" style="font-size:12px;color:#999;flex:1"></span>
+            <button type="button" class="btn" id="vf-location-refresh" style="padding:4px 8px;display:none" title="刷新定位">🔄</button>
+          </div>
+        </div>
         <div class="mini-form-row"><label class="mini-li-label">现场图片</label>
           <div class="mini-upload-box" id="vf-img-upload">点击上传图片</div>
+        </div>
+        <div class="mini-form-row"><label class="mini-li-label">作业人员照片</label>
+          <div class="mini-upload-box" id="vf-worker-photo-upload">点击上传照片</div>
+        </div>
+        <div class="mini-form-row"><label class="mini-li-label">监护人照片</label>
+          <div class="mini-upload-box" id="vf-guardian-photo-upload">点击上传照片</div>
         </div>
         <div class="mini-form-row"><label class="mini-li-label">现场视频</label>
           <div class="mini-upload-box" id="vf-video-upload">点击上传视频</div>
@@ -740,10 +783,33 @@
         const foot = `<button class="btn" id="vf-cancel" style="flex:1">取消</button><button class="btn btn-primary" id="vf-ok" style="flex:1">提交</button>`;
         const { node, close } = openModal('现场核查上传', body, foot);
         let imgUploaded = false;
+        let workerPhotoUploaded = false;
+        let guardianPhotoUploaded = false;
         let videoUploaded = false;
+        let locationText = '';
+        node.querySelector('#vf-location-btn').addEventListener('click', () => {
+          locationText = '杭州市钱塘区';
+          node.querySelector('#vf-location-text').textContent = locationText;
+          node.querySelector('#vf-location-btn').style.display = 'none';
+          node.querySelector('#vf-location-refresh').style.display = 'inline-flex';
+          toast('定位获取成功', 'success');
+        });
+        node.querySelector('#vf-location-refresh').addEventListener('click', () => {
+          locationText = '杭州市钱塘区';
+          node.querySelector('#vf-location-text').textContent = locationText;
+          toast('定位已刷新', 'success');
+        });
         node.querySelector('#vf-img-upload').addEventListener('click', () => {
           imgUploaded = true;
           node.querySelector('#vf-img-upload').textContent = '已上传 ✓';
+        });
+        node.querySelector('#vf-worker-photo-upload').addEventListener('click', () => {
+          workerPhotoUploaded = true;
+          node.querySelector('#vf-worker-photo-upload').textContent = '已上传 ✓';
+        });
+        node.querySelector('#vf-guardian-photo-upload').addEventListener('click', () => {
+          guardianPhotoUploaded = true;
+          node.querySelector('#vf-guardian-photo-upload').textContent = '已上传 ✓';
         });
         node.querySelector('#vf-video-upload').addEventListener('click', () => {
           videoUploaded = true;
@@ -753,6 +819,7 @@
         node.querySelector('#vf-ok').onclick = () => {
           const area = node.querySelector('#vf-area').value.trim();
           if (!area) { toast('请输入作业区域', 'error'); return; }
+          if (!locationText) { toast('请先获取当前定位', 'error'); return; }
           close();
           toast('核查记录已上传，AI判定中...', 'success');
         };
@@ -760,7 +827,7 @@
     });
   }
 
-  function renderMiniVerifyCards(verifies, workId) {
+  function renderMiniVerifyCards(verifies, workId, showAuditBtn = false) {
     if (!verifies || verifies.length === 0) return '<div class="mini-rec-empty">暂无核查记录</div>';
     return verifies.map((v, i) => {
       const isOpen = i === 0;
@@ -777,6 +844,11 @@
         return `<div class="mini-photo-item" style="background-image:url('${src}')" onclick="window.open('${src}','_blank')"></div>`;
       }).join('') : '';
       const videoHtml = v.videos > 0 ? `<div class="mini-video-item">${icon('play')}<span>点击播放</span></div>` : '';
+      const auditBtnHtml = (showAuditBtn && v.status !== '通过' && v.status !== '未通过')
+        ? `<div style="margin-top:12px;padding-top:12px;border-top:1px dashed #ebeef5;text-align:right">
+             <button class="btn btn-primary mini-verify-audit-btn" data-verify-idx="${i}" style="padding:6px 16px;font-size:13px">审核</button>
+           </div>`
+        : '';
       return `<div class="mini-rec-card ${isOpen ? 'open' : ''}" data-idx="${i}">
         <div class="mini-rec-head">
           <div class="mini-rec-summary">
@@ -788,10 +860,21 @@
           <span class="mini-rec-arrow">${icon('chevron-down')}</span>
         </div>
         <div class="mini-rec-body">
+          <div class="mini-li-row"><span class="mini-li-label">当前定位</span><span class="mini-li-val">${esc(v.location || '杭州市钱塘区')}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(v.area)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">检测记录</span><span class="mini-li-val"><span class="mini-view-detail-btn" data-mini-ai-review="verify-${workId}-${i}-${v.photos}-${v.videos}">查看详情</span></span></div>
+          ${v.status === '未通过' ? `<div class="mini-li-row"><span class="mini-li-label">未通过原因</span><span class="mini-li-val" style="color:#F5222D">${esc(v.reason || '未通过')}</span></div>` : ''}
           ${v.photos > 0 ? `<div class="mini-sub-title">现场图片 <span class="mini-count">${v.photos}张</span></div><div class="mini-photo-grid">${photoHtml}</div>` : ''}
+          <div class="mini-sub-title">作业人员照片</div>
+          <div class="mini-photo-grid">
+            <div class="mini-photo-item" style="background-image:url('assets/worker-photo-${(i % 3) + 1}.jpg')" onclick="window.open('assets/worker-photo-${(i % 3) + 1}.jpg','_blank')"></div>
+          </div>
+          <div class="mini-sub-title">监护人照片</div>
+          <div class="mini-photo-grid">
+            <div class="mini-photo-item" style="background-image:url('assets/guardian-photo-${(i % 3) + 1}.jpg')" onclick="window.open('assets/guardian-photo-${(i % 3) + 1}.jpg','_blank')"></div>
+          </div>
           ${v.videos > 0 ? `<div class="mini-sub-title">现场视频 <span class="mini-count">${v.videos}个</span></div>${videoHtml}` : ''}
+          ${auditBtnHtml}
         </div>
       </div>`;
     }).join('');
@@ -905,6 +988,7 @@
       const html = list.map((w) => `
         <div class="mini-list-item" data-id="${w.id}">
           <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><div style="display:flex;align-items:center;gap:8px"><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span>${(w.status === '待开始' || w.status === '进行中') ? '<span class="mini-add-btn" data-add-verify style="margin-left:0">+</span>' : ''}</div></div>
+          ${w.status === '进行中' ? '<div style="margin:-4px 0 8px 0"><span class="mini-li-tag-urgent">请尽快完成核查</span></div>' : ''}
           <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
 <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
@@ -983,6 +1067,7 @@
             <li><b>2·区域作业：</b>展示所有已审核的作业信息，该列表数据状态包括：待开始、进行中、已完成、已结束、已拒绝。该列表排序规则为：进行中、待开始、已完成、已拒绝、已结束，然后每个状态里又按上传时间倒序。</li>
             <li><b>3·作业区域：</b>支持状态搜索。</li>
             <li><b>4·待审核和区域作业的列表：</b>待审核、待开始、进行中都加上一个加号，点击可以直接上传现场核查照片和视频，功能与详情里的加号一致。</li>
+            <li><b>5·请尽快完成核查：</b>企业配置了核查规则后，安管员到达指定时间超时未上传核查信息，则进入小程序自动出现弹框提醒，且在区域作业列表，进行中的作业会打上【请尽快完成核查】的标签。</li>
           </ul>
         </div>
       </div>
@@ -1032,7 +1117,7 @@
       </tr>`;
     }).join('');
     const auditCardsHtml = renderMiniAuditCards(w.audit, w.id, false);
-    const verifyCardsHtml = renderMiniVerifyCards(w.verify, w.id);
+    const verifyCardsHtml = renderMiniVerifyCards(w.verify, w.id, true);
     view.innerHTML = `
       <div class="mini-office-wrap">
         <div class="mini-phone">
@@ -1070,6 +1155,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
@@ -1106,8 +1192,7 @@
             <li><b>5·现场核查记录：</b>作业区域为安管员现场核查时手动输入的具体地址，检测记录展示查看详情按钮。</li>
             <li><b>6·多条记录：</b>审核记录和现场核查记录都可能存在多条，默认展开第一条，其余折叠，按上传时间倒序。</li>
             <li><b>7·时间：</b>审核记录里的时间是作业人员上传作业信息提交时间；现场核查记录里的时间是安管员点击加号上传现场照片视频后提交的时间。</li>
-            <li><b>8·AI检测失败或未检测：</b>如果ai检测失败或未检测，则给审核记录和现场核查记录的检测记录回填【ai未检测】。现场核查记录除了通过和未通过两个状态，如果因为ai未检测，则状态标记直接给个横杠。</li>
-            <li><b>9·查看详情：</b>审核记录和现场核查记录的检测记录的查看详情按钮，点击后打开弹框，展示该条折叠记录里照片和视频所有的ai识别结果。</li>
+            <li><b>8·查看详情：</b>审核记录和现场核查记录的检测记录的查看详情按钮，点击后打开弹框，展示该条折叠记录里照片和视频所有的ai识别结果。</li>
           </ul>
         </div>
       </div>
@@ -1115,6 +1200,7 @@
     bindMiniAuditToggle(view);
     bindMiniAddVerify(view);
     bindMiniAiReviewButtons(view);
+    bindMiniVerifyAuditButtons(view);
     // 通过/拒绝都需填写理由
     const openReasonDialog = (type) => {
       const isPass = type === 'pass';
@@ -1159,7 +1245,7 @@
       </tr>`;
     }).join('');
     const auditCardsHtml = renderMiniAuditCards(w.audit, w.id, false);
-    const verifyCardsHtml = renderMiniVerifyCards(w.verify, w.id);
+    const verifyCardsHtml = renderMiniVerifyCards(w.verify, w.id, true);
     // 状态横幅提示文案
     const statusTip = { '待开始': '作业即将开始', '进行中': '作业进行中', '已完成': '作业已完成', '已拒绝': '作业已被拒绝', '已结束': '作业已结束' }[w.status] || '';
     view.innerHTML = `
@@ -1199,6 +1285,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
@@ -1223,14 +1310,44 @@
           <div class="sdp-title">作业详情说明</div>
           <ul>
             <li><b>1·数据来源：</b>所有审核过的作业都在区域作业列表，作业详情展示所有的作业人员提交的信息和审核记录与现场核查记录。</li>
-            <li><b>2·现场核查记录：</b>在待审核、待开始、进行中这三个状态时会有加号按钮出现，支持随时点击加号打开核查上传界面，功能为手动填写作业区域和上传照片视频，上传后自动调用ai对图片视频进行风险判定，通过则展示绿色通过标记，识别出风险则展示红色未通过标记，不通过原因为ai返回的结果，检测记录点击查看详情可以查看照片或视频的所有ai检测结果。</li>
+            <li><b>2·现场核查记录：</b>在待审核、待开始、进行中这三个状态时会有加号按钮出现，支持随时点击加号打开核查上传界面，待审核和待开始只是支持此功能，实际核查功能基本从进行中状态开始，功能为手动填写作业区域和上传照片视频，ai识别结果展示在【查看详情】按钮里。</li>
+            <li><b>3·安管员点击加号上传现场核查信息后，生成的这一条记录的地方会有审核按钮，需要对上传的内容，即安管员对现场进行环境，作业人员，监护人都确认无误后进行通过确认，审核后同步该条核查记录的状态，通过或未通过；审核未通过必填原因且展示在列表，通过选填，且不展示。</li>
           </ul>
         </div>
       </div>
     `;
     bindMiniAuditToggle(view);
     bindMiniAiReviewButtons(view);
+    bindMiniVerifyAuditButtons(view);
     if (w.status === '待开始' || w.status === '进行中') bindMiniAddVerify(view);
+  }
+
+  // 绑定核查记录审核按钮
+  function bindMiniVerifyAuditButtons(view) {
+    view.querySelectorAll('.mini-verify-audit-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.verifyIdx);
+        const body = `<div class="mini-reason-wrap">
+          <div style="margin-bottom:12px;font-size:13px;color:#666">请选择审核结果</div>
+          <textarea class="mini-reason-input" id="verify-audit-reason" placeholder="请输入审核理由（选填）" rows="3"></textarea>
+        </div>`;
+        const foot = `<button class="btn" id="va-cancel">取消</button><button class="btn btn-danger" id="va-reject">拒绝</button><button class="btn btn-primary" id="va-pass">通过</button>`;
+        const { node, close } = openModal('核查记录审核', body, foot);
+        node.querySelector('#va-cancel').onclick = close;
+        node.querySelector('#va-pass').onclick = () => {
+          close();
+          toast('核查记录已审核通过', 'success');
+          setTimeout(() => { location.reload(); }, 600);
+        };
+        node.querySelector('#va-reject').onclick = () => {
+          const reason = node.querySelector('#verify-audit-reason').value.trim();
+          if (!reason) { toast('请输入拒绝理由', 'error'); return; }
+          close();
+          toast('核查记录已拒绝', 'error');
+          setTimeout(() => { location.reload(); }, 600);
+        };
+      });
+    });
   }
 
   // ============ 小程序端作业人员 - 作业列表（两个tab） ============
@@ -1414,6 +1531,7 @@
               <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
@@ -1637,6 +1755,7 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
@@ -1751,11 +1870,17 @@
               <div class="mini-form-row"><label class="mini-li-label required">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
               <div class="mini-form-row"><label class="mini-li-label required">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
               <div class="mini-form-row"><label class="mini-li-label required">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label required">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label required">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业周期</label><div class="mini-form-range">
+                <input class="mini-form-input" type="date" value="${esc(w.periodStart || (w.startTime ? w.startTime.split(' ')[0] : ''))}" style="flex:1">
+                <span class="mini-range-sep">至</span>
+                <input class="mini-form-input" type="date" value="${esc(w.periodEnd || (w.endTime ? w.endTime.split(' ')[0] : ''))}" style="flex:1">
+              </div></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业开始时间</label><input class="mini-form-input" type="time" value="${esc(w.workStart || (w.startTime ? w.startTime.split(' ')[1] || '' : ''))}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业结束时间</label><input class="mini-form-input" type="time" value="${esc(w.workEnd || (w.endTime ? w.endTime.split(' ')[1] || '' : ''))}"></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span>
@@ -1793,14 +1918,15 @@
             <li><b>6·施工单位：</b>文本框，自由填写，没有校验。若不填写，所有该字段的展示都给横杠。</li>
             <li><b>7·施工地址：</b>自动回填门店的施工地址，但支持修改。</li>
             <li><b>8·施工负责人和负责人手机号：</b>两个信息自动回填当前登录的个人且姓名手机号身份证号自动填入施工人列表的第一行，标记为负责人。</li>
-            <li><b>9·开始时间/结束时间：</b>时间表格选取时间。</li>
-            <li><b>10·作业状态：</b>此处为作业人员上传作业信息的作业详情页面，状态一定为待审核。</li>
-            <li><b>11·动火作业证书：</b>状态标记，由施工人员列表在需要持证的前提下是否全部上传证件照判定，只要有人未上传，则直接显示未上传，全部上传则显示已上传。</li>
-            <li><b>12·动火票：</b>上传按钮，点击上传图片。</li>
-            <li><b>13·施工人列表：</b>统计总人数，点击加号可录入人员，操作列有编辑和删除，点击编辑按钮打开添加施工人页面但数据回填，点击删除直接删除整条该人员信息；是否持证如果在编辑时选的否，则此处展示横杠。注意只能添加已认证的成员。</li>
-            <li><b>14·负责人：</b>作业信息里填写了施工负责人，这个人必须填写在施工人列表，且自动标记为负责人（以姓名加手机号判定，防重名）。</li>
-            <li><b>15·作业现场：</b>支持仅照片或仅视频或照片和视频，属于必填但至少有一项，都没有则无法提交。</li>
-            <li><b>16·提交校验：</b>点击提交按钮，需要判断除施工单位所有数据全部必填是否有未填，否则点击提交按钮页面提示存在未填信息。</li>
+            <li><b>9·作业周期：</b>日期范围选取，格式为开始日期至结束日期。</li>
+            <li><b>10·作业开始时间/作业结束时间：</b>仅选择时和分（如09:00、18:00），需在作业周期范围内。</li>
+            <li><b>11·作业状态：</b>此处为作业人员上传作业信息的作业详情页面，状态一定为待审核。</li>
+            <li><b>12·动火作业证书：</b>状态标记，由施工人员列表在需要持证的前提下是否全部上传证件照判定，只要有人未上传，则直接显示未上传，全部上传则显示已上传。如果是否需要持证全部都是否，则动火作业证书状态标记直接给横杠。</li>
+            <li><b>13·动火票：</b>上传按钮，点击上传图片。</li>
+            <li><b>14·施工人列表：</b>统计总人数，点击加号可录入人员，操作列有编辑和删除，点击编辑按钮打开添加施工人页面但数据回填，点击删除直接删除整条该人员信息；是否持证如果在编辑时选的否，则此处展示横杠。注意只能添加已认证的成员。</li>
+            <li><b>15·负责人：</b>作业信息里填写了施工负责人，这个人必须填写在施工人列表，且自动标记为负责人（以姓名加手机号判定，防重名）。</li>
+            <li><b>16·作业现场：</b>支持仅照片或仅视频或照片和视频，属于必填但至少有一项，都没有则无法提交。</li>
+            <li><b>17·提交校验：</b>点击提交按钮，需要判断除施工单位所有数据全部必填是否有未填，否则点击提交按钮页面提示存在未填信息。</li>
           </ul>
         </div>
       </div>
@@ -1876,7 +2002,7 @@
           <ul>
             <li><b>1·</b>所有信息都是必填。</li>
             <li><b>2·</b>身份证号填写完后再列表展示为脱敏。</li>
-            <li><b>3·</b>是否需要持证默认为是。</li>
+            <li><b>3·</b>是否需要持证默认为是，如果选否，则不展示是否持证选项，且施工人列表的是否持证和证件照展示横杠。</li>
             <li><b>4·</b>是否持证：没有默认值，选是则出现证件照上传图片，必填，如果选否或未选择，都不展示证件照字段。</li>
           </ul>
         </div>`;
@@ -1945,7 +2071,7 @@
       id: src.id, name: src.name, type: src.type, enterprise: src.enterprise,
       areaName: src.areaName, store: src.store, constructionUnit: src.constructionUnit,
       address: src.address, leader: src.leader, leaderPhone: src.leaderPhone,
-      startTime: src.startTime, endTime: src.endTime, fireCert: src.fireCert,
+      startTime: src.startTime, endTime: src.endTime, fireCert: src.fireCert, insuranceCert: src.insuranceCert || '未上传',
       status: '待审核', workers: src.workers.map((p) => ({ ...p })),
     };
     const wrows = w.workers.map((p, idx) => {
@@ -2021,10 +2147,16 @@
               <div class="mini-form-row"><label class="mini-li-label required">施工地址</label><input class="mini-form-input" type="text" value="${esc(w.address)}"></div>
               <div class="mini-form-row"><label class="mini-li-label required">施工负责人</label><input class="mini-form-input" type="text" value="${esc(w.leader)}"></div>
               <div class="mini-form-row"><label class="mini-li-label required">负责人手机号</label><input class="mini-form-input" type="text" value="${esc(w.leaderPhone)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label required">开始时间</label><input class="mini-form-input" type="text" value="${esc(w.startTime)}"></div>
-              <div class="mini-form-row"><label class="mini-li-label required">结束时间</label><input class="mini-form-input" type="text" value="${esc(w.endTime)}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业周期</label><div class="mini-form-range">
+                <input class="mini-form-input" type="date" value="${esc(w.periodStart || (w.startTime ? w.startTime.split(' ')[0] : ''))}" style="flex:1">
+                <span class="mini-range-sep">至</span>
+                <input class="mini-form-input" type="date" value="${esc(w.periodEnd || (w.endTime ? w.endTime.split(' ')[0] : ''))}" style="flex:1">
+              </div></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业开始时间</label><input class="mini-form-input" type="time" value="${esc(w.workStart || (w.startTime ? w.startTime.split(' ')[1] || '' : ''))}"></div>
+              <div class="mini-form-row"><label class="mini-li-label required">作业结束时间</label><input class="mini-form-input" type="time" value="${esc(w.workEnd || (w.endTime ? w.endTime.split(' ')[1] || '' : ''))}"></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span>
@@ -2129,7 +2261,7 @@
           <ul>
             <li><b>1·</b>所有信息都是必填。</li>
             <li><b>2·</b>身份证号填写完后再列表展示为脱敏。</li>
-            <li><b>3·</b>是否需要持证默认为是。</li>
+            <li><b>3·</b>是否需要持证默认为是，如果选否，则不展示是否持证选项，且施工人列表的是否持证和证件照展示横杠。</li>
             <li><b>4·</b>是否持证：没有默认值，选是则出现证件照上传图片，必填，如果选否或未选择，都不展示证件照字段。</li>
           </ul>
         </div>`;
@@ -2662,7 +2794,15 @@
               const uploaded = r.fireTicket || r.fireTicketImg;
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
             } },
-          { title: '自动检测状态', render: (r) => {
+          { title: '作业人员照片', render: (r) => {
+              const uploaded = r.workerPhoto === '已上传';
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-worker-photo="${r.id}">${r.workerPhoto || '未上传'}</span>`;
+            } },
+          { title: '监护人照片', render: (r) => {
+              const uploaded = r.guardianPhoto === '已上传';
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-guardian-photo="${r.id}">${r.guardianPhoto || '未上传'}</span>`;
+            } },
+          { title: '现场核查状态', render: (r) => {
               const st = r.aiStatus || (r.fireCert === '已上传' ? '通过' : '异常');
               const cls = st === '通过' ? 'tag-success' : 'tag-danger';
               return `<span class="tag ${cls}">${esc(st)}</span>`;
@@ -2672,11 +2812,11 @@
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-cert="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
             } },
           { title: '作业状态', render: (r) => statusTag(r.status) },
-          { title: '操作', render: () => `<div class="actions"><button class="btn-text" data-act="view">查看</button></div>` },
+          { title: '操作', render: (r) => `<div class="actions"><button class="btn-text" data-act="view">查看</button>${opt.scope === 'enterprise' ? '<button class="btn-text" data-act="rule">核查规则</button><button class="btn-text" data-act="assign">分配安管员</button>' : ''}</div>` },
         ];
         const { node } = renderTable({
           columns, rows, page: state.page, pageSize: state.pageSize,
-          onAction: (act, id) => { const r = rows.find((x) => x.id === id); if (act === 'view') modalWorkDetail(r, opt.scope); },
+          onAction: (act, id) => { const r = rows.find((x) => x.id === id); if (act === 'view') modalWorkDetail(r, opt.scope); else if (act === 'rule') modalAuditRule(r); else if (act === 'assign') modalAssignOfficers(r); },
         });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
         // 作业票点击展开图片
@@ -2699,6 +2839,26 @@
             }
           };
         });
+        // 作业人员照片点击展开
+        node.querySelectorAll('[data-worker-photo]').forEach((el) => {
+          el.style.cursor = 'pointer';
+          el.onclick = () => {
+            const r = rows.find((x) => x.id === Number(el.dataset.workerPhoto));
+            if (r && r.workerPhoto === '已上传') {
+              showImagePreview(r.workerPhotoImg || 'assets/worker-photo-1.jpg', '作业人员照片');
+            }
+          };
+        });
+        // 监护人照片点击展开
+        node.querySelectorAll('[data-guardian-photo]').forEach((el) => {
+          el.style.cursor = 'pointer';
+          el.onclick = () => {
+            const r = rows.find((x) => x.id === Number(el.dataset.guardianPhoto));
+            if (r && r.guardianPhoto === '已上传') {
+              showImagePreview(r.guardianPhotoImg || 'assets/guardian-photo-1.jpg', '监护人照片');
+            }
+          };
+        });
         const slot = $('#tbl'); slot.innerHTML = ''; slot.appendChild(node);
         // G端作业管理字段说明
         if (opt.scope === 'g') {
@@ -2708,8 +2868,8 @@
               <li><b>1·搜索条件：</b>企业/作业区域取G端的所有企业和区域数据；选择作业后，企业只展示该区域下的数据；作业类型固定展示全部、动火、高处、临电，目前无配置入口；企业搜索为文本框，输入企业搜索；所有框选择或输入内容后立即生效，点击叉号清除搜索条件且立即生效。</li>
               <li><b>2·列表数据来源：</b>所有数据信息全部都是作业人员扫描二维码录入的作业信息产生，作业人员提交完信息后，在G端和企业端都会展示。注意，G端只会展示绑定了区域的企业的作业</li>
               <li><b>3·状态：</b>待审核、待开始、进行中、已完成、已拒绝、已结束。</li>
-              <li><b>4·作业票/特种作业证书：</b>都显示已上传或未上传，根据详情页是否有对应的照片判定，显示已上传时，点击该标签出现弹框，展示对应的作业票或证书；其中特种作业证书需要所有该上传的人全都上传才会显示已上传。</li>
-              <li><b>5·自动检测状态：</b>由详情的现场核查记录判定，当记录中存在异常，则列表页就是异常，如果有多条记录，只要记录中有一条是异常，则整体状态就是异常。</li>
+              <li><b>4·作业票/作业人员照片/监护人照片/特种作业证书：</b>都显示已上传或未上传，根据详情页是否有对应的照片判定，显示已上传时，点击该标签出现弹框，展示对应的作业票或证书；其中特种作业证书需要所有该上传的人全都上传才会显示已上传。</li>
+              <li><b>5·现场核查状态：</b>由详情的现场核查记录判定，当记录中存在异常，则列表页就是异常，如果有多条记录，只要记录中有一条是异常，则整体状态就是异常。</li>
             </ul>
           </div>`);
           slot.parentElement.appendChild(desc);
@@ -2753,6 +2913,170 @@
       items.push(`<div class="photo-item" onclick="window.open('${images[i % images.length]}','_blank')"><img src="${images[i % images.length]}" alt="现场图片${i + 1}"></div>`);
     }
     return `<div class="photo-gallery">${items.join('')}</div>`;
+  }
+  // 分配安管员弹窗
+  function modalAssignOfficers(work) {
+    const officers = DB.officers || [];
+    const assignedIds = work.assignedOfficers || [];
+    const body = `
+      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>作业名称</div><div class="fr"><div style="padding:6px 0;color:#606266">${esc(work.name)}</div></div></div>
+      <div class="form-row" style="align-items:flex-start">
+        <div class="fl" style="padding-top:6px"><span class="pin-num pin-inline"><span>2</span></span>选择安管员<span class="req">*</span></div>
+        <div class="fr">
+          <div class="officer-assign-list">
+            ${officers.map((o) => `
+              <label class="officer-assign-item" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid #ebeef5;border-radius:6px;margin-bottom:6px;cursor:pointer;transition:border-color .2s,background .2s;${assignedIds.includes(o.id) ? 'border-color:#409EFF;background:#ecf5ff' : ''}">
+                <input type="checkbox" class="officer-cb" value="${o.id}" ${assignedIds.includes(o.id) ? 'checked' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+                <div style="flex:1">
+                  <div style="font-size:13px;color:#333;font-weight:500">${esc(o.name)}</div>
+                  <div style="font-size:12px;color:#999">${esc(o.phone)}</div>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+          <div style="font-size:12px;color:#999;margin-top:6px">已选择 <span id="assigned-count" style="color:#409EFF;font-weight:600">${assignedIds.length}</span> 人</div>
+        </div>
+      </div>
+      <div class="modal-desc" style="margin-top:16px;width:auto;background:#FFF9E6;border:1px solid #FFE58F;border-radius:6px;padding:14px 16px;font-size:13px;color:#606266;line-height:1.7">
+        <div class="md-title" style="font-size:14px;font-weight:700;color:#D48806;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #FFD591">说明</div>
+        <ul style="list-style:none;padding:0;margin:0">
+          <li style="margin-bottom:8px">每条作业都需要专门指定哪位安管员，支持多选</li>
+          <li style="margin-bottom:8px">这条需求是这一个需求方提的，不代表其他使用者会认同，可能会嫌麻烦</li>
+          <li style="margin-bottom:0">可以在安管员管理创建安管员账号的地方预留窗口，即可以创建拥有所有作业权限的安管员账号</li>
+        </ul>
+      </div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="assign-ok">确定</button>`;
+    const { node, close } = openModal('分配安管员', body, foot, false);
+    const checkboxes = node.querySelectorAll('.officer-cb');
+    const countSpan = node.querySelector('#assigned-count');
+    const updateCount = () => {
+      const checked = node.querySelectorAll('.officer-cb:checked');
+      countSpan.textContent = checked.length;
+      checkboxes.forEach((cb) => {
+        const item = cb.closest('.officer-assign-item');
+        if (cb.checked) {
+          item.style.borderColor = '#409EFF';
+          item.style.background = '#ecf5ff';
+        } else {
+          item.style.borderColor = '#ebeef5';
+          item.style.background = '';
+        }
+      });
+    };
+    checkboxes.forEach((cb) => cb.addEventListener('change', updateCount));
+    node.querySelectorAll('.btn')[0].onclick = close;
+    node.querySelector('#assign-ok').onclick = () => {
+      const ids = Array.from(node.querySelectorAll('.officer-cb:checked')).map((cb) => Number(cb.value));
+      if (ids.length === 0) { toast('请至少选择一位安管员', 'error'); return; }
+      work.assignedOfficers = ids;
+      const names = ids.map((id) => { const o = officers.find((x) => x.id === id); return o ? o.name : ''; }).filter(Boolean);
+      work.assignedOfficerNames = names;
+      close();
+      toast(`已分配 ${ids.length} 位安管员：${names.join('、')}`);
+    };
+  }
+  // 核查规则弹窗
+  function modalAuditRule(work) {
+    const presets = [
+      { label: '一小时核查一次', value: '1h', hours: 1 },
+      { label: '两小时核查一次', value: '2h', hours: 2 },
+      { label: '四小时核查一次', value: '4h', hours: 4 },
+      { label: '从不核查', value: 'never', hours: 0 },
+    ];
+    const currentRule = work.auditRule || '2h';
+    const currentIsCustom = work.auditRuleCustom === true || !presets.find((p) => p.value === currentRule);
+    const currentIsNever = currentRule === 'never';
+    const customHours = work.auditCustomHours || 3;
+    const notifySms = currentIsNever ? false : (work.auditNotifySms === true);
+    const notifyMini = currentIsNever ? false : (work.auditNotifyMini === true);
+    const body = `
+      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>作业名称</div><div class="fr"><div style="padding:6px 0;color:#606266">${esc(work.name)}</div></div></div>
+      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>2</span></span>核查规则<span class="req">*</span></div><div class="fr">
+        <select class="select" id="rule-preset">
+          <option value="">-- 请选择核查规则 --</option>
+          ${presets.map((p) => `<option value="${p.value}" ${currentRule === p.value && !currentIsCustom ? 'selected' : ''}>${p.label}</option>`).join('')}
+          <option value="custom" ${currentIsCustom ? 'selected' : ''}>自定义规则</option>
+        </select>
+      </div></div>
+      <div id="rule-custom-row" class="form-row" style="display:${currentIsCustom ? 'flex' : 'none'}">
+        <div class="fl"><span class="pin-num pin-inline"><span>3</span></span>自定义规则</div>
+        <div class="fr" style="display:flex;align-items:center;gap:8px">
+          <input class="input" id="rule-custom-hours" type="number" min="0.5" max="168" step="0.1" value="${customHours}" style="width:100px" placeholder="输入小时数">
+          <span style="color:#606266">小时核查一次</span>
+        </div>
+      </div>
+      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>4</span></span>核查提醒</div><div class="fr" style="display:flex;align-items:center;gap:20px">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
+          <input type="checkbox" id="notify-sms" ${notifySms ? 'checked' : ''} ${currentIsNever ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+          <span>短信提醒</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
+          <input type="checkbox" id="notify-mini" ${notifyMini ? 'checked' : ''} ${currentIsNever ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+          <span>小程序提醒</span>
+        </label>
+      </div></div>
+      <div class="modal-desc" style="margin-top:16px;width:auto;background:#FFF9E6;border:1px solid #FFE58F;border-radius:6px;padding:14px 16px;font-size:13px;color:#606266;line-height:1.7">
+        <div class="md-title" style="font-size:14px;font-weight:700;color:#D48806;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #FFD591">说明</div>
+        <ul style="list-style:none;padding:0;margin:0">
+          <li style="margin-bottom:8px">设置核查规则，用于管控安管员按规则去进行现场核查，下拉框选项的1、2、4小时及从不核查为内置选项</li>
+          <li style="margin-bottom:8px">自定义规则可以由企业自己填写核查间隔时间，支持一位小数（如0.5、1.5）</li>
+          <li style="margin-bottom:0">核查提醒默认不勾选，短信提醒暂时不发短信，小程序提醒会在区域作业列表进行中的作业打上提醒标签</li>
+        </ul>
+      </div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="rule-ok">确定</button>`;
+    const { node, close } = openModal('核查规则', body, foot, false);
+    const presetSel = node.querySelector('#rule-preset');
+    const customRow = node.querySelector('#rule-custom-row');
+    const customHoursInput = node.querySelector('#rule-custom-hours');
+    const notifySmsCk = node.querySelector('#notify-sms');
+    const notifyMiniCk = node.querySelector('#notify-mini');
+    presetSel.onchange = () => {
+      const val = presetSel.value;
+      customRow.style.display = val === 'custom' ? 'flex' : 'none';
+      const isNever = val === 'never';
+      notifySmsCk.disabled = isNever;
+      notifyMiniCk.disabled = isNever;
+      if (isNever) {
+        notifySmsCk.checked = false;
+        notifyMiniCk.checked = false;
+      }
+    };
+    node.querySelectorAll('.btn')[0].onclick = close;
+    node.querySelector('#rule-ok').onclick = () => {
+      const preset = presetSel.value;
+      if (!preset) { toast('请选择核查规则', 'error'); return; }
+      let ruleLabel = '', ruleValue = '', isCustom = false;
+      const isNever = preset === 'never';
+      if (preset === 'custom') {
+        const h = parseFloat(customHoursInput.value);
+        if (!h || h < 0.5 || h > 168) { toast('请输入0.5-168之间的有效小时数', 'error'); return; }
+        ruleLabel = `${h}小时核查一次`;
+        ruleValue = 'custom';
+        isCustom = true;
+      } else {
+        const p = presets.find((x) => x.value === preset);
+        ruleLabel = p.label;
+        ruleValue = p.value;
+      }
+      const sms = isNever ? false : notifySmsCk.checked;
+      const mini = isNever ? false : notifyMiniCk.checked;
+      if (!isNever && !sms && !mini) { toast('请至少选择一种核查提醒方式', 'error'); return; }
+      work.auditRule = ruleValue;
+      work.auditRuleLabel = ruleLabel;
+      work.auditRuleCustom = isCustom;
+      if (isCustom) work.auditCustomHours = parseFloat(customHoursInput.value);
+      work.auditNotifySms = sms;
+      work.auditNotifyMini = mini;
+      close();
+      if (isNever) {
+        toast(`核查规则已设置：${ruleLabel}`);
+      } else {
+        const notifyParts = [];
+        if (sms) notifyParts.push('短信');
+        if (mini) notifyParts.push('小程序');
+        toast(`核查规则已设置：${ruleLabel}，通知方式：${notifyParts.join('、')}`);
+      }
+    };
   }
   function modalWorkDetail(w, scope) {
     // PC端AI审核结果弹窗
@@ -2870,6 +3194,7 @@
           <div class="detail-item"><div class="dk">结束时间</div><div class="dv">${esc(w.endTime)}</div></div>
           <div class="detail-item"><div class="dk">作业状态</div><div class="dv">${statusTag(w.status)}</div></div>
           <div class="detail-item"><div class="dk">动火票</div><div class="dv">${(() => { const ft = Array.isArray(w.audit) ? w.audit.find(a => a.fireTicket && a.fireTicket !== '—') : null; return ft ? '<img class="fire-ticket-img" src="assets/work-fireticket.jpg" onclick="window.open(\'assets/work-fireticket.jpg\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
+          <div class="detail-item"><div class="dk">作业人员保险</div><div class="dv">${(() => { const ins = w.insuranceCert; return ins && ins !== '未上传' ? '<img class="fire-ticket-img" src="assets/insurance-cert.jpg" onclick="window.open(\'assets/insurance-cert.jpg\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
         </div>
       </div>`;
     const wcols = ['姓名', '手机号', '身份证号', '工作内容', '是否需要持证', '是否持证', '证件照'];
@@ -2927,13 +3252,16 @@
             </div>
             <div class="rec-body">
               <div class="detail-grid">
-                <div class="detail-item"><div class="dk">核查时间</div><div class="dv">${esc(v.time || '—')}</div></div>
+                <div class="detail-item"><div class="dk">当前定位</div><div class="dv">${esc(v.location || '—')}</div></div>
                 <div class="detail-item"><div class="dk">核查人姓名</div><div class="dv">${esc(v.name)}</div></div>
                 <div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(v.phone)}</div></div>
                 <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(v.org)}</div></div>
                 <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, v.photos, VERIFY_POOL)}</div></div>
+                <div class="detail-item"><div class="dk">作业人员照片</div><div class="dv">${(() => { const wp = v.workerPhoto; return wp && wp !== '未上传' ? '<img class="fire-ticket-img" src="' + (v.workerPhotoImg || 'assets/worker-photo-1.jpg') + '" onclick="window.open(\'' + (v.workerPhotoImg || 'assets/worker-photo-1.jpg') + '\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
+                <div class="detail-item"><div class="dk">监护人照片</div><div class="dv">${(() => { const gp = v.guardianPhoto; return gp && gp !== '未上传' ? '<img class="fire-ticket-img" src="' + (v.guardianPhotoImg || 'assets/guardian-photo-1.jpg') + '" onclick="window.open(\'' + (v.guardianPhotoImg || 'assets/guardian-photo-1.jpg') + '\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
                 <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${v.videos} 个</div></div>
                 <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
+                ${(v.status === '异常' || v.status === '未通过') ? `<div class="detail-item"><div class="dk" style="color:#F5222D">未通过原因</div><div class="dv" style="color:#F5222D">${esc(v.reason || '—')}</div></div>` : ''}
                 <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
               </div>
             </div>

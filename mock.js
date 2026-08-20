@@ -46,6 +46,9 @@ window.DB = (function () {
       address: '江汉区建设大道100号', contractor: '某某建设集团', leader: '张师傅', workerCount: 3,
       startTime: '2026-08-04 08:00', endTime: '2026-08-10 18:00', status: '进行中',
       fireTicket: true, fireTicketImg: 'assets/work-fireticket.jpg', fireCert: '已上传', fireCertImg: 'assets/cert-fire-1.jpg', aiStatus: '通过',
+      insuranceCert: '已上传',
+      workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg',
+      guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg',
       workers: [
         { name: '张师傅', phone: '13900000001', idCard: '4201**********0011', task: '动火焊接', needCert: '是', hasCert: '是' },
         { name: '李师傅', phone: '13900000002', idCard: '4201**********0022', task: '现场监护', needCert: '否', hasCert: '否' },
@@ -56,8 +59,8 @@ window.DB = (function () {
         { time: '2026-08-05 12:30', name: '张安管', phone: '13800138001', org: 'A区商业广场', photos: 2, videos: 0, fireTicket: '已上传', fireCert: '已上传', status: '通过', reason: '', records: '午后复测浓度合格' },
       ],
       verify: [
-        { time: '2026-08-04 10:15', name: '张安管', phone: '13800138001', org: 'A区商业广场', photos: 3, videos: 1, status: '通过', reason: '', records: '现场核查通过' },
-        { time: '2026-08-05 15:20', name: '张安管', phone: '13800138001', org: 'A区商业广场', photos: 2, videos: 1, status: '通过', reason: '', records: '第二次核查通过' },
+        { time: '2026-08-04 10:15', name: '张安管', phone: '13800138001', org: 'A区商业广场', location: '杭州市上城区', photos: 3, videos: 1, status: '通过', reason: '', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg', guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg', records: '现场核查通过' },
+        { time: '2026-08-05 15:20', name: '张安管', phone: '13800138001', org: 'A区商业广场', location: '杭州市上城区', photos: 2, videos: 1, status: '异常', reason: '安全带挂钩松动', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg', guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg', records: '安全带挂钩松动，需整改' },
       ],
     },
     {
@@ -65,6 +68,9 @@ window.DB = (function () {
       address: '武昌区中南路300号', contractor: '某某电力公司', leader: '李师傅', workerCount: 2,
       startTime: '2026-08-05 09:00', endTime: '2026-08-09 17:00', status: '进行中',
       fireTicket: false, fireCert: '已上传', fireCertImg: 'assets/cert-photo-1.jpg', aiStatus: '通过',
+      insuranceCert: '已上传',
+      workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-2.jpg',
+      guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-2.jpg',
       workers: [
         { name: '李师傅', phone: '13900000004', idCard: '4201**********0044', task: '高空安装', needCert: '是', hasCert: '是' },
         { name: '赵师傅', phone: '13900000005', idCard: '4201**********0055', task: '地面配合', needCert: '否', hasCert: '否' },
@@ -73,7 +79,7 @@ window.DB = (function () {
         { time: '2026-08-05 08:30', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, fireTicket: '—', fireCert: '—', status: '通过', reason: '', records: '安全带、安全帽佩戴齐全' },
       ],
       verify: [
-        { time: '2026-08-05 11:00', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, status: '通过', reason: '', records: '现场核查通过' },
+        { time: '2026-08-05 11:00', name: '李安管', phone: '13800138002', org: 'B区住宅小区', location: '杭州市拱墅区', photos: 2, videos: 1, status: '通过', reason: '', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-2.jpg', guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-2.jpg', records: '现场核查通过' },
       ],
     },
     {
@@ -81,6 +87,8 @@ window.DB = (function () {
       address: '洪山区珞喻路400号', contractor: '某某消防工程', leader: '王师傅', workerCount: 2,
       startTime: '2026-08-01 08:00', endTime: '2026-08-03 18:00', status: '已完成',
       fireTicket: false, fireCert: '未上传', aiStatus: '异常',
+      insuranceCert: '未上传',
+      workerPhoto: '未上传', guardianPhoto: '未上传',
       workers: [
         { name: '王师傅', phone: '13900000006', idCard: '4201**********0066', task: '电路布线', needCert: '是', hasCert: '是' },
         { name: '钱师傅', phone: '13900000007', idCard: '4201**********0077', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -90,8 +98,8 @@ window.DB = (function () {
         { time: '2026-08-02 14:00', name: '王安管', phone: '13800138003', org: 'C区工业园区', photos: 1, videos: 0, fireTicket: '—', fireCert: '—', status: '通过', reason: '', records: '绝缘复测合格' },
       ],
       verify: [
-        { time: '2026-08-01 10:30', name: '王安管', phone: '13800138003', org: 'C区工业园区', photos: 2, videos: 0, status: '通过', reason: '', records: '现场核查通过' },
-        { time: '2026-08-03 16:45', name: '王安管', phone: '13800138003', org: 'C区工业园区', photos: 1, videos: 0, status: '通过', reason: '', records: '完工核查通过' },
+        { time: '2026-08-01 10:30', name: '王安管', phone: '13800138003', org: 'C区工业园区', location: '杭州市余杭区', photos: 2, videos: 0, status: '通过', reason: '', workerPhoto: '未上传', guardianPhoto: '未上传', records: '现场核查通过' },
+        { time: '2026-08-03 16:45', name: '王安管', phone: '13800138003', org: 'C区工业园区', location: '杭州市余杭区', photos: 1, videos: 0, status: '通过', reason: '', workerPhoto: '未上传', guardianPhoto: '未上传', records: '完工核查通过' },
       ],
     },
     {
@@ -99,6 +107,8 @@ window.DB = (function () {
       address: '江汉区解放大道200号', contractor: '某某装饰公司', leader: '赵师傅', workerCount: 1,
       startTime: '2026-08-05 08:00', endTime: '2026-08-09 18:00', status: '待审核',
       fireTicket: false, fireCert: '已上传', fireCertImg: 'assets/cert-fire-1.jpg', aiStatus: '通过',
+      insuranceCert: '已上传',
+      workerPhoto: '未上传', guardianPhoto: '未上传',
       workers: [
         { name: '赵师傅', phone: '13900000008', idCard: '4201**********0088', task: '动火切割', needCert: '是', hasCert: '是' },
       ],
@@ -112,6 +122,9 @@ window.DB = (function () {
       address: '武昌区中南路300号', contractor: '某某电力公司', leader: '刘师傅', workerCount: 2,
       startTime: '2026-08-03 14:00', endTime: '2026-08-08 20:00', status: '进行中',
       fireTicket: false, fireCert: '未上传', aiStatus: '异常',
+      insuranceCert: '已上传',
+      workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-3.jpg',
+      guardianPhoto: '未上传',
       workers: [
         { name: '刘师傅', phone: '13900000009', idCard: '4201**********0099', task: '配电改造', needCert: '是', hasCert: '是' },
         { name: '孙师傅', phone: '13900000010', idCard: '4201**********0100', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -120,7 +133,7 @@ window.DB = (function () {
         { time: '2026-08-03 13:30', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, fireTicket: '—', fireCert: '—', status: '通过', reason: '', records: '绝缘检测合格' },
       ],
       verify: [
-        { time: '2026-08-04 16:00', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, status: '通过', reason: '', records: '现场核查通过' },
+        { time: '2026-08-04 16:00', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, status: '异常', reason: '配电箱防护缺失', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-3.jpg', guardianPhoto: '未上传', records: '配电箱防护缺失，需整改' },
       ],
     },
     {
@@ -128,6 +141,8 @@ window.DB = (function () {
       address: '洪山区关山大道500号', contractor: '某某机电安装', leader: '陈师傅', workerCount: 1,
       startTime: '2026-08-06 08:00', endTime: '2026-08-08 18:00', status: '待审核',
       fireTicket: false, fireCert: '未上传', aiStatus: '异常',
+      insuranceCert: '未上传',
+      workerPhoto: '未上传', guardianPhoto: '未上传',
       workers: [
         { name: '陈师傅', phone: '13900000011', idCard: '4201**********0111', task: '设备高空安装', needCert: '是', hasCert: '是' },
       ],
@@ -141,6 +156,9 @@ window.DB = (function () {
       address: '江汉区建设大道100号', contractor: '某某建设集团', leader: '吴师傅', workerCount: 2,
       startTime: '2026-08-10 08:00', endTime: '2026-08-12 18:00', status: '待开始',
       fireTicket: true, fireTicketImg: 'assets/work-fireticket.jpg', fireCert: '已上传', fireCertImg: 'assets/cert-photo-2.jpg', aiStatus: '通过',
+      insuranceCert: '已上传',
+      workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg',
+      guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg',
       workers: [
         { name: '吴师傅', phone: '13900000012', idCard: '4201**********0122', task: '冷却塔检修', needCert: '是', hasCert: '是' },
         { name: '郑师傅', phone: '13900000013', idCard: '4201**********0133', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -155,6 +173,9 @@ window.DB = (function () {
       address: '武昌区中南路300号', contractor: '某某装饰公司', leader: '冯师傅', workerCount: 2,
       startTime: '2026-08-06 09:00', endTime: '2026-08-12 17:00', status: '已拒绝',
       fireTicket: true, fireTicketImg: 'assets/work-fireticket.jpg', fireCert: '未上传', aiStatus: '异常',
+      insuranceCert: '未上传',
+      workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-2.jpg',
+      guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-2.jpg',
       workers: [
         { name: '冯师傅', phone: '13900000014', idCard: '4201**********0144', task: '管道焊接', needCert: '是', hasCert: '是' },
         { name: '何师傅', phone: '13900000015', idCard: '4201**********0155', task: '现场监护', needCert: '否', hasCert: '否' },
@@ -169,6 +190,8 @@ window.DB = (function () {
       address: '洪山区珞喻路400号', contractor: '某某消防工程', leader: '许师傅', workerCount: 3,
       startTime: '2026-08-01 08:00', endTime: '2026-08-04 18:00', status: '已结束',
       fireTicket: false, fireCert: '未上传', aiStatus: '异常',
+      insuranceCert: '未上传',
+      workerPhoto: '未上传', guardianPhoto: '未上传',
       workers: [
         { name: '许师傅', phone: '13900000016', idCard: '4201**********0166', task: '仓库清理', needCert: '否', hasCert: '否' },
         { name: '马师傅', phone: '13900000017', idCard: '4201**********0177', task: '设备搬运', needCert: '否', hasCert: '否' },
