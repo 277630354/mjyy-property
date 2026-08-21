@@ -1020,8 +1020,8 @@
         <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-        <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-        <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`).join('');
     view.innerHTML = `
@@ -1364,8 +1364,8 @@
         <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-        <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-        <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`).join('');
     const areaStatuses = ['全部', '待开始', '进行中', '已完成', '已拒绝', '已结束'];
@@ -1380,8 +1380,8 @@
         <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-        <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-        <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
         ${resubmitBtn}
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`;
@@ -2789,8 +2789,8 @@
           { title: '施工单位', key: 'contractor' },
           { title: '施工负责人', key: 'leader' },
           { title: '施工人数', key: 'workerCount' },
-          { title: '开始时间', key: 'startTime' },
-          { title: '结束时间', key: 'endTime' },
+          { title: '作业周期', render: (r) => esc((r.startTime || '').split(' ')[0] || '—') },
+          { title: '作业时间', render: (r) => esc((r.startTime || '').split(' ')[1] || '—') + ' - ' + esc((r.endTime || '').split(' ')[1] || '—') },
           ...(opt.scope === 'enterprise' ? [
             { title: '核查规则', render: (r) => esc(r.auditRuleLabel || '—') },
             { title: '安管员', render: (r) => esc((r.assignedOfficerNames && r.assignedOfficerNames.length) ? r.assignedOfficerNames.join('、') : '—') },
