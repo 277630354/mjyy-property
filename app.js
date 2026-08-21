@@ -1151,8 +1151,8 @@
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
@@ -1281,8 +1281,8 @@
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
@@ -1528,8 +1528,8 @@
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
@@ -1751,8 +1751,8 @@
               <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
@@ -2887,7 +2887,8 @@
               <li><b>作业管理所有数据来源都是作业人员扫描二维码录入的信息上传。</b></li>
               <li><b>1·作业类型条件搜索：</b>作业类型有动火，高处，临电，但目前只有动火可以三个都放进去。</li>
               <li><b>2·操作列的核查规则和分配安管员只有待审核的作业才展示，企业管理员将作业分配给安管员后，安管员才能在小程序上看到作业。</b></li>
-              <li><b>3·作业状态条件搜索：</b>待审核，待开始，进行中，已完成，已拒绝，已结束。</li>
+              <li><b>3·现场核查状态：</b>取该作业现场核查记录里最新一条的状态，如果最新一条未审核即没有状态标识，则展示横杠。</li>
+              <li><b>4·作业状态条件搜索：</b>待审核，待开始，进行中，已完成，已拒绝，已结束。</li>
               <li><b>待审核：</b>作业人员上传的作业信息初始为待审核状态。</li>
               <li><b>待开始：</b>审核通过但未到作业开始时间。</li>
               <li><b>进行中：</b>作业已处于开始时间和结束时间之间。</li>
@@ -3196,8 +3197,8 @@
           <div class="detail-item"><div class="dk">施工单位</div><div class="dv">${esc(w.contractor)}</div></div>
           <div class="detail-item"><div class="dk">施工负责人</div><div class="dv">${esc(w.leader)}</div></div>
           <div class="detail-item"><div class="dk">负责人手机号</div><div class="dv">${esc(w.leaderPhone)}</div></div>
-          <div class="detail-item"><div class="dk">开始时间</div><div class="dv">${esc(w.startTime)}</div></div>
-          <div class="detail-item"><div class="dk">结束时间</div><div class="dv">${esc(w.endTime)}</div></div>
+          <div class="detail-item"><div class="dk">作业周期</div><div class="dv">${esc((w.startTime || '').split(' ')[0] || '—')}</div></div>
+          <div class="detail-item"><div class="dk">作业时间</div><div class="dv">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</div></div>
           <div class="detail-item"><div class="dk">作业状态</div><div class="dv">${statusTag(w.status)}</div></div>
           <div class="detail-item"><div class="dk">动火票</div><div class="dv">${(() => { const ft = Array.isArray(w.audit) ? w.audit.find(a => a.fireTicket && a.fireTicket !== '—') : null; return ft ? '<img class="fire-ticket-img" src="assets/work-fireticket.jpg" onclick="window.open(\'assets/work-fireticket.jpg\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
           <div class="detail-item"><div class="dk">作业人员保险</div><div class="dv">${(() => { const ins = w.insuranceCert; return ins && ins !== '未上传' ? '<img class="fire-ticket-img" src="assets/insurance-cert.jpg" onclick="window.open(\'assets/insurance-cert.jpg\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
