@@ -39,6 +39,14 @@ window.DB = (function () {
     { id: 5, name: '陈安全员', phone: '13700137005', createdAt: '2026-06-08 15:45' },
   ];
 
+  // ---- 监护人 ----
+  const guardians = [
+    { id: 1, name: '张监护', phone: '13600136001', createdAt: '2026-06-01 09:30' },
+    { id: 2, name: '李监护', phone: '13600136002', createdAt: '2026-06-02 11:00' },
+    { id: 3, name: '王监护', phone: '13600136003', createdAt: '2026-06-03 15:20' },
+    { id: 4, name: '刘监护', phone: '13600136004', createdAt: '2026-06-06 10:10' },
+  ];
+
   // ---- 作业 ----
   const works = [
     {
@@ -204,5 +212,5 @@ window.DB = (function () {
     },
   ];
 
-  return { areas, enterprises, stores, officers, works };
+  return { areas, enterprises, stores, officers, guardians, works };
 })();

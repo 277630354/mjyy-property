@@ -51,6 +51,7 @@
       { label: '企业首页', icon: 'layout-dashboard', route: '#/zone/home' },
       { label: '门店管理', icon: 'store', route: '#/zone/stores' },
       { label: '安管员管理', icon: 'user-check', route: '#/zone/officers' },
+      { label: '监护人管理', icon: 'users', route: '#/zone/guardians' },
       { label: '企业作业管理', icon: 'clipboard-list', route: '#/zone/tasks' },
     ]},
     { title: '小程序端安管员', icon: 'smartphone', items: [
@@ -61,6 +62,9 @@
       { label: '小程序首页', icon: 'home', route: '#/worker/mini' },
       { label: '作业列表', icon: 'clipboard-list', route: '#/worker/mini/detail' },
       { label: '作业详情', icon: 'file-text', route: '#/worker/mini/work-info' },
+    ]},
+    { title: '需求更新', icon: 'file-text', items: [
+      { label: '需求说明', icon: 'file-text', route: '#/worker/mini/requirements' },
     ]},
   ];
 
@@ -73,17 +77,19 @@
     '#/zone/home': { view: viewZoneHome, group: 1, crumb: ['企业端作业管理', '企业首页'] },
     '#/zone/stores': { view: viewStores, group: 1, crumb: ['企业端作业管理', '门店管理'] },
     '#/zone/officers': { view: viewOfficers, group: 1, crumb: ['企业端作业管理', '安管员管理'] },
+    '#/zone/guardians': { view: viewGuardians, group: 1, crumb: ['企业端作业管理', '监护人管理'] },
     '#/zone/tasks': { view: viewZoneTasks, group: 1, crumb: ['企业端作业管理', '企业作业管理'] },
-    '#/officer/mini': { view: viewOfficerMini, group: 3, crumb: ['小程序端安管员', '小程序首页'] },
-    '#/officer/mini/detail': { view: viewOfficerMiniDetail, group: 3, crumb: ['小程序端安管员', '作业列表'] },
-    '#/officer/mini/work-detail': { view: viewOfficerMiniWorkDetail, group: 3, crumb: ['小程序端安管员', '作业详情'] },
-    '#/officer/mini/area-work-detail': { view: viewOfficerMiniAreaWorkDetail, group: 3, crumb: ['小程序端安管员', '作业详情'] },
-    '#/worker/mini': { view: viewWorkerMini, group: 4, crumb: ['小程序端作业人员', '小程序首页'] },
-    '#/worker/mini/detail': { view: viewWorkerMiniDetail, group: 4, crumb: ['小程序端作业人员', '作业列表'] },
-    '#/worker/mini/work-detail': { view: viewWorkerMiniWorkDetail, group: 4, crumb: ['小程序端作业人员', '作业详情'] },
-    '#/worker/mini/area-work-detail': { view: viewWorkerMiniAreaWorkDetail, group: 4, crumb: ['小程序端作业人员', '作业详情'] },
-    '#/worker/mini/work-info': { view: viewWorkerMiniWorkInfo, group: 4, crumb: ['小程序端作业人员', '作业详情'] },
-    '#/worker/mini/resubmit': { view: viewWorkerMiniResubmit, group: 4, crumb: ['小程序端作业人员', '重新提交作业'] },
+    '#/officer/mini': { view: viewOfficerMini, group: 2, crumb: ['小程序端安管员', '小程序首页'] },
+    '#/officer/mini/detail': { view: viewOfficerMiniDetail, group: 2, crumb: ['小程序端安管员', '作业列表'] },
+    '#/officer/mini/work-detail': { view: viewOfficerMiniWorkDetail, group: 2, crumb: ['小程序端安管员', '作业详情'] },
+    '#/officer/mini/area-work-detail': { view: viewOfficerMiniAreaWorkDetail, group: 2, crumb: ['小程序端安管员', '作业详情'] },
+    '#/worker/mini': { view: viewWorkerMini, group: 3, crumb: ['小程序端作业人员', '小程序首页'] },
+    '#/worker/mini/detail': { view: viewWorkerMiniDetail, group: 3, crumb: ['小程序端作业人员', '作业列表'] },
+    '#/worker/mini/work-detail': { view: viewWorkerMiniWorkDetail, group: 3, crumb: ['小程序端作业人员', '作业详情'] },
+    '#/worker/mini/area-work-detail': { view: viewWorkerMiniAreaWorkDetail, group: 3, crumb: ['小程序端作业人员', '作业详情'] },
+    '#/worker/mini/work-info': { view: viewWorkerMiniWorkInfo, group: 3, crumb: ['小程序端作业人员', '作业详情'] },
+    '#/worker/mini/resubmit': { view: viewWorkerMiniResubmit, group: 3, crumb: ['小程序端作业人员', '重新提交作业'] },
+    '#/worker/mini/requirements': { view: viewWorkerMiniRequirements, group: 4, crumb: ['需求更新', '需求说明'] },
   };
 
   // ============ 工具函数 ============
@@ -555,8 +561,8 @@
       leader: '张伟', leaderPhone: '13800138000',
       startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待审核', fireCert: '已上传', insuranceCert: '已上传',
       workers: [
-        { name: '张伟', phone: '13800138000', idCard: '3301**********0011', task: '动火焊接', needCert: '是', hasCert: '是', certImg: 'assets/cert-fire-1.jpg' },
-        { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '' },
+        { name: '张伟', phone: '13800138000', idCard: '3301**********0011', task: '动火焊接', needCert: '是', hasCert: '是', certImg: 'assets/cert-fire-1.jpg', insuranceImg: 'assets/insurance-cert.jpg' },
+        { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '', insuranceImg: 'assets/insurance-cert.jpg' },
       ],
       audit: [
         { time: '2026-08-06 08:50', name: '张伟', content: '动火浓度检测合格,火焰清理到位,现场防护措施已布置', photos: 3, videos: 1, status: '待审核', reason: '', fireTicket: '动火票编号:DH20260806001' },
@@ -566,6 +572,11 @@
         { time: '2026-08-06 10:00', name: '赵安管', phone: '13800138001', area: 'A区商业广场', photos: 2, videos: 1, status: '未通过', reason: '现场动火点附近易燃物清理不彻底', content: '需清理动火点5米范围内所有易燃物' },
         { time: '2026-08-06 15:00', name: '赵安管', phone: '13800138001', area: 'A区商业广场', photos: 1, videos: 0, status: '通过', reason: '', content: '整改后复核通过,现场安全状态良好' },
       ],
+      completion: {
+        workRecord: { time: '2026-08-06 17:50', name: '张伟', status: '已完成', remark: '作业完成,现场清理到位,工具设备已撤场', photos: ['assets/work-hot-1.jpg', 'assets/work-hot-2.jpg'] },
+        officerConfirm: { time: '2026-08-06 18:00', name: '赵安管', status: '已确认', remark: '现场确认作业已完成,无遗留安全隐患', photos: ['assets/work-hot-3.jpg'] },
+        guardianConfirm: { time: '2026-08-06 17:55', name: '李明', status: '已确认', remark: '监护人确认作业已完成', photos: ['assets/work-hot-1.jpg'] },
+      },
     },
     {
       id: 2, name: '紫荆花路B座高处作业', type: '高处作业', enterprise: '浙江华东工程建设有限公司',
@@ -574,7 +585,7 @@
       leader: '李强', leaderPhone: '13900139000',
       startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '待审核', fireCert: '未上传', insuranceCert: '未上传',
       workers: [
-        { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg' },
+        { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg', insuranceImg: '' },
       ],
       audit: [
         { time: '2026-08-07 08:20', name: '李强', content: '安全带、安全帽佩戴齐全,脚手架搭建合格', photos: 2, videos: 1, status: '待审核', reason: '', fireTicket: '—' },
@@ -582,6 +593,11 @@
       verify: [
         { time: '2026-08-07 09:00', name: '孙安管', phone: '13900139002', area: 'B座外墙施工区域', photos: 3, videos: 1, status: '通过', reason: '', content: '安全带系挂规范,脚手架验收合格' },
       ],
+      completion: {
+        workRecord: { time: '2026-08-07 16:50', name: '李强', status: '已完成', remark: '高处作业完成,脚手架已拆除', photos: ['assets/work-high-1.jpg', 'assets/work-high-2.jpg'] },
+        officerConfirm: { time: '2026-08-07 17:00', name: '孙安管', status: '已确认', remark: '现场确认作业已完成', photos: ['assets/work-high-1.jpg'] },
+        guardianConfirm: { time: '2026-08-07 16:55', name: '王磊', status: '已确认', remark: '监护人确认作业已完成', photos: ['assets/work-high-2.jpg'] },
+      },
     },
     {
       id: 3, name: '半山路厂区临时用电作业', type: '临时用电作业', enterprise: '中铁建工集团有限公司',
@@ -590,8 +606,8 @@
       leader: '王磊', leaderPhone: '13700137000',
       startTime: '2026-08-08 14:00', endTime: '2026-08-08 20:00', status: '待审核', fireCert: '未上传', insuranceCert: '未上传',
       workers: [
-        { name: '王磊', phone: '13700137000', idCard: '3301**********0044', task: '电路布线', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-2.jpg' },
-        { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
+        { name: '王磊', phone: '13700137000', idCard: '3301**********0044', task: '电路布线', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-2.jpg', insuranceImg: '' },
+        { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '', insuranceImg: '' },
       ],
       audit: [
         { time: '2026-08-08 13:50', name: '王磊', content: '漏电保护器检测合格,绝缘电阻测试达标', photos: 2, videos: 0, status: '待审核', reason: '', fireTicket: '—' },
@@ -602,6 +618,11 @@
         { time: '2026-08-08 18:00', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 1, videos: 1, status: '未通过', reason: '部分线路接线不规范', content: '需重新整理接线,确保绝缘包裹到位' },
         { time: '2026-08-08 19:30', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 1, videos: 0, status: '', reason: '', content: '' },
       ],
+      completion: {
+        workRecord: { time: '', name: '王磊', status: '未完成', remark: '作业进行中,尚未完成', photos: [] },
+        officerConfirm: { time: '', name: '吴安管', status: '未确认', remark: '', photos: [] },
+        guardianConfirm: { time: '', name: '赵刚', status: '未确认', remark: '', photos: [] },
+      },
     },
   ];
 
@@ -614,8 +635,8 @@
       leader: '张伟', leaderPhone: '13800138000',
       startTime: '2026-08-06 09:00', endTime: '2026-08-06 18:00', status: '待开始', fireCert: '已上传', insuranceCert: '已上传',
       workers: [
-        { name: '张伟', phone: '13800138000', idCard: '3301**********0011', task: '动火焊接', needCert: '是', hasCert: '是', certImg: 'assets/cert-fire-1.jpg' },
-        { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '' },
+        { name: '张伟', phone: '13800138000', idCard: '3301**********0011', task: '动火焊接', needCert: '是', hasCert: '是', certImg: 'assets/cert-fire-1.jpg', insuranceImg: 'assets/insurance-cert.jpg' },
+        { name: '李明', phone: '13800138001', idCard: '3301**********0022', task: '现场监护', needCert: '否', hasCert: '否', certImg: '', insuranceImg: 'assets/insurance-cert.jpg' },
       ],
       audit: [
         { time: '2026-08-06 08:50', name: '张伟', reviewer: '赵安管', content: '动火前检查,现场防护措施已布置', photos: 3, videos: 1, status: '通过', reason: '', fireTicket: '动火票编号:DH20260806001' },
@@ -623,6 +644,11 @@
       verify: [
         { time: '2026-08-06 09:30', name: '赵安管', phone: '13800138001', area: 'A栋3楼装修区域', photos: 2, videos: 1, status: '', reason: '', content: '现场防护到位,动火票据齐全' },
       ],
+      completion: {
+        workRecord: { time: '', name: '张伟', status: '未完成', remark: '作业进行中', photos: [] },
+        officerConfirm: { time: '', name: '赵安管', status: '未确认', remark: '', photos: [] },
+        guardianConfirm: { time: '', name: '李明', status: '未确认', remark: '', photos: [] },
+      },
       reason: '',
     },
     {
@@ -632,7 +658,7 @@
       leader: '李强', leaderPhone: '13900139000',
       startTime: '2026-08-07 08:30', endTime: '2026-08-07 17:00', status: '进行中', fireCert: '未上传', insuranceCert: '未上传',
       workers: [
-        { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg' },
+        { name: '李强', phone: '13900139000', idCard: '3301**********0033', task: '高空安装', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-1.jpg', insuranceImg: '' },
       ],
       audit: [
         { time: '2026-08-07 08:20', name: '李强', reviewer: '孙安管', content: '安全带、安全帽佩戴齐全,脚手架搭建合格', photos: 2, videos: 1, status: '通过', reason: '', fireTicket: '—' },
@@ -642,6 +668,11 @@
         { time: '2026-08-07 09:00', name: '孙安管', phone: '13900139002', area: 'B座外墙施工区域', photos: 3, videos: 1, status: '通过', reason: '', content: '安全带系挂规范,脚手架验收合格' },
         { time: '2026-08-07 13:00', name: '孙安管', phone: '13900139002', area: 'B座外墙施工区域', photos: 2, videos: 0, status: '未通过', reason: '安全带挂钩松动', content: '需重新紧固安全带挂钩,确保安全' },
       ],
+      completion: {
+        workRecord: { time: '2026-08-07 17:00', name: '李强', status: '已完成', remark: '高处作业完成', photos: ['assets/work-high-1.jpg'] },
+        officerConfirm: { time: '2026-08-07 17:10', name: '孙安管', status: '已确认', remark: '现场确认作业已完成', photos: ['assets/work-high-2.jpg'] },
+        guardianConfirm: { time: '2026-08-07 17:05', name: '王磊', status: '已确认', remark: '监护人确认作业已完成', photos: ['assets/work-high-1.jpg'] },
+      },
       reason: '',
     },
     {
@@ -651,8 +682,8 @@
       leader: '王磊', leaderPhone: '13700137000',
       startTime: '2026-08-04 14:00', endTime: '2026-08-05 20:00', status: '已完成', fireCert: '未上传', insuranceCert: '已上传',
       workers: [
-        { name: '王磊', phone: '13700137000', idCard: '3301**********0044', task: '电路布线', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-2.jpg' },
-        { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
+        { name: '王磊', phone: '13700137000', idCard: '3301**********0044', task: '电路布线', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-2.jpg', insuranceImg: 'assets/insurance-cert.jpg' },
+        { name: '赵刚', phone: '13700137001', idCard: '3301**********0055', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '', insuranceImg: 'assets/insurance-cert.jpg' },
       ],
       audit: [
         { time: '2026-08-04 13:50', name: '王磊', reviewer: '吴安管', content: '漏电保护器检测合格,绝缘电阻测试达标', photos: 2, videos: 0, status: '通过', reason: '', fireTicket: '—' },
@@ -661,6 +692,11 @@
       verify: [
         { time: '2026-08-04 15:00', name: '吴安管', phone: '13700137003', area: '厂区配电房区域', photos: 2, videos: 0, status: '通过', reason: '', content: '配电改造区域安全防护到位' },
       ],
+      completion: {
+        workRecord: { time: '2026-08-05 19:50', name: '王磊', status: '已完成', remark: '配电改造作业完成,已通电验收', photos: ['assets/work-electric-1.jpg', 'assets/work-electric-2.jpg'] },
+        officerConfirm: { time: '2026-08-05 20:00', name: '吴安管', status: '已确认', remark: '现场确认作业已完成,通电正常', photos: ['assets/work-electric-1.jpg'] },
+        guardianConfirm: { time: '2026-08-05 19:55', name: '赵刚', status: '已确认', remark: '监护人确认作业已完成', photos: ['assets/work-electric-2.jpg'] },
+      },
       reason: '',
     },
     {
@@ -670,7 +706,7 @@
       leader: '陈刚', leaderPhone: '13600136000',
       startTime: '2026-08-03 09:00', endTime: '2026-08-03 18:00', status: '已拒绝', fireCert: '已上传', insuranceCert: '未上传',
       workers: [
-        { name: '陈刚', phone: '13600136000', idCard: '3301**********0066', task: '动火切割', needCert: '是', hasCert: '否', certImg: '' },
+        { name: '陈刚', phone: '13600136000', idCard: '3301**********0066', task: '动火切割', needCert: '是', hasCert: '否', certImg: '', insuranceImg: '' },
       ],
       audit: [
         { time: '2026-08-03 08:30', name: '陈刚', reviewer: '郑安管', content: '动火前现场环境检查,防护措施初步到位', photos: 2, videos: 0, status: '通过', reason: '', fireTicket: '动火票编号:DH20260803001' },
@@ -679,6 +715,11 @@
       verify: [
         { time: '2026-08-03 08:45', name: '郑安管', phone: '13600136004', area: '钱江新城B栋施工区域', photos: 2, videos: 0, status: '未通过', reason: '施工人员未持有效动火作业证', content: '立即停止作业,待人员资质审核通过后方可恢复' },
       ],
+      completion: {
+        workRecord: { time: '', name: '陈刚', status: '未完成', remark: '作业被拒绝,无法继续', photos: [] },
+        officerConfirm: { time: '', name: '郑安管', status: '未确认', remark: '', photos: [] },
+        guardianConfirm: { time: '', name: '未知', status: '未确认', remark: '', photos: [] },
+      },
       reason: '施工人员未持有效动火作业证',
     },
     {
@@ -688,8 +729,8 @@
       leader: '刘洋', leaderPhone: '13500135000',
       startTime: '2026-07-28 08:00', endTime: '2026-07-30 18:00', status: '已结束', fireCert: '未上传', insuranceCert: '已上传',
       workers: [
-        { name: '刘洋', phone: '13500135000', idCard: '3301**********0077', task: '配电改造', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-3.jpg' },
-        { name: '周强', phone: '13500135001', idCard: '3301**********0088', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '' },
+        { name: '刘洋', phone: '13500135000', idCard: '3301**********0077', task: '配电改造', needCert: '是', hasCert: '是', certImg: 'assets/cert-photo-3.jpg', insuranceImg: 'assets/insurance-cert.jpg' },
+        { name: '周强', phone: '13500135001', idCard: '3301**********0088', task: '辅助作业', needCert: '否', hasCert: '否', certImg: '', insuranceImg: 'assets/insurance-cert.jpg' },
       ],
       audit: [
         { time: '2026-07-28 07:50', name: '刘洋', reviewer: '冯安管', content: '配电改造前安全检查,符合开工条件', photos: 2, videos: 1, status: '通过', reason: '', fireTicket: '—' },
@@ -699,6 +740,11 @@
         { time: '2026-07-28 09:00', name: '冯安管', phone: '13500135005', area: '文化广场配电房区域', photos: 2, videos: 1, status: '通过', reason: '', content: '配电改造区域隔离到位,警示标志齐全' },
         { time: '2026-07-30 16:00', name: '冯安管', phone: '13500135005', area: '文化广场配电房区域', photos: 3, videos: 0, status: '通过', reason: '', content: '接地线整改完成,复检通过' },
       ],
+      completion: {
+        workRecord: { time: '2026-07-30 17:50', name: '刘洋', status: '已完成', remark: '临时用电作业完成,现场清理到位', photos: ['assets/work-electric-1.jpg', 'assets/work-electric-2.jpg'] },
+        officerConfirm: { time: '2026-07-30 18:00', name: '冯安管', status: '已确认', remark: '现场确认作业已完成', photos: ['assets/work-electric-1.jpg'] },
+        guardianConfirm: { time: '2026-07-30 17:55', name: '周强', status: '已确认', remark: '监护人确认作业已完成', photos: ['assets/work-electric-2.jpg'] },
+      },
       reason: '',
     },
   ];
@@ -750,6 +796,132 @@
       head.addEventListener('click', () => {
         head.parentElement.classList.toggle('open');
       });
+    });
+  }
+
+  // ===== Officer Finish Popup =====
+  function showOfficerFinishPopup(id) {
+    const w = MINI_AREA_WORKS.find((x) => String(x.id) === String(id)) || {};
+    const comp = w.completion || {};
+    const oc = comp.officerConfirm || {};
+    const popupHtml = `
+      <div class="mini-popup-wrap">
+        <div class="mini-popup-title">上传作业完结证明</div>
+        <div class="mini-popup-body">
+          <div class="mini-form-row">
+            <span class="mini-form-label">状态</span>
+            <div class="mini-form-static">已确认</div>
+          </div>
+          <div class="mini-form-row">
+            <span class="mini-form-label">确认人<span class="req">*</span></span>
+            <input type="text" id="of-name" class="mini-form-input" value="${esc(oc.name || '')}" placeholder="请输入确认人姓名" />
+          </div>
+          <div class="mini-form-row">
+            <span class="mini-form-label">备注</span>
+            <textarea id="of-remark" class="mini-form-textarea" placeholder="请输入备注信息">${esc(oc.remark || '')}</textarea>
+          </div>
+          <div class="mini-form-row">
+            <span class="mini-form-label">现场照片<span class="req">*</span></span>
+            <div class="mini-photo-upload">
+              <div class="mini-photo-slot" data-of-photo>
+                <span class="mini-photo-plus">+</span>
+              </div>
+              <span class="mini-photo-hint">点击上传现场照片（至少一张）</span>
+            </div>
+          </div>
+        </div>
+        <div class="mini-popup-footer">
+          <button class="mini-btn-cancel">取消</button>
+          <button class="mini-btn-primary" id="of-submit">提交</button>
+        </div>
+      </div>`;
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = popupHtml;
+    document.body.appendChild(overlay);
+    const closePopup = () => overlay.remove();
+    overlay.querySelector('.mini-btn-cancel').addEventListener('click', closePopup);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
+    let photoCount = 0;
+    const photoSlot = overlay.querySelector('[data-of-photo]');
+    photoSlot.addEventListener('click', () => {
+      photoCount++;
+      const placeholder = document.createElement('div');
+      placeholder.className = 'mini-photo-placeholder';
+      placeholder.textContent = '📷 照片' + photoCount;
+      photoSlot.parentNode.insertBefore(placeholder, photoSlot.nextSibling);
+    });
+    overlay.querySelector('#of-submit').addEventListener('click', () => {
+      const name = overlay.querySelector('#of-name').value.trim();
+      const remark = overlay.querySelector('#of-remark').value.trim();
+      if (!name) { alert('请填写确认人'); return; }
+      if (photoCount < 1) { alert('请至少上传一张现场照片'); return; }
+      alert('提交成功！已上传作业完结证明');
+      closePopup();
+    });
+  }
+
+  // ===== Worker Finish Popup =====
+  function showWorkerFinishPopup(id) {
+    const w = MINI_AREA_WORKS.find((x) => String(x.id) === String(id)) || {};
+    const comp = w.completion || {};
+    const wr = comp.workRecord || {};
+    const popupHtml = `
+      <div class="mini-popup-wrap">
+        <div class="mini-popup-title">上传作业完结证明</div>
+        <div class="mini-popup-body">
+          <div class="mini-form-row">
+            <span class="mini-form-label">状态</span>
+            <div class="mini-form-static">已完成</div>
+          </div>
+          <div class="mini-form-row">
+            <span class="mini-form-label">作业人员负责人<span class="req">*</span></span>
+            <input type="text" id="wf-name" class="mini-form-input" value="${esc(wr.name || w.leader || '')}" placeholder="请输入作业人员负责人" />
+          </div>
+          <div class="mini-form-row">
+            <span class="mini-form-label">备注</span>
+            <textarea id="wf-remark" class="mini-form-textarea" placeholder="请输入备注信息">${esc(wr.remark || '')}</textarea>
+          </div>
+          <div class="mini-form-row">
+            <span class="mini-form-label">现场照片<span class="req">*</span></span>
+            <div class="mini-photo-upload">
+              <div class="mini-photo-slot" data-wf-photo>
+                <span class="mini-photo-plus">+</span>
+              </div>
+              <span class="mini-photo-hint">点击上传现场照片（至少一张）</span>
+            </div>
+          </div>
+        </div>
+        <div class="mini-popup-footer">
+          <button class="mini-btn-cancel">取消</button>
+          <button class="mini-btn-primary" id="wf-submit">提交</button>
+        </div>
+      </div>`;
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    overlay.innerHTML = popupHtml;
+    document.body.appendChild(overlay);
+    const closePopup = () => overlay.remove();
+    overlay.querySelector('.mini-btn-cancel').addEventListener('click', closePopup);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
+    let photoCount = 0;
+    const photoSlot = overlay.querySelector('[data-wf-photo]');
+    photoSlot.addEventListener('click', () => {
+      photoCount++;
+      const placeholder = document.createElement('div');
+      placeholder.className = 'mini-photo-placeholder';
+      placeholder.textContent = '📷 照片' + photoCount;
+      photoSlot.parentNode.insertBefore(placeholder, photoSlot.nextSibling);
+    });
+    overlay.querySelector('#wf-submit').addEventListener('click', () => {
+      const name = overlay.querySelector('#wf-name').value.trim();
+      const remark = overlay.querySelector('#wf-remark').value.trim();
+      if (!name) { alert('请填写作业人员负责人'); return; }
+      if (photoCount < 1) { alert('请至少上传一张现场照片'); return; }
+      alert('提交成功！已上传作业完结证明');
+      closePopup();
     });
   }
 
@@ -986,7 +1158,9 @@
     let areaFilter = '全部';
     const renderAreaItems = () => {
       const list = areaFilter === '全部' ? MINI_AREA_WORKS : MINI_AREA_WORKS.filter((w) => w.status === areaFilter);
-      const html = list.map((w) => `
+      const html = list.map((w) => {
+        const finishBtn = w.status === '已完成' ? '<div class="mini-li-actions"><span class="mini-btn-mini primary" data-upload-finish="' + w.id + '">请上传作业完结证明</span></div>' : '';
+        return `
         <div class="mini-list-item" data-id="${w.id}">
           <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><div style="display:flex;align-items:center;gap:8px"><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span>${(w.status === '待开始' || w.status === '进行中') ? '<span class="mini-add-btn" data-add-verify style="margin-left:0">+</span>' : ''}</div></div>
           ${w.status === '进行中' ? '<div style="margin:-4px 0 8px 0"><span class="mini-li-tag-urgent">请尽快完成核查</span></div>' : ''}
@@ -999,13 +1173,22 @@
           <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
           <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+          ${finishBtn}
           <div class="mini-li-arrow">${icon('chevron')}</div>
-        </div>`).join('') || '<div class="mini-rec-empty">暂无数据</div>';
+        </div>`;
+      }).join('') || '<div class="mini-rec-empty">暂无数据</div>';
       const listBox = view.querySelector('#officerTab1 .mini-list');
       if (listBox) listBox.innerHTML = html;
       view.querySelectorAll('#officerTab1 .mini-list-item').forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', (e) => {
+          if (e.target.closest('[data-upload-finish]')) return;
           location.hash = '#/officer/mini/area-work-detail?id=' + item.dataset.id;
+        });
+      });
+      view.querySelectorAll('[data-upload-finish]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showOfficerFinishPopup(btn.dataset.uploadFinish);
         });
       });
       bindMiniAddVerify(view.querySelector('#officerTab1'));
@@ -1107,6 +1290,9 @@
       const certCell = p.certImg
         ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img" onclick="window.open('${p.certImg}','_blank')">`
         : '—';
+      const insCell = p.insuranceImg
+        ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img" onclick="window.open('${p.insuranceImg}','_blank')">`
+        : '—';
       return `<tr class="${isLeader ? 'is-leader' : ''}">
         <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
         <td>${esc(p.phone)}</td>
@@ -1115,6 +1301,7 @@
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
         <td>${certCell}</td>
+        <td>${insCell}</td>
       </tr>`;
     }).join('');
     const auditCardsHtml = renderMiniAuditCards(w.audit, w.id, false);
@@ -1156,27 +1343,56 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">审核记录 <span class="mini-count">${w.audit.length}条</span></div>
+              <div class="mini-card-title">审核记录 <span class="mini-stage-tag mini-stage-pre">作业前</span> <span class="mini-count">${w.audit.length}条</span></div>
               ${auditCardsHtml}
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">现场核查记录 <span class="mini-count">${w.verify.length}条</span>
+              <div class="mini-card-title">现场核查记录 <span class="mini-stage-tag mini-stage-during">作业中</span> <span class="mini-count">${w.verify.length}条</span>
                 <span class="mini-add-btn" data-add-verify>+</span>
               </div>
               ${verifyCardsHtml}
             </div>
+            ${w.status === '已完成' ? (() => { const comp = w.completion || {}; const wr = comp.workRecord || {}; const oc = comp.officerConfirm || {}; const gc = comp.guardianConfirm || {}; const photoHtml = (photos) => { if (!photos || !photos.length) return '<div class="mini-comp-row"><span class="mini-comp-key">现场照片：</span><span class="mini-comp-val">—</span></div>'; return '<div class="mini-comp-row"><span class="mini-comp-key">现场照片：</span><span class="mini-comp-val"><div class="mini-comp-photos">' + photos.map(p => '<img src="' + p + '" alt="现场照片" onclick="window.open(\'' + p + '\',\'_blank\')">').join('') + '</div></span></div>'; }; return `
+            <div class="mini-detail-card">
+              <div class="mini-card-title">完成记录 <span class="mini-stage-tag mini-stage-post">作业完成</span></div>
+              <div class="mini-comp-block">
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">作业完成记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${wr.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">完成时间：</span><span class="mini-comp-val">${wr.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">作业人员：</span><span class="mini-comp-val">${wr.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${wr.remark || '—'}</span></div>
+                  ${photoHtml(wr.photos)}
+                </div>
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">安管员确认记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${oc.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认时间：</span><span class="mini-comp-val">${oc.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认人：</span><span class="mini-comp-val">${oc.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${oc.remark || '—'}</span></div>
+                  ${photoHtml(oc.photos)}
+                </div>
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">监护人确认记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${gc.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认时间：</span><span class="mini-comp-val">${gc.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认人：</span><span class="mini-comp-val">${gc.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${gc.remark || '—'}</span></div>
+                  ${photoHtml(gc.photos)}
+                </div>
+              </div>
+            </div>`; })() : ''}
           </div>
           <div class="mini-action-bar">
             <button class="mini-btn reject" id="btn-reject">拒绝</button>
@@ -1236,6 +1452,9 @@
       const certCell = p.certImg
         ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img" onclick="window.open('${p.certImg}','_blank')">`
         : '—';
+      const insCell = p.insuranceImg
+        ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img" onclick="window.open('${p.insuranceImg}','_blank')">`
+        : '—';
       return `<tr class="${isLeader ? 'is-leader' : ''}">
         <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
         <td>${esc(p.phone)}</td>
@@ -1244,6 +1463,7 @@
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
         <td>${certCell}</td>
+        <td>${insCell}</td>
       </tr>`;
     }).join('');
     const auditCardsHtml = renderMiniAuditCards(w.audit, w.id, false);
@@ -1287,25 +1507,54 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">审核记录 <span class="mini-count">${w.audit.length}条</span></div>
+              <div class="mini-card-title">审核记录 <span class="mini-stage-tag mini-stage-pre">作业前</span> <span class="mini-count">${w.audit.length}条</span></div>
               ${auditCardsHtml}
             </div>
             <div class="mini-detail-card">
-              <div class="mini-card-title">现场核查记录 <span class="mini-count">${w.verify.length}条</span>${(w.status === '待开始' || w.status === '进行中') ? '<span class="mini-add-btn" data-add-verify>+</span>' : ''}</div>
+              <div class="mini-card-title">现场核查记录 <span class="mini-stage-tag mini-stage-during">作业中</span> <span class="mini-count">${w.verify.length}条</span>${(w.status === '待开始' || w.status === '进行中') ? '<span class="mini-add-btn" data-add-verify>+</span>' : ''}</div>
               ${verifyCardsHtml}
             </div>
+            ${w.status === '已完成' ? (() => { const comp = w.completion || {}; const wr = comp.workRecord || {}; const oc = comp.officerConfirm || {}; const gc = comp.guardianConfirm || {}; const photoHtml = (photos) => { if (!photos || !photos.length) return '<div class="mini-comp-row"><span class="mini-comp-key">现场照片：</span><span class="mini-comp-val">—</span></div>'; return '<div class="mini-comp-row"><span class="mini-comp-key">现场照片：</span><span class="mini-comp-val"><div class="mini-comp-photos">' + photos.map(p => '<img src="' + p + '" alt="现场照片" onclick="window.open(\'' + p + '\',\'_blank\')">').join('') + '</div></span></div>'; }; return `
+            <div class="mini-detail-card">
+              <div class="mini-card-title">完成记录 <span class="mini-stage-tag mini-stage-post">作业完成</span></div>
+              <div class="mini-comp-block">
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">作业完成记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${wr.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">完成时间：</span><span class="mini-comp-val">${wr.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">作业人员：</span><span class="mini-comp-val">${wr.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${wr.remark || '—'}</span></div>
+                  ${photoHtml(wr.photos)}
+                </div>
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">安管员确认记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${oc.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认时间：</span><span class="mini-comp-val">${oc.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认人：</span><span class="mini-comp-val">${oc.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${oc.remark || '—'}</span></div>
+                  ${photoHtml(oc.photos)}
+                </div>
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">监护人确认记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${gc.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认时间：</span><span class="mini-comp-val">${gc.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认人：</span><span class="mini-comp-val">${gc.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${gc.remark || '—'}</span></div>
+                  ${photoHtml(gc.photos)}
+                </div>
+              </div>
+            </div>`; })() : ''}
           </div>
         </div>
         <div class="side-desc-panel mini-side-panel">
@@ -1372,6 +1621,7 @@
     const areaStatuses = ['全部', '待开始', '进行中', '已完成', '已拒绝', '已结束'];
     const areaItems = MINI_AREA_WORKS.map((w) => {
       const resubmitBtn = w.status === '已拒绝' ? `<div class="mini-li-actions"><span class="mini-btn-mini primary" data-resubmit="${w.id}">重新提交</span></div>` : '';
+      const finishBtn = w.status === '已完成' ? `<div class="mini-li-actions"><span class="mini-btn-mini primary" data-worker-upload-finish="${w.id}">请上传作业完结证明</span></div>` : '';
       return `<div class="mini-list-item" data-id="${w.id}" data-status="${esc(w.status)}">
         <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
@@ -1384,6 +1634,7 @@
         <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[0] || '—')}</span></div>
         <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
         ${resubmitBtn}
+        ${finishBtn}
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`;
     }).join('');
@@ -1449,7 +1700,7 @@
     });
     view.querySelectorAll('#workerTab1 .mini-list-item').forEach(item => {
       item.addEventListener('click', (e) => {
-        if (e.target.closest('[data-resubmit]')) return;
+        if (e.target.closest('[data-resubmit]') || e.target.closest('[data-worker-upload-finish]')) return;
         location.hash = '#/worker/mini/area-work-detail?id=' + item.dataset.id;
       });
     });
@@ -1457,6 +1708,12 @@
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         location.hash = '#/worker/mini/resubmit?id=' + btn.dataset.resubmit;
+      });
+    });
+    view.querySelectorAll('[data-worker-upload-finish]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showWorkerFinishPopup(btn.dataset.workerUploadFinish);
       });
     });
     const statusFilter = view.querySelector('#areaStatusFilter');
@@ -1480,6 +1737,9 @@
       const certCell = p.certImg
         ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img" onclick="window.open('${p.certImg}','_blank')">`
         : '—';
+      const insCell = p.insuranceImg
+        ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img" onclick="window.open('${p.insuranceImg}','_blank')">`
+        : '—';
       return `<tr class="${isLeader ? 'is-leader' : ''}">
         <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
         <td>${esc(p.phone)}</td>
@@ -1488,6 +1748,7 @@
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
         <td>${certCell}</td>
+        <td>${insCell}</td>
       </tr>`;
     }).join('');
     const auditCardsHtml = renderMiniAuditCards(w.audit, w.id);
@@ -1533,14 +1794,13 @@
               <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -1707,6 +1967,9 @@
       const certCell = p.certImg
         ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img" onclick="window.open('${p.certImg}','_blank')">`
         : '—';
+      const insCell = p.insuranceImg
+        ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img" onclick="window.open('${p.insuranceImg}','_blank')">`
+        : '—';
       return `<tr class="${isLeader ? 'is-leader' : ''}">
         <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
         <td>${esc(p.phone)}</td>
@@ -1715,6 +1978,7 @@
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
         <td>${certCell}</td>
+        <td>${insCell}</td>
       </tr>`;
     }).join('');
     const auditCardsHtml = renderMiniAuditCards(w.audit, w.id, false);
@@ -1757,25 +2021,54 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span></div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
             </div>
             ${(w.audit && w.audit.length > 0) ? `<div class="mini-detail-card">
-              <div class="mini-card-title">审核记录 <span class="mini-count">${w.audit.length}条</span></div>
+              <div class="mini-card-title">审核记录 <span class="mini-stage-tag mini-stage-pre">作业前</span> <span class="mini-count">${w.audit.length}条</span></div>
               ${auditCardsHtml}
             </div>` : ''}
             ${(w.verify && w.verify.length > 0) ? `<div class="mini-detail-card">
-              <div class="mini-card-title">现场核查记录 <span class="mini-count">${w.verify.length}条</span></div>
+              <div class="mini-card-title">现场核查记录 <span class="mini-stage-tag mini-stage-during">作业中</span> <span class="mini-count">${w.verify.length}条</span></div>
               ${verifyCardsHtml}
             </div>` : ''}
+            ${w.status === '已完成' ? (() => { const comp = w.completion || {}; const wr = comp.workRecord || {}; const oc = comp.officerConfirm || {}; const gc = comp.guardianConfirm || {}; const photoHtml = (photos) => { if (!photos || !photos.length) return '<div class="mini-comp-row"><span class="mini-comp-key">现场照片：</span><span class="mini-comp-val">—</span></div>'; return '<div class="mini-comp-row"><span class="mini-comp-key">现场照片：</span><span class="mini-comp-val"><div class="mini-comp-photos">' + photos.map(p => '<img src="' + p + '" alt="现场照片" onclick="window.open(\'' + p + '\',\'_blank\')">').join('') + '</div></span></div>'; }; return `
+            <div class="mini-detail-card">
+              <div class="mini-card-title">完成记录 <span class="mini-stage-tag mini-stage-post">作业完成</span></div>
+              <div class="mini-comp-block">
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">作业完成记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${wr.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">完成时间：</span><span class="mini-comp-val">${wr.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">作业人员：</span><span class="mini-comp-val">${wr.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${wr.remark || '—'}</span></div>
+                  ${photoHtml(wr.photos)}
+                </div>
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">安管员确认记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${oc.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认时间：</span><span class="mini-comp-val">${oc.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认人：</span><span class="mini-comp-val">${oc.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${oc.remark || '—'}</span></div>
+                  ${photoHtml(oc.photos)}
+                </div>
+                <div class="mini-comp-section">
+                  <div class="mini-comp-title">监护人确认记录</div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">状态：</span><span class="mini-comp-val">${gc.status || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认时间：</span><span class="mini-comp-val">${gc.time || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">确认人：</span><span class="mini-comp-val">${gc.name || '—'}</span></div>
+                  <div class="mini-comp-row"><span class="mini-comp-key">备注：</span><span class="mini-comp-val">${gc.remark || '—'}</span></div>
+                  ${photoHtml(gc.photos)}
+                </div>
+              </div>
+            </div>`; })() : ''}
           </div>
           ${w.status === '已拒绝' ? `<div class="mini-action-bar"><button class="mini-btn primary" id="resubmitBtn">重新提交</button></div>` : ''}
         </div>
@@ -1808,6 +2101,9 @@
       const certCell = p.certImg
         ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img">`
         : '—';
+      const insCell = p.insuranceImg
+        ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img">`
+        : '—';
       return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
         <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
         <td>${esc(p.phone)}</td>
@@ -1816,6 +2112,7 @@
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
         <td>${certCell}</td>
+        <td>${insCell}</td>
         <td class="mini-tbl-actions">
           <span class="mini-tbl-edit" data-edit-idx="${idx}">编辑</span>
           <span class="mini-tbl-del" data-del-idx="${idx}">删除</span>
@@ -1882,7 +2179,6 @@
               <div class="mini-li-row"><span class="mini-li-label">作业状态</span><span class="mini-li-val">${statusTag(w.status)}</span></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span>
@@ -1890,7 +2186,7 @@
               </div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>操作</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -1997,6 +2293,10 @@
             <label class="mini-li-label">证件照<span class="mini-req">*</span></label>
             <div class="mini-upload-box" id="wk-upload">${p && p.certImg ? '已上传 ✓' : '点击上传图片'}</div>
           </div>
+          <div class="mini-form-row">
+            <label class="mini-li-label">作业人员保险</label>
+            <div class="mini-upload-box" id="wk-ins-upload">${p && p.insuranceImg ? '已上传 ✓' : '点击上传图片'}</div>
+          </div>
         </div>`;
       const foot = `<button class="btn btn-primary" id="wk-ok" style="width:100%">确认</button>`;
       const desc = `<div class="modal-desc">
@@ -2035,6 +2335,11 @@
         certUploaded = true;
         node.querySelector('#wk-upload').textContent = '已上传 ✓';
       });
+      let insUploaded = editing ? !!(p && p.insuranceImg) : false;
+      node.querySelector('#wk-ins-upload').addEventListener('click', () => {
+        insUploaded = true;
+        node.querySelector('#wk-ins-upload').textContent = '已上传 ✓';
+      });
       node.querySelector('#wk-ok').onclick = () => {
         const name = node.querySelector('#wk-name').value.trim();
         if (!name) { toast('请输入姓名', 'error'); return; }
@@ -2049,7 +2354,7 @@
         const hascert = node.querySelector('#wk-hascert').value;
         if (!hascert) { toast('请选择是否持证', 'error'); return; }
         if (hascert === '是' && !certUploaded) { toast('请上传证件照', 'error'); return; }
-        const data = { name, phone, idCard: idcard, task, needCert: needcert, hasCert: hascert, certImg: certUploaded ? (p && p.certImg ? p.certImg : 'assets/cert-sample.jpg') : '' };
+        const data = { name, phone, idCard: idcard, task, needCert: needcert, hasCert: hascert, certImg: certUploaded ? (p && p.certImg ? p.certImg : 'assets/cert-sample.jpg') : '', insuranceImg: insUploaded ? (p && p.insuranceImg ? p.insuranceImg : 'assets/insurance-cert.jpg') : '' };
         if (editing) {
           w.workers[editIdx] = data;
           if (wasLeader) w.leader = name;
@@ -2081,6 +2386,9 @@
       const certCell = p.certImg
         ? `<img src="${p.certImg}" alt="证件照" class="mini-cert-img">`
         : '—';
+      const insCell = p.insuranceImg
+        ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img">`
+        : '—';
       return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
         <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
         <td>${esc(p.phone)}</td>
@@ -2089,6 +2397,7 @@
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
         <td>${certCell}</td>
+        <td>${insCell}</td>
         <td class="mini-tbl-actions">
           <span class="mini-tbl-edit" data-edit-idx="${idx}">编辑</span>
           <span class="mini-tbl-del" data-del-idx="${idx}">删除</span>
@@ -2158,7 +2467,6 @@
               <div class="mini-form-row"><label class="mini-li-label required">作业结束时间</label><input class="mini-form-input" type="time" value="${esc(w.workEnd || (w.endTime ? w.endTime.split(' ')[1] || '' : ''))}"></div>
               <div class="mini-li-row"><span class="mini-li-label">动火作业证书</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<span class="fire-cert-tag uploaded">已上传</span>' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
               <div class="mini-li-row"><span class="mini-li-label required">动火票</span><span class="mini-li-val">${w.fireCert === '已上传' ? '<img src="assets/fire-ticket.jpg" alt="动火票" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
-              <div class="mini-li-row"><span class="mini-li-label">作业人员保险</span><span class="mini-li-val">${w.insuranceCert === '已上传' ? '<img src="assets/insurance-cert.jpg" alt="作业人员保险" class="mini-cert-img">' : '<span class="fire-cert-tag not-uploaded">未上传</span>'}</span></div>
             </div>
             <div class="mini-detail-card">
               <div class="mini-card-title required">施工人列表 <span class="mini-count">${w.workers.length}人</span>
@@ -2166,7 +2474,7 @@
               </div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>操作</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -2256,6 +2564,10 @@
             <label class="mini-li-label">证件照<span class="mini-req">*</span></label>
             <div class="mini-upload-box" id="wk-upload">${p && p.certImg ? '已上传 ✓' : '点击上传图片'}</div>
           </div>
+          <div class="mini-form-row">
+            <label class="mini-li-label">作业人员保险</label>
+            <div class="mini-upload-box" id="wk-ins-upload">${p && p.insuranceImg ? '已上传 ✓' : '点击上传图片'}</div>
+          </div>
         </div>`;
       const foot = `<button class="btn btn-primary" id="wk-ok" style="width:100%">确认</button>`;
       const desc = `<div class="modal-desc">
@@ -2293,6 +2605,13 @@
         uploadBox.textContent = '已上传 ✓';
         certUploaded = true;
       });
+      let insUploaded = editing ? !!(p && p.insuranceImg) : false;
+      const insUploadBox = node.querySelector('#wk-ins-upload');
+      insUploadBox.addEventListener('click', () => {
+        toast('保险照片已上传', 'success');
+        insUploadBox.textContent = '已上传 ✓';
+        insUploaded = true;
+      });
       node.querySelector('#wk-ok').onclick = () => {
         const name = node.querySelector('#wk-name').value.trim();
         const phone = node.querySelector('#wk-phone').value.trim();
@@ -2309,10 +2628,11 @@
           return;
         }
         const certImg = hasCert === '是' ? (editing && p ? p.certImg : 'assets/cert-default.jpg') : '';
+        const insImg = insUploaded ? (editing && p ? p.insuranceImg : 'assets/insurance-cert.jpg') : '';
         if (editing) {
-          w.workers[editIdx] = { name, phone, idCard, task, needCert, hasCert: hasCert === '否' ? '否' : (hasCert || ''), certImg };
+          w.workers[editIdx] = { name, phone, idCard, task, needCert, hasCert: hasCert === '否' ? '否' : (hasCert || ''), certImg, insuranceImg: insImg };
         } else {
-          w.workers.push({ name, phone, idCard, task, needCert, hasCert: hasCert === '否' ? '否' : (hasCert || ''), certImg });
+          w.workers.push({ name, phone, idCard, task, needCert, hasCert: hasCert === '否' ? '否' : (hasCert || ''), certImg, insuranceImg: insImg });
         }
         close();
         toast(editing ? '施工人已更新' : '施工人已添加', 'success');
@@ -2343,6 +2663,48 @@
         }, 800);
       });
     }
+  }
+
+  // ============ 小程序端作业人员 - 需求更新 ============
+  function viewWorkerMiniRequirements() {
+    const view = $('#view');
+    view.innerHTML = `
+      <div class="requirements-page">
+        <div class="requirements-title">需求更新</div>
+        <div class="mini-req-panels">
+          <div class="mini-req-panel">
+            <div class="mini-req-title">需求说明</div>
+            <ol class="mini-req-list">
+              <li>1·安管员按指定规则时间去现场核查（需要判断安管员是否超时）</li>
+              <li>2·安管员要检查作业人员是否被更换（拍摄现场作业人员实时照片，还有穿戴设备是否规范）</li>
+              <li>3·现场环境是否安全，作业地点是否正确（安管员去确认现场环境是否安全和作业地址是否正确）</li>
+              <li>4·监护人是否在场（安管员拍摄监护人照片上传）</li>
+              <li>5·作业人员自己购买的保险，上传上来（上传照片）</li>
+              <li>6·人员定位</li>
+              <li>7·手机只能打开相机实时拍摄，不能相册上传</li>
+              <li>8·由企业分配作业给安管员（可以指定多个安管员，分配安管员后，小程序才能看到作业并审核）</li>
+            </ol>
+            <div class="mini-req-meta">
+              <div class="mini-req-row"><span class="mini-req-label">需求来源：</span><span class="mini-req-value">远程会议，龙湖需求方主任领导</span></div>
+              <div class="mini-req-row"><span class="mini-req-label">记录日期：</span><span class="mini-req-value">2026/8/19</span></div>
+            </div>
+          </div>
+          <div class="mini-req-panel">
+            <div class="mini-req-title">需求说明</div>
+            <ol class="mini-req-list">
+              <li>1、增加作业的监护人</li>
+              <li>2、施工单位：增加"个人"</li>
+              <li>3、展示事前-事中-事后，核查记录排序按顺序（第一条与审核记录的时间不超过30分钟）</li>
+              <li>4、增加完成记录（事后）</li>
+            </ol>
+            <div class="mini-req-meta">
+              <div class="mini-req-row"><span class="mini-req-label">需求来源：</span><span class="mini-req-value">杨冰</span></div>
+              <div class="mini-req-row"><span class="mini-req-label">记录日期：</span><span class="mini-req-value">2026/8/24</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   // ============ 作业区域 ============
@@ -2794,6 +3156,7 @@
           { title: '作业时间', render: (r) => esc((r.startTime || '').split(' ')[1] || '—') + ' - ' + esc((r.endTime || '').split(' ')[1] || '—') },
           { title: '核查规则', render: (r) => esc(r.auditRuleLabel || '—') },
           { title: '安管员', render: (r) => esc((r.assignedOfficerNames && r.assignedOfficerNames.length) ? r.assignedOfficerNames.join('、') : '—') },
+          { title: '监护人', render: (r) => esc((r.assignedGuardianNames && r.assignedGuardianNames.length) ? r.assignedGuardianNames.join('、') : '—') },
           { title: '作业票', render: (r) => {
               const uploaded = r.fireTicket || r.fireTicketImg;
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
@@ -2816,11 +3179,11 @@
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-cert="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
             } },
           { title: '作业状态', render: (r) => statusTag(r.status) },
-          { title: '操作', render: (r) => `<div class="actions"><button class="btn-text" data-act="view">查看</button>${opt.scope === 'enterprise' && r.status === '待审核' ? '<button class="btn-text" data-act="rule">核查规则</button><button class="btn-text" data-act="assign">分配安管员</button>' : ''}</div>` },
+          { title: '操作', render: (r) => `<div class="actions"><button class="btn-text" data-act="view">查看</button>${opt.scope === 'enterprise' && r.status === '待审核' ? '<button class="btn-text" data-act="rule">核查规则</button><button class="btn-text" data-act="assign">分配安管员</button><button class="btn-text" data-act="assign-guardian">分配监护人</button>' : ''}</div>` },
         ];
         const { node } = renderTable({
           columns, rows, page: state.page, pageSize: state.pageSize,
-          onAction: (act, id) => { const r = rows.find((x) => x.id === id); if (act === 'view') modalWorkDetail(r, opt.scope); else if (act === 'rule') modalAuditRule(r); else if (act === 'assign') modalAssignOfficers(r); },
+          onAction: (act, id) => { const r = rows.find((x) => x.id === id); if (act === 'view') modalWorkDetail(r, opt.scope); else if (act === 'rule') modalAuditRule(r); else if (act === 'assign') modalAssignOfficers(r); else if (act === 'assign-guardian') modalAssignGuardians(r); },
         });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
         // 作业票点击展开图片
@@ -2873,7 +3236,7 @@
               <li><b>2·列表数据来源：</b>所有数据信息全部都是作业人员扫描二维码录入的作业信息产生，作业人员提交完信息后，在G端和企业端都会展示。注意，G端只会展示绑定了区域的企业的作业</li>
               <li><b>3·状态：</b>待审核、待开始、进行中、已完成、已拒绝、已结束。</li>
               <li><b>4·作业票/作业人员照片/监护人照片/特种作业证书：</b>都显示已上传或未上传，根据详情页是否有对应的照片判定，显示已上传时，点击该标签出现弹框，展示对应的作业票或证书；其中特种作业证书需要所有该上传的人全都上传才会显示已上传。</li>
-              <li><b>5·现场核查状态：</b>由详情的现场核查记录判定，当记录中存在异常，则列表页就是异常，如果有多条记录，只要记录中有一条是异常，则整体状态就是异常。</li>
+              <li><b>5·现场核查状态：</b>由详情的现场核查记录判定，取最新一条现场核查记录来判定。</li>
             </ul>
           </div>`);
           slot.parentElement.appendChild(desc);
@@ -2885,9 +3248,10 @@
             <ul>
               <li><b>作业管理所有数据来源都是作业人员扫描二维码录入的信息上传。</b></li>
               <li><b>1·作业类型条件搜索：</b>作业类型有动火，高处，临电，但目前只有动火可以三个都放进去。</li>
-              <li><b>2·操作列的核查规则和分配安管员只有待审核的作业才展示，企业管理员将作业分配给安管员后，安管员才能在小程序上看到作业。</b></li>
-              <li><b>3·现场核查状态：</b>取该作业现场核查记录里最新一条的状态，如果最新一条未审核即没有状态标识，则展示横杠。</li>
+              <li><b>2·操作列的核查规则、分配安管员和分配监护人只有待审核的作业才展示，企业管理员将作业分配给安管员后，安管员才能在小程序上看到作业。</b></li>
+              <li><b>3·作业人员照片/监护人照片/现场核查状态：</b>取该作业现场核查记录里最新一条的状态，如果最新一条未审核即没有状态标识，则展示横杠，照片上传了则显示已上传反之未上传。</li>
               <li><b>4·作业状态条件搜索：</b>待审核，待开始，进行中，已完成，已拒绝，已结束。</li>
+              <li><b>5·监护人列：</b>显示已分配的监护人，未分配时显示横杠。</li>
               <li><b>待审核：</b>作业人员上传的作业信息初始为待审核状态。</li>
               <li><b>待开始：</b>审核通过但未到作业开始时间。</li>
               <li><b>进行中：</b>作业已处于开始时间和结束时间之间。</li>
@@ -2979,6 +3343,67 @@
       work.assignedOfficerNames = names;
       close();
       toast(`已分配 ${ids.length} 位安管员：${names.join('、')}`);
+    };
+  }
+  // 分配监护人弹窗
+  function modalAssignGuardians(work) {
+    const guardians = DB.guardians || [];
+    const assignedIds = work.assignedGuardians || [];
+    const body = `
+      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>作业名称</div><div class="fr"><div style="padding:6px 0;color:#606266">${esc(work.name)}</div></div></div>
+      <div class="form-row" style="align-items:flex-start">
+        <div class="fl" style="padding-top:6px"><span class="pin-num pin-inline"><span>2</span></span>选择监护人<span class="req">*</span></div>
+        <div class="fr">
+          <div class="officer-assign-list">
+            ${guardians.map((g) => `
+              <label class="officer-assign-item" style="display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid #ebeef5;border-radius:6px;margin-bottom:6px;cursor:pointer;transition:border-color .2s,background .2s;${assignedIds.includes(g.id) ? 'border-color:#67C23A;background:#f0f9eb' : ''}">
+                <input type="checkbox" class="guardian-cb" value="${g.id}" ${assignedIds.includes(g.id) ? 'checked' : ''} style="width:16px;height:16px;accent-color:#67C23A">
+                <div style="flex:1">
+                  <div style="font-size:13px;color:#333;font-weight:500">${esc(g.name)}</div>
+                  <div style="font-size:12px;color:#999">${esc(g.phone)}</div>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+          <div style="font-size:12px;color:#999;margin-top:6px">已选择 <span id="guardian-count" style="color:#67C23A;font-weight:600">${assignedIds.length}</span> 人</div>
+        </div>
+      </div>
+      <div class="modal-desc" style="margin-top:16px;width:auto;background:#FFF9E6;border:1px solid #FFE58F;border-radius:6px;padding:14px 16px;font-size:13px;color:#606266;line-height:1.7">
+        <div class="md-title" style="font-size:14px;font-weight:700;color:#D48806;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #FFD591">说明</div>
+        <ul style="list-style:none;padding:0;margin:0">
+          <li style="margin-bottom:8px">每条作业都需要专门指定哪位监护人，支持多选</li>
+          <li style="margin-bottom:8px">监护人负责在作业现场全程监督作业安全</li>
+          <li style="margin-bottom:0">监护人必须在作业期间在场，确保作业安全规范执行</li>
+        </ul>
+      </div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="assign-g-ok">确定</button>`;
+    const { node, close } = openModal('分配监护人', body, foot, false);
+    const checkboxes = node.querySelectorAll('.guardian-cb');
+    const countSpan = node.querySelector('#guardian-count');
+    const updateCount = () => {
+      const checked = node.querySelectorAll('.guardian-cb:checked');
+      countSpan.textContent = checked.length;
+      checkboxes.forEach((cb) => {
+        const item = cb.closest('.officer-assign-item');
+        if (cb.checked) {
+          item.style.borderColor = '#67C23A';
+          item.style.background = '#f0f9eb';
+        } else {
+          item.style.borderColor = '#ebeef5';
+          item.style.background = '';
+        }
+      });
+    };
+    checkboxes.forEach((cb) => cb.addEventListener('change', updateCount));
+    node.querySelectorAll('.btn')[0].onclick = close;
+    node.querySelector('#assign-g-ok').onclick = () => {
+      const ids = Array.from(node.querySelectorAll('.guardian-cb:checked')).map((cb) => Number(cb.value));
+      if (ids.length === 0) { toast('请至少选择一位监护人', 'error'); return; }
+      work.assignedGuardians = ids;
+      const names = ids.map((id) => { const g = guardians.find((x) => x.id === id); return g ? g.name : ''; }).filter(Boolean);
+      work.assignedGuardianNames = names;
+      close();
+      toast(`已分配 ${ids.length} 位监护人：${names.join('、')}`);
     };
   }
   // 核查规则弹窗
@@ -3200,10 +3625,9 @@
           <div class="detail-item"><div class="dk">作业时间</div><div class="dv">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</div></div>
           <div class="detail-item"><div class="dk">作业状态</div><div class="dv">${statusTag(w.status)}</div></div>
           <div class="detail-item"><div class="dk">动火票</div><div class="dv">${(() => { const ft = Array.isArray(w.audit) ? w.audit.find(a => a.fireTicket && a.fireTicket !== '—') : null; return ft ? '<img class="fire-ticket-img" src="assets/work-fireticket.jpg" onclick="window.open(\'assets/work-fireticket.jpg\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
-          <div class="detail-item"><div class="dk">作业人员保险</div><div class="dv">${(() => { const ins = w.insuranceCert; return ins && ins !== '未上传' ? '<img class="fire-ticket-img" src="assets/insurance-cert.jpg" onclick="window.open(\'assets/insurance-cert.jpg\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
         </div>
       </div>`;
-    const wcols = ['姓名', '手机号', '身份证号', '工作内容', '是否需要持证', '是否持证', '证件照'];
+    const wcols = ['姓名', '手机号', '身份证号', '工作内容', '是否需要持证', '是否持证', '证件照', '作业人员保险'];
     const CERT_PHOTOS = ['assets/cert-photo-1.jpg', 'assets/cert-photo-2.jpg', 'assets/cert-photo-3.jpg'];
     const wrows = w.workers.map((p, i) => {
       let certCell;
@@ -3213,7 +3637,13 @@
       } else {
         certCell = '—';
       }
-      return `<tr><td>${esc(p.name)}</td><td>${esc(p.phone)}</td><td class="mono">${esc(p.idCard)}</td><td>${esc(p.task)}</td><td>${esc(p.needCert)}</td><td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td><td>${certCell}</td></tr>`;
+      let insCell;
+      if (p.insuranceImg) {
+        insCell = `<img src="${p.insuranceImg}" alt="作业人员保险" style="width:40px;height:48px;object-fit:cover;border-radius:4px;cursor:pointer" onclick="window.open('${p.insuranceImg}','_blank')">`;
+      } else {
+        insCell = '—';
+      }
+      return `<tr><td>${esc(p.name)}</td><td>${esc(p.phone)}</td><td class="mono">${esc(p.idCard)}</td><td>${esc(p.task)}</td><td>${esc(p.needCert)}</td><td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td><td>${certCell}</td><td>${insCell}</td></tr>`;
     }).join('');
     const workers = `
       <div class="detail-section">
@@ -3223,7 +3653,7 @@
     const audits = Array.isArray(w.audit) ? w.audit : (w.audit ? [w.audit] : []);
     const audit = `
       <div class="detail-section">
-        <div class="ds-title">审核记录 <span class="rec-count">${audits.length}条</span></div>
+        <div class="ds-title">审核记录 <span class="stage-tag stage-pre">作业前</span> <span class="rec-count">${audits.length}条</span></div>
         ${audits.length === 0 ? '<div class="rec-empty">暂无审核记录</div>' : audits.map((a, i) => `
           <div class="rec-card ${i === 0 ? 'open' : ''}">
             <div class="rec-head">
@@ -3249,7 +3679,7 @@
     const verifies = Array.isArray(w.verify) ? w.verify : (w.verify ? [w.verify] : []);
     const verify = `
       <div class="detail-section">
-        <div class="ds-title">现场核查记录 <span class="rec-count">${verifies.length}条</span></div>
+        <div class="ds-title">现场核查记录 <span class="stage-tag stage-during">作业中</span> <span class="rec-count">${verifies.length}条</span></div>
         ${verifies.length === 0 ? '<div class="rec-empty">暂无核查记录</div>' : verifies.map((v, i) => `
           <div class="rec-card ${i === 0 ? 'open' : ''}">
             <div class="rec-head">
@@ -3273,7 +3703,51 @@
             </div>
           </div>`).join('')}
       </div>`;
-    const { node } = openModal('作业详情', base + workers + audit + verify, `<button class="btn btn-primary" onclick="this.closest('.overlay').remove()">关闭</button>`, true);
+    const comp = w.completion || {};
+    const compWR = comp.workRecord || {};
+    const compOC = comp.officerConfirm || {};
+    const compGC = comp.guardianConfirm || {};
+    const completionPhotosHtml = (photos, label) => {
+      if (!photos || !photos.length) return `<div class="detail-item"><div class="dk">${label}</div><div class="dv">—</div></div>`;
+      return `<div class="detail-item"><div class="dk">${label}</div><div class="dv"><div class="comp-photos">${photos.map((p) => `<img src="${p}" alt="${label}" onclick="window.open('${p}','_blank')">`).join('')}</div></div></div>`;
+    };
+    const completion = w.status === '已完成' ? `
+      <div class="detail-section">
+        <div class="ds-title">完成记录 <span class="stage-tag stage-post">作业完成</span></div>
+        <div class="comp-card">
+          <div class="comp-item">
+            <div class="comp-label">作业完成记录</div>
+            <div class="comp-grid">
+              <div class="detail-item"><div class="dk">状态</div><div class="dv">${compWR.status ? '<span class="tag ' + (compWR.status === '已完成' ? 'tag-success' : 'tag-warning') + '">' + esc(compWR.status) + '</span>' : '—'}</div></div>
+              <div class="detail-item"><div class="dk">完成时间</div><div class="dv">${esc(compWR.time || '—')}</div></div>
+              <div class="detail-item"><div class="dk">作业人员</div><div class="dv">${esc(compWR.name || '—')}</div></div>
+              <div class="detail-item"><div class="dk">备注</div><div class="dv">${esc(compWR.remark || '—')}</div></div>
+              ${completionPhotosHtml(compWR.photos, '现场照片')}
+            </div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-label">安管员确认记录</div>
+            <div class="comp-grid">
+              <div class="detail-item"><div class="dk">状态</div><div class="dv">${compOC.status ? '<span class="tag ' + (compOC.status === '已确认' ? 'tag-success' : 'tag-warning') + '">' + esc(compOC.status) + '</span>' : '—'}</div></div>
+              <div class="detail-item"><div class="dk">确认时间</div><div class="dv">${esc(compOC.time || '—')}</div></div>
+              <div class="detail-item"><div class="dk">确认人</div><div class="dv">${esc(compOC.name || '—')}</div></div>
+              <div class="detail-item"><div class="dk">备注</div><div class="dv">${esc(compOC.remark || '—')}</div></div>
+              ${completionPhotosHtml(compOC.photos, '现场照片')}
+            </div>
+          </div>
+          <div class="comp-item">
+            <div class="comp-label">监护人确认记录</div>
+            <div class="comp-grid">
+              <div class="detail-item"><div class="dk">状态</div><div class="dv">${compGC.status ? '<span class="tag ' + (compGC.status === '已确认' ? 'tag-success' : 'tag-warning') + '">' + esc(compGC.status) + '</span>' : '—'}</div></div>
+              <div class="detail-item"><div class="dk">确认时间</div><div class="dv">${esc(compGC.time || '—')}</div></div>
+              <div class="detail-item"><div class="dk">确认人</div><div class="dv">${esc(compGC.name || '—')}</div></div>
+              <div class="detail-item"><div class="dk">备注</div><div class="dv">${esc(compGC.remark || '—')}</div></div>
+              ${completionPhotosHtml(compGC.photos, '现场照片')}
+            </div>
+          </div>
+        </div>
+      </div>` : '';
+    const { node } = openModal('作业详情', base + workers + audit + verify + completion, `<button class="btn btn-primary" onclick="this.closest('.overlay').remove()">关闭</button>`, true);
     node.querySelectorAll('.rec-card .rec-head').forEach((head) => {
       head.onclick = () => head.parentElement.classList.toggle('open');
     });
@@ -3499,6 +3973,78 @@
       const idx = DB.officers.findIndex((x) => x.id === o.id);
       DB.officers[idx] = { ...DB.officers[idx], name: $('#o-name').value.trim(), phone: $('#o-phone').value.trim() };
       close(); toast('修改成功'); onDone && onDone();
+    };
+  }
+
+  // ============ 监护人管理 ============
+  function viewGuardians() {
+    const view = $('#view');
+    let state = { page: 1, pageSize: 10 };
+    function render() {
+      view.innerHTML = `<div class="card"><div class="toolbar"><div class="spacer"></div><button class="btn btn-primary" id="btn-add">${icon('plus')}新增</button></div><div id="tbl"></div></div>`;
+      $('#btn-add').onclick = () => modalGuardian(render);
+      renderTbl();
+    }
+    function renderTbl() {
+      API.listGuardians().then((res) => {
+        const rows = res.data;
+        const columns = [
+          { title: '姓名', key: 'name' },
+          { title: '手机号', key: 'phone' },
+          { title: '创建时间', key: 'createdAt' },
+          { title: '操作', render: () => `<div class="actions"><button class="btn-text" data-act="view">查看</button><button class="btn-text" data-act="edit">修改</button><button class="btn-text danger" data-act="delete">删除</button></div>` },
+        ];
+        const { node } = renderTable({
+          columns, rows, page: state.page, pageSize: state.pageSize,
+          onAction: (act, id) => {
+            const r = rows.find((x) => x.id === id);
+            if (act === 'view') { openModal('监护人详情', `<div class="detail-grid"><div class="detail-item"><div class="dk">姓名</div><div class="dv">${esc(r.name)}</div></div><div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(r.phone)}</div></div><div class="detail-item"><div class="dk">创建时间</div><div class="dv">${esc(r.createdAt)}</div></div></div>`, `<button class="btn btn-primary" onclick="this.closest('.overlay').remove()">关闭</button>`); }
+            else if (act === 'edit') modalGuardianEdit(r, render);
+            else if (act === 'delete') confirmDialog(`确定删除监护人「${r.name}」吗？`, () => API.deleteGuardian(id).then(() => { toast('删除成功'); render(); }));
+          },
+        });
+        node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
+        const slot = $('#tbl'); slot.innerHTML = ''; slot.appendChild(node);
+        // 监护人管理：字段说明
+        const desc = h(`<div class="card desc-panel desc-panel-sm">
+          <div class="card-title">监护人管理</div>
+          <ul>
+            <li><b>监护人是作业现场负责监督作业安全的人员，需要在作业期间全程在场。</b></li>
+            <li><b>1·新增：</b>只需要录入姓名和手机号即可，必填，无限限配置。</li>
+            <li><b>2·修改和查看：</b>修改和新增页面一致，内容回填；查看多展示一个创建时间。</li>
+            <li><b>3·删除：</b>删除按钮默认不开放，因为涉及到该监护人参与的历史作业记录。</li>
+            <li><b>4·分配监护人：</b>在企业作业管理列表中，待审核的作业可以分配监护人。</li>
+          </ul>
+        </div>`);
+        slot.parentElement.appendChild(desc);
+      });
+    }
+    render();
+  }
+  function modalGuardian(onDone) {
+    const body = `
+      <div class="form-row"><div class="fl">姓名<span class="req">*</span></div><div class="fr"><input class="input" id="g-name" placeholder="请输入姓名"></div></div>
+      <div class="form-row"><div class="fl">手机号<span class="req">*</span></div><div class="fr"><input class="input" id="g-phone" placeholder="请输入手机号"></div></div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="g-ok">确定</button>`;
+    const { node, close } = openModal('新增监护人', body, foot);
+    node.querySelectorAll('.btn')[0].onclick = close;
+    $('#g-ok').onclick = () => {
+      const data = { name: $('#g-name').value.trim(), phone: $('#g-phone').value.trim() };
+      if (!data.name || !data.phone) { toast('请填写必填项', 'error'); return; }
+      API.createGuardian(data).then(() => { close(); toast('新增成功'); onDone && onDone(); });
+    };
+  }
+  function modalGuardianEdit(g, onDone) {
+    const body = `
+      <div class="form-row"><div class="fl">姓名<span class="req">*</span></div><div class="fr"><input class="input" id="g-name" value="${esc(g.name)}"></div></div>
+      <div class="form-row"><div class="fl">手机号<span class="req">*</span></div><div class="fr"><input class="input" id="g-phone" value="${esc(g.phone)}"></div></div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="g-ok">确定</button>`;
+    const { node, close } = openModal('修改监护人', body, foot);
+    node.querySelectorAll('.btn')[0].onclick = close;
+    $('#g-ok').onclick = () => {
+      API.updateGuardian({ id: g.id, name: $('#g-name').value.trim(), phone: $('#g-phone').value.trim() }).then(() => {
+        close(); toast('修改成功'); onDone && onDone();
+      });
     };
   }
 

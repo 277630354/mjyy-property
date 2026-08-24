@@ -114,6 +114,34 @@
     return ok({ id });
   }
 
+  // ---- 监护人 ----
+  // GET /api/guardians
+  async function listGuardians() {
+    await delay(300);
+    return ok(DB.guardians.map((g) => ({ ...g })));
+  }
+  // POST /api/guardians
+  async function createGuardian(data) {
+    await delay(300);
+    const id = Math.max(0, ...DB.guardians.map((g) => g.id)) + 1;
+    const g = { id, createdAt: new Date().toISOString().slice(0, 16).replace('T', ' '), ...data };
+    DB.guardians.push(g);
+    return ok(g);
+  }
+  // PUT /api/guardians/:id
+  async function updateGuardian(data) {
+    await delay(300);
+    const idx = DB.guardians.findIndex((g) => g.id === data.id);
+    if (idx > -1) DB.guardians[idx] = { ...DB.guardians[idx], ...data };
+    return ok(DB.guardians[idx]);
+  }
+  // DELETE /api/guardians/:id
+  async function deleteGuardian(id) {
+    await delay(300);
+    DB.guardians = DB.guardians.filter((g) => g.id !== id);
+    return ok({ id });
+  }
+
   // ---- 作业 ----
   // GET /api/works?enterpriseId=&areaId=&type=&status=
   async function listWorks({ enterpriseId, areaId, type, status } = {}) {
@@ -174,6 +202,7 @@
     listEnterprises, bindEnterprise, unbindEnterprise,
     listStores, createStore, updateStore, deleteStore,
     listOfficers, createOfficer, deleteOfficer,
+    listGuardians, createGuardian, updateGuardian, deleteGuardian,
     listWorks, getWorkDetail,
     dashboardStats,
   };
