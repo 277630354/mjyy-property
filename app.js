@@ -2792,10 +2792,8 @@
           { title: '施工人数', key: 'workerCount' },
           { title: '作业周期', render: (r) => esc((r.startTime || '').split(' ')[0] || '—') },
           { title: '作业时间', render: (r) => esc((r.startTime || '').split(' ')[1] || '—') + ' - ' + esc((r.endTime || '').split(' ')[1] || '—') },
-          ...(opt.scope === 'enterprise' ? [
-            { title: '核查规则', render: (r) => esc(r.auditRuleLabel || '—') },
-            { title: '安管员', render: (r) => esc((r.assignedOfficerNames && r.assignedOfficerNames.length) ? r.assignedOfficerNames.join('、') : '—') },
-          ] : []),
+          { title: '核查规则', render: (r) => esc(r.auditRuleLabel || '—') },
+          { title: '安管员', render: (r) => esc((r.assignedOfficerNames && r.assignedOfficerNames.length) ? r.assignedOfficerNames.join('、') : '—') },
           { title: '作业票', render: (r) => {
               const uploaded = r.fireTicket || r.fireTicketImg;
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
