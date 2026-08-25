@@ -2100,6 +2100,11 @@
   function viewWorkerMiniWorkInfo() {
     const view = $('#view');
     const w = MINI_PENDING_WORKS[0];
+    const maskId = (id) => {
+      if (!id) return '';
+      if (id.length < 10) return id;
+      return id.slice(0, 4) + '**********' + id.slice(-4);
+    };
     const wrows = w.workers.map((p, idx) => {
       const isLeader = p.name === w.leader;
       const certCell = p.certImg
@@ -2108,10 +2113,11 @@
       const insCell = p.insuranceImg
         ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img">`
         : '—';
+      const idCell = `<div>${maskId(p.idCard)}</div>`;
+      const nameCell = `<div style="color:#999;font-size:12px">${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</div><div style="color:#999;font-size:12px">${esc(p.phone)}</div>`;
       return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
-        <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
-        <td>${esc(p.phone)}</td>
-        <td class="mono">${esc(p.idCard)}</td>
+        <td>${idCell}</td>
+        <td>${nameCell}</td>
         <td>${esc(p.task)}</td>
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
@@ -2190,7 +2196,7 @@
               </div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
+                  <thead><tr><th>身份证号</th><th>姓名/手机号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -2276,9 +2282,10 @@
       const p = editing ? w.workers[editIdx] : null;
       const wasLeader = editing && p.name === w.leader;
       const body = `<div class="mini-worker-form">
-          <div class="mini-form-row"><label class="mini-li-label">姓名<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-name" placeholder="请输入姓名" value="${p ? esc(p.name) : ''}"></div>
-          <div class="mini-form-row"><label class="mini-li-label">手机号<span class="mini-req">*</span></label><input class="mini-form-input" type="tel" id="wk-phone" placeholder="请输入手机号" value="${p ? esc(p.phone) : ''}"></div>
           <div class="mini-form-row"><label class="mini-li-label">身份证号<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-idcard" placeholder="请输入身份证号" value="${p ? esc(p.idCard) : ''}"></div>
+          <div class="mini-form-row" style="display:none;color:#f56c6c;font-size:12px;margin:-6px 0 6px 90px" id="wk-idcard-err"></div>
+          <div class="mini-form-row"><label class="mini-li-label">姓名<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-name" placeholder="" value="${p ? esc(p.name) : ''}" disabled></div>
+          <div class="mini-form-row"><label class="mini-li-label">手机号<span class="mini-req">*</span></label><input class="mini-form-input" type="tel" id="wk-phone" placeholder="" value="${p ? esc(p.phone) : ''}" disabled></div>
           <div class="mini-form-row"><label class="mini-li-label">工作内容<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-task" placeholder="请输入工作内容" value="${p ? esc(p.task) : ''}"></div>
           <div class="mini-form-row"><label class="mini-li-label">是否需要持证<span class="mini-req">*</span></label>
             <select class="mini-form-select" id="wk-needcert">
@@ -2307,7 +2314,7 @@
           <div class="md-title">添加施工人说明</div>
           <ul>
             <li><b>1·</b>所有信息都是必填。</li>
-            <li><b>2·</b>身份证号填写完后再列表展示为脱敏。</li>
+            <li><b>2·</b>姓名手机号置灰，输入身份证号失焦后立即查询该人员是否在名匠存在个人注册认证，如果有则回填姓名手机号；如果未查询到则出现红色提示文案【未查询到当前人员，请先完成平台注册认证，再重新添加施工人员】；如果该身份证查询到多条信息则不回填并提示【当前身份证号查询异常，请联系客服处理】；未查询到和查询出多条都无法提交。</li>
             <li><b>3·</b>是否需要持证默认为是，如果选否，则不展示是否持证选项，且施工人列表的是否持证和证件照展示横杠。</li>
             <li><b>4·</b>是否持证：没有默认值，选是则出现证件照上传图片，必填，如果选否或未选择，都不展示证件照字段。</li>
           </ul>
@@ -2328,6 +2335,32 @@
       const hasCertSelect = node.querySelector('#wk-hascert');
       const certRow = node.querySelector('#wk-cert-row');
       let certUploaded = editing ? !!(p && p.certImg) : false;
+      const idcardInput = node.querySelector('#wk-idcard');
+      const nameInput = node.querySelector('#wk-name');
+      const phoneInput = node.querySelector('#wk-phone');
+      const errMsgEl = node.querySelector('#wk-idcard-err');
+      let lookupStatus = 'idle';
+      const setIdError = (msg) => {
+        if (!errMsgEl) return;
+        if (msg) { errMsgEl.textContent = msg; errMsgEl.style.display = 'block'; }
+        else { errMsgEl.style.display = 'none'; }
+      };
+      idcardInput.addEventListener('blur', () => {
+        const v = idcardInput.value.trim();
+        if (!v) { setIdError(''); lookupStatus = 'idle'; return; }
+        if (v === '110101199003071234' || v.endsWith('1234')) {
+          if (!editing) { nameInput.value = '张三'; phoneInput.value = '1385678'; }
+          setIdError(''); lookupStatus = 'ok';
+        } else if (v === '110101199003079999') {
+          setIdError('当前身份证号查询异常，请联系客服处理');
+          lookupStatus = 'multiple';
+          nameInput.value = ''; phoneInput.value = '';
+        } else {
+          setIdError('未查询到当前人员，请先完成平台注册认证，再重新添加施工人员');
+          lookupStatus = 'notfound';
+          nameInput.value = ''; phoneInput.value = '';
+        }
+      });
       hasCertSelect.addEventListener('change', () => {
         const show = hasCertSelect.value === '是';
         certRow.style.display = show ? 'flex' : 'none';
@@ -2345,12 +2378,15 @@
         node.querySelector('#wk-ins-upload').textContent = '已上传 ✓';
       });
       node.querySelector('#wk-ok').onclick = () => {
+        const idcard = node.querySelector('#wk-idcard').value.trim();
+        if (!idcard) { toast('请输入身份证号', 'error'); return; }
+        if (!editing && (lookupStatus === 'notfound' || lookupStatus === 'multiple' || lookupStatus === 'idle')) {
+          toast(lookupStatus === 'idle' ? '请输入身份证号并失焦查询' : (lookupStatus === 'multiple' ? '当前身份证号查询异常，请联系客服处理' : '未查询到当前人员，请先完成平台注册认证，再重新添加施工人员'), 'error'); return;
+        }
         const name = node.querySelector('#wk-name').value.trim();
         if (!name) { toast('请输入姓名', 'error'); return; }
         const phone = node.querySelector('#wk-phone').value.trim();
         if (!phone) { toast('请输入手机号', 'error'); return; }
-        const idcard = node.querySelector('#wk-idcard').value.trim();
-        if (!idcard) { toast('请输入身份证号', 'error'); return; }
         const task = node.querySelector('#wk-task').value.trim();
         if (!task) { toast('请输入工作内容', 'error'); return; }
         const needcert = node.querySelector('#wk-needcert').value;
@@ -2385,6 +2421,11 @@
       startTime: src.startTime, endTime: src.endTime, fireCert: src.fireCert, insuranceCert: src.insuranceCert || '未上传',
       status: '待审核', workers: src.workers.map((p) => ({ ...p })),
     };
+    const maskId = (id) => {
+      if (!id) return '';
+      if (id.length < 10) return id;
+      return id.slice(0, 4) + '**********' + id.slice(-4);
+    };
     const wrows = w.workers.map((p, idx) => {
       const isLeader = p.name === w.leader;
       const certCell = p.certImg
@@ -2393,10 +2434,11 @@
       const insCell = p.insuranceImg
         ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img">`
         : '—';
+      const idCell = `<div>${maskId(p.idCard)}</div>`;
+      const nameCell = `<div style="color:#999;font-size:12px">${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</div><div style="color:#999;font-size:12px">${esc(p.phone)}</div>`;
       return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
-        <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
-        <td>${esc(p.phone)}</td>
-        <td class="mono">${esc(p.idCard)}</td>
+        <td>${idCell}</td>
+        <td>${nameCell}</td>
         <td>${esc(p.task)}</td>
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
@@ -2478,7 +2520,7 @@
               </div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
+                  <thead><tr><th>身份证号</th><th>姓名/手机号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -2547,9 +2589,10 @@
       const p = editing ? w.workers[editIdx] : null;
       const wasLeader = editing && p.name === w.leader;
       const body = `<div class="mini-worker-form">
-          <div class="mini-form-row"><label class="mini-li-label">姓名<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-name" placeholder="请输入姓名" value="${p ? esc(p.name) : ''}"></div>
-          <div class="mini-form-row"><label class="mini-li-label">手机号<span class="mini-req">*</span></label><input class="mini-form-input" type="tel" id="wk-phone" placeholder="请输入手机号" value="${p ? esc(p.phone) : ''}"></div>
           <div class="mini-form-row"><label class="mini-li-label">身份证号<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-idcard" placeholder="请输入身份证号" value="${p ? esc(p.idCard) : ''}"></div>
+          <div class="mini-form-row" style="display:none;color:#f56c6c;font-size:12px;margin:-6px 0 6px 90px" id="wk-idcard-err"></div>
+          <div class="mini-form-row"><label class="mini-li-label">姓名<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-name" placeholder="" value="${p ? esc(p.name) : ''}" disabled></div>
+          <div class="mini-form-row"><label class="mini-li-label">手机号<span class="mini-req">*</span></label><input class="mini-form-input" type="tel" id="wk-phone" placeholder="" value="${p ? esc(p.phone) : ''}" disabled></div>
           <div class="mini-form-row"><label class="mini-li-label">工作内容<span class="mini-req">*</span></label><input class="mini-form-input" type="text" id="wk-task" placeholder="请输入工作内容" value="${p ? esc(p.task) : ''}"></div>
           <div class="mini-form-row"><label class="mini-li-label">是否需要持证<span class="mini-req">*</span></label>
             <select class="mini-form-select" id="wk-needcert">
@@ -2578,7 +2621,7 @@
           <div class="md-title">添加施工人说明</div>
           <ul>
             <li><b>1·</b>所有信息都是必填。</li>
-            <li><b>2·</b>身份证号填写完后再列表展示为脱敏。</li>
+            <li><b>2·</b>姓名手机号置灰，输入身份证号失焦后立即查询该人员是否在名匠存在个人注册认证，如果有则回填姓名手机号；如果未查询到则出现红色提示文案【未查询到当前人员，请先完成平台注册认证，再重新添加施工人员】；如果该身份证查询到多条信息则不回填并提示【当前身份证号查询异常，请联系客服处理】；未查询到和查询出多条都无法提交。</li>
             <li><b>3·</b>是否需要持证默认为是，如果选否，则不展示是否持证选项，且施工人列表的是否持证和证件照展示横杠。</li>
             <li><b>4·</b>是否持证：没有默认值，选是则出现证件照上传图片，必填，如果选否或未选择，都不展示证件照字段。</li>
           </ul>
@@ -2599,6 +2642,32 @@
       const hasCertSelect = node.querySelector('#wk-hascert');
       const certRow = node.querySelector('#wk-cert-row');
       let certUploaded = editing ? !!(p && p.certImg) : false;
+      const idcardInput = node.querySelector('#wk-idcard');
+      const nameInput = node.querySelector('#wk-name');
+      const phoneInput = node.querySelector('#wk-phone');
+      const errMsgEl = node.querySelector('#wk-idcard-err');
+      let lookupStatus = 'idle';
+      const setIdError = (msg) => {
+        if (!errMsgEl) return;
+        if (msg) { errMsgEl.textContent = msg; errMsgEl.style.display = 'block'; }
+        else { errMsgEl.style.display = 'none'; }
+      };
+      idcardInput.addEventListener('blur', () => {
+        const v = idcardInput.value.trim();
+        if (!v) { setIdError(''); lookupStatus = 'idle'; return; }
+        if (v === '110101199003071234' || v.endsWith('1234')) {
+          if (!editing) { nameInput.value = '张三'; phoneInput.value = '1385678'; }
+          setIdError(''); lookupStatus = 'ok';
+        } else if (v === '110101199003079999') {
+          setIdError('当前身份证号查询异常，请联系客服处理');
+          lookupStatus = 'multiple';
+          nameInput.value = ''; phoneInput.value = '';
+        } else {
+          setIdError('未查询到当前人员，请先完成平台注册认证，再重新添加施工人员');
+          lookupStatus = 'notfound';
+          nameInput.value = ''; phoneInput.value = '';
+        }
+      });
       hasCertSelect.addEventListener('change', () => {
         const show = hasCertSelect.value === '是';
         certRow.style.display = show ? 'flex' : 'none';
@@ -2617,9 +2686,13 @@
         insUploaded = true;
       });
       node.querySelector('#wk-ok').onclick = () => {
+        const idCard = node.querySelector('#wk-idcard').value.trim();
+        if (!editing && (lookupStatus === 'notfound' || lookupStatus === 'multiple' || lookupStatus === 'idle')) {
+          toast(lookupStatus === 'idle' ? '请输入身份证号并失焦查询' : (lookupStatus === 'multiple' ? '当前身份证号查询异常，请联系客服处理' : '未查询到当前人员，请先完成平台注册认证，再重新添加施工人员'), 'error');
+          return;
+        }
         const name = node.querySelector('#wk-name').value.trim();
         const phone = node.querySelector('#wk-phone').value.trim();
-        const idCard = node.querySelector('#wk-idcard').value.trim();
         const task = node.querySelector('#wk-task').value.trim();
         const needCert = node.querySelector('#wk-needcert').value;
         const hasCert = hasCertSelect.value;
