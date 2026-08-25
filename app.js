@@ -3308,8 +3308,16 @@
           { title: '作业周期', render: (r) => esc((r.startTime || '').split(' ')[0] || '—') },
           { title: '作业时间', render: (r) => esc((r.startTime || '').split(' ')[1] || '—') + ' - ' + esc((r.endTime || '').split(' ')[1] || '—') },
           { title: '核查规则', render: (r) => esc(r.auditRuleLabel || '—') },
-          { title: '安管员', render: (r) => esc((r.assignedOfficerNames && r.assignedOfficerNames.length) ? r.assignedOfficerNames.join('、') : '—') },
-          { title: '监护人', render: (r) => esc((r.assignedGuardianNames && r.assignedGuardianNames.length) ? r.assignedGuardianNames.join('、') : '—') },
+          { title: '安管员', render: (r) => {
+              const n = (r.assignedOfficers || []).length;
+              if (!n) return '—';
+              return `<a href="javascript:;" class="officer-count" data-id="${r.id}" style="color:#1f7ae0;font-weight:500;text-decoration:underline;cursor:pointer">${n}</a>`;
+            } },
+          { title: '监护人', render: (r) => {
+              const n = (r.assignedGuardians || []).length;
+              if (!n) return '—';
+              return `<a href="javascript:;" class="guardian-count" data-id="${r.id}" style="color:#1f7ae0;font-weight:500;text-decoration:underline;cursor:pointer">${n}</a>`;
+            } },
           { title: '作业票', render: (r) => {
               const uploaded = r.fireTicket || r.fireTicketImg;
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
@@ -3339,6 +3347,50 @@
           onAction: (act, id) => { const r = rows.find((x) => x.id === id); if (act === 'view') modalWorkDetail(r, opt.scope); else if (act === 'rule') modalAuditRule(r); else if (act === 'assign') modalAssignOfficers(r); else if (act === 'assign-guardian') modalAssignGuardians(r); },
         });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
+        // 安管员数量点击展示列表
+        node.querySelectorAll('.officer-count').forEach((el) => {
+          el.onclick = () => {
+            const id = Number(el.dataset.id);
+            const r = rows.find((x) => x.id === id);
+            if (!r) return;
+            const ids = r.assignedOfficers || [];
+            const officers = (DB.officers || []).filter((o) => ids.includes(o.id));
+            const body = `
+              <div style="max-height:400px;overflow:auto">
+                <table class="mini-tbl" style="width:100%">
+                  <thead><tr><th>姓名</th><th>手机号</th></tr></thead>
+                  <tbody>
+                    ${officers.length ? officers.map((o) => `<tr><td>${esc(o.name || '—')}</td><td>${esc(o.phone || '—')}</td></tr>`).join('') : '<tr><td colspan="2" style="text-align:center;color:#999">暂无</td></tr>'}
+                  </tbody>
+                </table>
+              </div>`;
+            const foot = `<button class="btn btn-primary" id="off-close">关闭</button>`;
+            const { node: mNode, close } = openModal(`安管员列表 - ${esc(r.name)}`, body, foot);
+            mNode.querySelector('#off-close').onclick = close;
+          };
+        });
+        // 监护人数量点击展示列表
+        node.querySelectorAll('.guardian-count').forEach((el) => {
+          el.onclick = () => {
+            const id = Number(el.dataset.id);
+            const r = rows.find((x) => x.id === id);
+            if (!r) return;
+            const ids = r.assignedGuardians || [];
+            const guardians = (DB.guardians || []).filter((g) => ids.includes(g.id));
+            const body = `
+              <div style="max-height:400px;overflow:auto">
+                <table class="mini-tbl" style="width:100%">
+                  <thead><tr><th>姓名</th><th>手机号</th></tr></thead>
+                  <tbody>
+                    ${guardians.length ? guardians.map((g) => `<tr><td>${esc(g.name || '—')}</td><td>${esc(g.phone || '—')}</td></tr>`).join('') : '<tr><td colspan="2" style="text-align:center;color:#999">暂无</td></tr>'}
+                  </tbody>
+                </table>
+              </div>`;
+            const foot = `<button class="btn btn-primary" id="gu-close">关闭</button>`;
+            const { node: mNode, close } = openModal(`监护人列表 - ${esc(r.name)}`, body, foot);
+            mNode.querySelector('#gu-close').onclick = close;
+          };
+        });
         // 作业票点击展开图片
         node.querySelectorAll('[data-fire-ticket]').forEach((el) => {
           el.style.cursor = 'pointer';
@@ -3390,6 +3442,7 @@
               <li><b>3·状态：</b>待审核、待开始、进行中、已完成、已拒绝、已结束。</li>
               <li><b>4·作业票/作业人员照片/监护人照片/特种作业证书：</b>都显示已上传或未上传，根据详情页是否有对应的照片判定，显示已上传时，点击该标签出现弹框，展示对应的作业票或证书；其中特种作业证书需要所有该上传的人全都上传才会显示已上传。</li>
               <li><b>5·现场核查状态：</b>由详情的现场核查记录判定，取最新一条现场核查记录来判定。</li>
+              <li><b>6·安管员/监护人列：</b>展示当前作业已分配的安管员/监护人数量，点击数字以弹窗形式展示对应的姓名和手机号；未分配时显示横杠。</li>
             </ul>
           </div>`);
           slot.parentElement.appendChild(desc);
@@ -3405,6 +3458,7 @@
               <li><b>3·作业人员照片/监护人照片/现场核查状态：</b>取该作业现场核查记录里最新一条的状态，如果最新一条未审核即没有状态标识，则展示横杠，照片上传了则显示已上传反之未上传。</li>
               <li><b>4·作业状态条件搜索：</b>待审核，待开始，进行中，已完成，已拒绝，已结束。</li>
               <li><b>5·监护人列：</b>显示已分配的监护人，未分配时显示横杠。</li>
+              <li><b>6·安管员/监护人列：</b>展示当前作业已分配的安管员/监护人数量，点击数字以弹窗形式展示对应的姓名和手机号；未分配时显示横杠。</li>
               <li><b>待审核：</b>作业人员上传的作业信息初始为待审核状态。</li>
               <li><b>待开始：</b>审核通过但未到作业开始时间。</li>
               <li><b>进行中：</b>作业已处于开始时间和结束时间之间。</li>

@@ -57,6 +57,7 @@ window.DB = (function () {
       insuranceCert: '已上传',
       workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg',
       guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg',
+      assignedOfficers: [1, 2], assignedGuardians: [1],
       workers: [
         { name: '张师傅', phone: '13900000001', idCard: '4201**********0011', task: '动火焊接', needCert: '是', hasCert: '是' },
         { name: '李师傅', phone: '13900000002', idCard: '4201**********0022', task: '现场监护', needCert: '否', hasCert: '否' },
@@ -79,6 +80,7 @@ window.DB = (function () {
       insuranceCert: '已上传',
       workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-2.jpg',
       guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-2.jpg',
+      assignedOfficers: [2], assignedGuardians: [2],
       workers: [
         { name: '李师傅', phone: '13900000004', idCard: '4201**********0044', task: '高空安装', needCert: '是', hasCert: '是' },
         { name: '赵师傅', phone: '13900000005', idCard: '4201**********0055', task: '地面配合', needCert: '否', hasCert: '否' },
@@ -97,6 +99,7 @@ window.DB = (function () {
       fireTicket: false, fireCert: '未上传', aiStatus: '异常',
       insuranceCert: '未上传',
       workerPhoto: '未上传', guardianPhoto: '未上传',
+      assignedOfficers: [3], assignedGuardians: [],
       workers: [
         { name: '王师傅', phone: '13900000006', idCard: '4201**********0066', task: '电路布线', needCert: '是', hasCert: '是' },
         { name: '钱师傅', phone: '13900000007', idCard: '4201**********0077', task: '辅助作业', needCert: '否', hasCert: '否' },
@@ -167,6 +170,7 @@ window.DB = (function () {
       insuranceCert: '已上传',
       workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg',
       guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg',
+      assignedOfficers: [1, 4, 5], assignedGuardians: [1, 3],
       workers: [
         { name: '吴师傅', phone: '13900000012', idCard: '4201**********0122', task: '冷却塔检修', needCert: '是', hasCert: '是' },
         { name: '郑师傅', phone: '13900000013', idCard: '4201**********0133', task: '辅助作业', needCert: '否', hasCert: '否' },
