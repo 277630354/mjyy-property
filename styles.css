@@ -78,6 +78,12 @@ ul,li{list-style:none}
 .btn-text{background:transparent;border:none;color:var(--primary);height:auto;padding:0 4px}
 .btn-text:hover{background:transparent;color:var(--primary-hover)}
 .btn-text.danger{color:var(--danger)}
+.sup-row{margin-bottom:6px}
+.sup-fields{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.sup-fields .input{flex:1;min-width:120px}
+.sup-add-row{margin-top:6px}
+.btn-plus{color:#1f7ae0;font-size:13px}
+.btn-plus:hover{color:#1565c0}
 .btn-text.danger:hover{color:#f78989}
 .btn-sm{height:32px;padding:0 14px}
 .btn:disabled{opacity:.6;cursor:not-allowed}

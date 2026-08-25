@@ -2113,11 +2113,10 @@
       const insCell = p.insuranceImg
         ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img">`
         : '—';
-      const idCell = `<div>${maskId(p.idCard)}</div>`;
-      const nameCell = `<div style="color:#999;font-size:12px">${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</div><div style="color:#999;font-size:12px">${esc(p.phone)}</div>`;
       return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
-        <td>${idCell}</td>
-        <td>${nameCell}</td>
+        <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
+        <td>${esc(p.phone)}</td>
+        <td>${maskId(p.idCard)}</td>
         <td>${esc(p.task)}</td>
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
@@ -2196,7 +2195,7 @@
               </div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>身份证号</th><th>姓名/手机号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -2434,11 +2433,10 @@
       const insCell = p.insuranceImg
         ? `<img src="${p.insuranceImg}" alt="作业人员保险" class="mini-cert-img">`
         : '—';
-      const idCell = `<div>${maskId(p.idCard)}</div>`;
-      const nameCell = `<div style="color:#999;font-size:12px">${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</div><div style="color:#999;font-size:12px">${esc(p.phone)}</div>`;
       return `<tr class="${isLeader ? 'is-leader' : ''}" data-idx="${idx}">
-        <td>${idCell}</td>
-        <td>${nameCell}</td>
+        <td>${esc(p.name)}${isLeader ? '<span class="leader-tag">负责人</span>' : ''}</td>
+        <td>${esc(p.phone)}</td>
+        <td>${maskId(p.idCard)}</td>
         <td>${esc(p.task)}</td>
         <td>${esc(p.needCert)}</td>
         <td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td>
@@ -2520,7 +2518,7 @@
               </div>
               <div class="mini-tbl-wrap">
                 <table class="mini-tbl">
-                  <thead><tr><th>身份证号</th><th>姓名/手机号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
+                  <thead><tr><th>姓名</th><th>手机号</th><th>身份证号</th><th>工作内容</th><th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员保险</th><th>操作</th></tr></thead>
                   <tbody>${wrows}</tbody>
                 </table>
               </div>
@@ -2812,8 +2810,11 @@
         const columns = [
           { title: '名称', key: 'name' },
           { title: '所属区域', key: 'region' },
-          { title: '区域安管员', key: 'officer' },
-          { title: '联系方式', key: 'phone' },
+          { title: '主管部门', render: (r) => {
+            const list = r.supervisorDepts || [];
+            if (!list.length) return '<span style="color:#999">0</span>';
+            return `<a href="javascript:;" class="sup-count" data-id="${r.id}" style="color:#1f7ae0;font-weight:500;text-decoration:underline;cursor:pointer">${list.length}</a>`;
+          } },
           { title: '状态', titleHtml: '<span class="pin-num pin-inline"><span>1</span></span>状态', render: (r) => statusTag(r.status) },
           { title: '作业数量', titleHtml: '<span class="pin-num pin-inline"><span>2</span></span>作业数量', key: 'workCount' },
           { title: '操作', render: (r) => `
@@ -2834,6 +2835,27 @@
             else if (act === 'delete') confirmDialog(`确定删除区域「${r.name}」吗？`, () => API.deleteArea(id).then(() => { toast('删除成功'); render(); }));
           },
         });
+        // 主管部门数量点击展示
+        node.querySelectorAll('.sup-count').forEach((el) => {
+          el.onclick = () => {
+            const id = Number(el.dataset.id);
+            const r = rows.find((x) => x.id === id);
+            if (!r) return;
+            const list = r.supervisorDepts || [];
+            const body = `
+              <div style="max-height:400px;overflow:auto">
+                <table class="mini-tbl" style="width:100%">
+                  <thead><tr><th>主管部门</th><th>姓名</th><th>手机号</th></tr></thead>
+                  <tbody>
+                    ${list.map((s) => `<tr><td>${esc(s.dept || '—')}</td><td>${esc(s.name || '—')}</td><td>${esc(s.phone || '—')}</td></tr>`).join('')}
+                  </tbody>
+                </table>
+              </div>`;
+            const foot = `<button class="btn btn-primary" id="sup-close">关闭</button>`;
+            const { node: mNode, close } = openModal(`主管部门列表 - ${esc(r.name)}`, body, foot);
+            mNode.querySelector('#sup-close').onclick = close;
+          };
+        });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) render(); });
         const slot = $('#tbl'); slot.innerHTML = ''; slot.appendChild(node);
         // 红框位置：字段说明
@@ -2842,6 +2864,7 @@
           <ul>
             <li><b>1·状态：</b>启动/禁用搜索；</li>
             <li><b>2·作业数量：</b>当前区域内所有作业数量合计；</li>
+            <li><b>3·主管部门统计数量，点击展示主管部门，姓名，手机号，一条信息展示一行，该手机号可以登录安管员小程序，可查看该区域下所有企业的作业信息，并在待审核，待开始，进行中的作业随时上传现场核查，不受核查规则约束，也不会因为核查规则导致弹框预警。</li>
           </ul>
         </div>`);
         slot.parentElement.appendChild(desc);
@@ -2851,7 +2874,7 @@
           <ul>
             <li><b>1·区域名称：</b>必填，30字符串长度；</li>
             <li><b>2·所属区域：</b>必填，非手输，选择地图定位后自动识别区域回填；</li>
-            <li><b>3·姓名、手机号：</b>选填；</li>
+            <li><b>3·主管部门/姓名/手机号：</b>可动态多行添加，点击加号继续新增，用于绑定主管部门人员；</li>
             <li><b>4·地图定位：</b>和现有的地图范围选点的方式一样，选完地图区域范围后自动识别省市区回填，置灰，不支持修改省市区。</li>
           </ul>
         </div>`);
@@ -2888,7 +2911,17 @@
   // 新增/编辑区域弹窗
   function modalArea(area, onDone) {
     const isEdit = !!area;
-    const a = area || { name: '', region: '', province: '湖北省', city: '武汉市', district: '江汉区', officer: '', phone: '', bounds: { north: 30.59, south: 30.58, east: 114.31, west: 114.29 } };
+    const a = area || { name: '', region: '', province: '湖北省', city: '武汉市', district: '江汉区', supervisorDepts: [{ dept: '', name: '', phone: '' }], bounds: { north: 30.59, south: 30.58, east: 114.31, west: 114.29 } };
+    const supList = (a.supervisorDepts && a.supervisorDepts.length) ? a.supervisorDepts.map((s) => ({ ...s })) : [{ dept: '', name: '', phone: '' }];
+    const supRowHtml = (s, idx) => `
+          <div class="form-row sup-row" data-idx="${idx}">
+            <div class="fr sup-fields">
+              <input class="input sup-dept" placeholder="主管部门" value="${esc(s.dept || '')}">
+              <input class="input sup-name" placeholder="姓名" value="${esc(s.name || '')}">
+              <input class="input sup-phone" placeholder="手机号" value="${esc(s.phone || '')}">
+              <span class="btn-text danger sup-del" style="margin-left:4px" data-del="${idx}">删除</span>
+            </div>
+          </div>`;
     const body = `
       <div class="modal-with-desc">
         <div class="modal-main">
@@ -2899,8 +2932,12 @@
               <select class="select" id="m-city"><option>武汉市</option><option>宜昌市</option><option>襄阳市</option></select>
               <select class="select" id="m-dist"><option>江汉区</option><option>武昌区</option><option>洪山区</option><option>江岸区</option></select>
             </div></div></div>
-          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>安管员姓名</div><div class="fr"><input class="input" id="m-officer" value="${esc(a.officer)}" placeholder="请输入安管员姓名（选填）"></div></div>
-          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>联系方式</div><div class="fr"><input class="input" id="m-phone" value="${esc(a.phone)}" placeholder="请输入联系方式（选填）"></div></div>
+          <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>3</span></span>主管部门/姓名/手机号</div>
+            <div class="fr" id="sup-list">
+              ${supList.map((s, i) => supRowHtml(s, i)).join('')}
+              <div class="sup-add-row" id="sup-add"><span class="btn btn-text btn-plus">+ 继续添加</span></div>
+            </div>
+          </div>
           <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>4</span></span>地图定位</div><div class="fr">
             <div class="map-box"><div class="grid"></div><div class="road" style="left:0;top:55%;width:100%;height:6px;transform:rotate(-8deg)"></div><div class="road" style="left:40%;top:0;width:6px;height:100%;transform:rotate(6deg)"></div><div class="pin">${icon('map-pin')}</div><div class="scale">500m</div></div>
             <div class="coord-row">
@@ -2922,6 +2959,33 @@
     const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="m-ok">确定</button>`;
     const { node, close } = openModal(isEdit ? '编辑区域' : '新增区域', body, foot, true);
     $('#m-prov').value = a.province; $('#m-city').value = a.city; $('#m-dist').value = a.district;
+    // 主管部门动态增减
+    const supListNode = node.querySelector('#sup-list');
+    const reIndex = () => {
+      supListNode.querySelectorAll('.sup-row').forEach((row, i) => row.dataset.idx = i);
+      supListNode.querySelectorAll('.sup-del').forEach((btn, i) => btn.dataset.del = i);
+    };
+    node.querySelector('#sup-add').onclick = () => {
+      supListNode.insertAdjacentHTML('beforeend', supRowHtml({ dept: '', name: '', phone: '' }, supListNode.querySelectorAll('.sup-row').length));
+      bindSupDelete();
+    };
+    const bindSupDelete = () => {
+      supListNode.querySelectorAll('.sup-del').forEach((btn) => {
+        btn.onclick = () => {
+          const rows = supListNode.querySelectorAll('.sup-row');
+          if (rows.length <= 1) {
+            // 保留一行空白，仅清空
+            const first = rows[0];
+            first.querySelectorAll('input').forEach((inp) => inp.value = '');
+          } else {
+            btn.closest('.sup-row').remove();
+            reIndex();
+          }
+        };
+      });
+    };
+    bindSupDelete();
+    reIndex();
     node.querySelectorAll('.btn')[0].onclick = close;
     $('#m-ok').onclick = () => {
       const name = $('#m-name').value.trim();
@@ -2936,11 +3000,20 @@
         alertNode.addEventListener('click', (e) => { if (e.target === alertNode) closeAlert(); });
         return;
       }
+      // 收集主管部门
+      const supervisors = [];
+      supListNode.querySelectorAll('.sup-row').forEach((row) => {
+        const inputs = row.querySelectorAll('input');
+        const dept = inputs[0].value.trim();
+        const nm = inputs[1].value.trim();
+        const ph = inputs[2].value.trim();
+        if (dept || nm || ph) supervisors.push({ dept, name: nm, phone: ph });
+      });
       const data = {
         id: a.id, name,
         province: $('#m-prov').value, city: currentCity, district: $('#m-dist').value,
         region: `${$('#m-prov').value}${currentCity}${$('#m-dist').value}`,
-        officer: $('#m-officer').value.trim(), phone: $('#m-phone').value.trim(),
+        supervisorDepts: supervisors,
         bounds: { north: +$('#m-north').value, south: +$('#m-south').value, east: +$('#m-east').value, west: +$('#m-west').value },
       };
       const fn = isEdit ? API.updateArea(data) : API.createArea(data);
@@ -2978,12 +3051,15 @@
         };
       }
     };
+    const supList = a.supervisorDepts || [];
+    const supHtml = supList.length
+      ? supList.map((s) => `<div style="padding:4px 0;border-bottom:1px dashed #f0f0f0;display:flex;gap:12px"><span class="tag tag-blue" style="margin:0">${esc(s.dept || '未填写')}</span><span>${esc(s.name || '—')}</span><span style="color:#999">${esc(s.phone || '—')}</span></div>`).join('')
+      : '<div style="color:#999">暂无</div>';
     const body = `
       <div class="detail-grid">
         <div class="detail-item"><div class="dk">区域名称</div><div class="dv">${esc(a.name)}</div></div>
         <div class="detail-item"><div class="dk">所属区域</div><div class="dv">${esc(a.region)}</div></div>
-        <div class="detail-item"><div class="dk">区域安管员</div><div class="dv">${esc(a.officer)}</div></div>
-        <div class="detail-item"><div class="dk">联系方式</div><div class="dv">${esc(a.phone)}</div></div>
+        <div class="detail-item"><div class="dk">主管部门</div><div class="dv">${supHtml}</div></div>
         <div class="detail-item"><div class="dk">状态</div><div class="dv">${statusTag(a.status)}</div></div>
         <div class="detail-item"><div class="dk">作业数量</div><div class="dv">${a.workCount}</div></div>
       </div>

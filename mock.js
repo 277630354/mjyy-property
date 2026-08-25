@@ -5,10 +5,10 @@
 window.DB = (function () {
   // ---- 作业区域 ----
   const areas = [
-    { id: 1, name: 'A区商业广场', region: '湖北省武汉市江汉区', province: '湖北省', city: '武汉市', district: '江汉区', officer: '张安管', phone: '13800138001', status: '启用', workCount: 2, bounds: { north: 30.59, south: 30.58, east: 114.31, west: 114.29 } },
-    { id: 2, name: 'B区住宅小区', region: '湖北省武汉市武昌区', province: '湖北省', city: '武汉市', district: '武昌区', officer: '李安管', phone: '13800138002', status: '启用', workCount: 2, bounds: { north: 30.60, south: 30.57, east: 114.34, west: 114.31 } },
-    { id: 3, name: 'C区工业园区', region: '湖北省武汉市洪山区', province: '湖北省', city: '武汉市', district: '洪山区', officer: '王安管', phone: '13800138003', status: '启用', workCount: 2, bounds: { north: 30.62, south: 30.59, east: 114.36, west: 114.33 } },
-    { id: 4, name: 'D区写字楼群', region: '湖北省武汉市江岸区', province: '湖北省', city: '武汉市', district: '江岸区', officer: '赵安管', phone: '13800138004', status: '禁用', workCount: 0, bounds: { north: 30.63, south: 30.61, east: 114.32, west: 114.30 } },
+    { id: 1, name: 'A区商业广场', region: '湖北省武汉市江汉区', province: '湖北省', city: '武汉市', district: '江汉区', supervisorDepts: [{ dept: '运营部', name: '张安管', phone: '13800138001' }, { dept: '安全部', name: '李安管', phone: '13800138002' }], status: '启用', workCount: 2, bounds: { north: 30.59, south: 30.58, east: 114.31, west: 114.29 } },
+    { id: 2, name: 'B区住宅小区', region: '湖北省武汉市武昌区', province: '湖北省', city: '武汉市', district: '武昌区', supervisorDepts: [{ dept: '物业部', name: '李安管', phone: '13800138002' }], status: '启用', workCount: 2, bounds: { north: 30.60, south: 30.57, east: 114.34, west: 114.31 } },
+    { id: 3, name: 'C区工业园区', region: '湖北省武汉市洪山区', province: '湖北省', city: '武汉市', district: '洪山区', supervisorDepts: [{ dept: '工业管理部', name: '王安管', phone: '13800138003' }, { dept: '安全部', name: '赵安管', phone: '13800138004' }], status: '启用', workCount: 2, bounds: { north: 30.62, south: 30.59, east: 114.36, west: 114.33 } },
+    { id: 4, name: 'D区写字楼群', region: '湖北省武汉市江岸区', province: '湖北省', city: '武汉市', district: '江岸区', supervisorDepts: [], status: '禁用', workCount: 0, bounds: { north: 30.63, south: 30.61, east: 114.32, west: 114.30 } },
   ];
 
   // ---- 企业 ----
