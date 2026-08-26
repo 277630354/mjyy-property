@@ -174,9 +174,11 @@
       { type: '临时用电', count: list.filter((w) => w.type === '临时用电').length },
     ]);
     if (scope === 'enterprise') {
+      const pending = works.filter((w) => w.status === '待审核').length;
       return ok({ cards: [
         { label: '作业数量', value: works.length, icon: 'clipboard-list', color: '#409EFF' },
         { label: '进行中的作业数量', value: works.filter((w) => w.status === '进行中').length, icon: 'play', color: '#67C23A' },
+        { label: '待审核的作业数量', value: pending, icon: 'clock', color: '#E6A23C' },
       ], types: byType(works) });
     }
     if (scope === 'officer') {

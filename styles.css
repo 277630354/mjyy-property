@@ -173,6 +173,7 @@ table.tbl .actions{display:flex;gap:4px;flex-wrap:nowrap;white-space:nowrap}
 /* ===== Stat cards (dashboard) ===== */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:20px}
 .stat-grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.stat-grid.cols-3{grid-template-columns:repeat(3,1fr)}
 .stat-card{background:#fff;border-radius:var(--radius);box-shadow:var(--card-shadow);padding:20px;display:flex;align-items:center;gap:16px;animation:rise .4s both;position:relative}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .stat-icon{width:56px;height:56px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none}

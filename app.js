@@ -275,7 +275,7 @@
     view.innerHTML = `<div class="loading">加载中…</div>`;
     API.dashboardStats({ scope }).then((res) => {
       const d = res.data;
-      const cols = scope === 'g' ? '' : 'cols-2';
+      const cols = scope === 'g' ? '' : 'cols-3';
       const cards = d.cards.map((c, i) => `
         <div class="stat-card" style="animation-delay:${i * 60}ms">
           ${scope === 'g' ? `<span class="pin-num pin-abs"><span>${i + 1}</span></span>` : ''}
@@ -300,7 +300,8 @@
           <ul>
             <li><b>1·作业数量：</b>企业作业管理中所有审核通过的任务；</li>
             <li><b>2·进行中的任务：</b>企业作业中状态为【进行中】的任务；</li>
-            <li><b>3·作业按类型统计：</b>目前只有动火作业，以后可能会拓展。</li>
+            <li><b>3·待审核的作业数量：</b>企业作业中状态为【待审核】的任务；</li>
+            <li><b>4·作业按类型统计：</b>目前只有动火作业，以后可能会拓展。</li>
           </ul>
           <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #FFE58F;font-size:12px;color:#909399">企业端登录账号为管理总台已认证且被打上特种作业标记的企业账号。</div>
         </div>` : '';
