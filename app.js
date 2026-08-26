@@ -63,6 +63,10 @@
       { label: '作业列表', icon: 'clipboard-list', route: '#/worker/mini/detail' },
       { label: '作业详情', icon: 'file-text', route: '#/worker/mini/work-info' },
     ]},
+    { title: '企业端小程序', icon: 'smartphone', items: [
+      { label: '小程序首页', icon: 'home', route: '#/enterprise/mini' },
+      { label: '特种作业', icon: 'clipboard-list', route: '#/enterprise/mini/safety' },
+    ]},
     { title: '需求更新', icon: 'file-text', items: [
       { label: '需求说明', icon: 'file-text', route: '#/worker/mini/requirements' },
     ]},
@@ -89,7 +93,15 @@
     '#/worker/mini/area-work-detail': { view: viewWorkerMiniAreaWorkDetail, group: 3, crumb: ['小程序端作业人员', '作业详情'] },
     '#/worker/mini/work-info': { view: viewWorkerMiniWorkInfo, group: 3, crumb: ['小程序端作业人员', '作业详情'] },
     '#/worker/mini/resubmit': { view: viewWorkerMiniResubmit, group: 3, crumb: ['小程序端作业人员', '重新提交作业'] },
-    '#/worker/mini/requirements': { view: viewWorkerMiniRequirements, group: 4, crumb: ['需求更新', '需求说明'] },
+    '#/worker/mini/requirements': { view: viewWorkerMiniRequirements, group: '需求更新', crumb: ['需求更新', '需求说明'] },
+    '#/enterprise/mini': { view: viewEnterpriseMini, group: '企业端小程序', crumb: ['企业端小程序', '小程序首页'] },
+    '#/enterprise/mini/safety': { view: viewEnterpriseMiniSafety, group: '企业端小程序', crumb: ['企业端小程序', '特种作业'] },
+    '#/enterprise/mini/safety/home': { view: viewEnterpriseMiniSafetyHome, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业首页'] },
+    '#/enterprise/mini/safety/stores': { view: viewEnterpriseMiniStores, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '门店管理'] },
+    '#/enterprise/mini/safety/officers': { view: viewEnterpriseMiniOfficers, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '安管员管理'] },
+    '#/enterprise/mini/safety/guardians': { view: viewEnterpriseMiniGuardians, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '监护人管理'] },
+    '#/enterprise/mini/safety/tasks': { view: viewEnterpriseMiniTasks, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业作业管理'] },
+    '#/enterprise/mini/safety/task-detail': { view: viewEnterpriseMiniTaskDetail, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业作业详情'] },
   };
 
   // ============ 工具函数 ============
@@ -3874,7 +3886,7 @@
                 <div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(a.phone)}</div></div>
                 <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(a.org)}</div></div>
                 <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, a.photos)}</div></div>
-                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${a.videos} 个</div></div>
+                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
                 <div class="detail-item"><div class="dk">动火作业证书</div><div class="dv">${esc(a.fireCert)}</div></div>
                 <div class="detail-item"><div class="dk">审核状态</div><div class="dv">${statusTag(a.status)}</div></div>
                 <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${esc(a.reason || '—')}</div></div>
@@ -3902,7 +3914,7 @@
                 <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, v.photos, VERIFY_POOL)}</div></div>
                 <div class="detail-item"><div class="dk">作业人员照片</div><div class="dv">${(() => { const wp = v.workerPhoto; return wp && wp !== '未上传' ? '<img class="fire-ticket-img" src="' + (v.workerPhotoImg || 'assets/worker-photo-1.jpg') + '" onclick="window.open(\'' + (v.workerPhotoImg || 'assets/worker-photo-1.jpg') + '\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
                 <div class="detail-item"><div class="dk">监护人照片</div><div class="dv">${(() => { const gp = v.guardianPhoto; return gp && gp !== '未上传' ? '<img class="fire-ticket-img" src="' + (v.guardianPhotoImg || 'assets/guardian-photo-1.jpg') + '" onclick="window.open(\'' + (v.guardianPhotoImg || 'assets/guardian-photo-1.jpg') + '\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
-                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')} ${v.videos} 个</div></div>
+                <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
                 <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
                 ${(v.status === '异常' || v.status === '未通过') ? `<div class="detail-item"><div class="dk" style="color:#F5222D">未通过原因</div><div class="dv" style="color:#F5222D">${esc(v.reason || '—')}</div></div>` : ''}
                 <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
@@ -4042,14 +4054,17 @@
   }
   function modalStore(s, onDone) {
     const isEdit = !!s;
-    const d = s || { name: '', address: '', manager: '', phone: '', enterpriseId: '', desc: '' };
-    const entOpts = DB.enterprises.map((e) => `<option value="${e.id}" ${d.enterpriseId === e.id ? 'selected' : ''}>${esc(e.name)}</option>`).join('');
+    // 所属企业：默认回填当前登录企业；编辑时回填数据自身的企业；统一置灰不可修改
+    const curEnt = (DB.enterprises && DB.enterprises[0]) || {};
+    const enterpriseId = isEdit ? (s && s.enterpriseId) : curEnt.id;
+    const ent = DB.enterprises.find((e) => e.id === enterpriseId) || curEnt;
+    const d = s || { name: '', address: '', manager: '', phone: '', enterpriseId: enterpriseId, desc: '' };
     const body = `
       <div class="form-row"><div class="fl">门店名称<span class="req">*</span></div><div class="fr"><input class="input" id="s-name" value="${esc(d.name)}" placeholder="请输入门店名称"></div></div>
       <div class="form-row"><div class="fl">门店地址<span class="req">*</span></div><div class="fr"><input class="input" id="s-addr" value="${esc(d.address)}" placeholder="请输入门店地址"></div></div>
       <div class="form-row"><div class="fl">门店管理员</div><div class="fr"><input class="input" id="s-mgr" value="${esc(d.manager)}" placeholder="请输入门店管理员"></div></div>
       <div class="form-row"><div class="fl">门店联系方式</div><div class="fr"><input class="input" id="s-phone" value="${esc(d.phone)}" placeholder="请输入联系方式"></div></div>
-      <div class="form-row"><div class="fl">所属企业<span class="req">*</span></div><div class="fr"><select class="select" id="s-ent"><option value="">请选择企业</option>${entOpts}</select></div></div>
+      <div class="form-row"><div class="fl">所属企业<span class="req">*</span></div><div class="fr"><input class="input" value="${esc(ent.name || '—')}" disabled style="background:#f5f7fa;color:#909399;cursor:not-allowed"></div></div>
       <div class="form-row"><div class="fl">门店描述</div><div class="fr"><textarea class="input" id="s-desc" placeholder="请输入门店描述">${esc(d.desc)}</textarea></div></div>`;
     const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="s-ok">确定</button>`;
     const { node, close } = openModal(isEdit ? '修改门店' : '新增门店', body, foot);
@@ -4058,7 +4073,7 @@
       const data = {
         id: d.id, name: $('#s-name').value.trim(), address: $('#s-addr').value.trim(),
         manager: $('#s-mgr').value.trim(), phone: $('#s-phone').value.trim(),
-        enterpriseId: Number($('#s-ent').value), desc: $('#s-desc').value.trim(),
+        enterpriseId: enterpriseId, desc: $('#s-desc').value.trim(),
       };
       if (!data.name || !data.address || !data.enterpriseId) { toast('请填写必填项', 'error'); return; }
       const fn = isEdit ? API.updateStore(data) : API.createStore(data);
@@ -4255,10 +4270,833 @@
     };
   }
 
+  // ============ 企业端小程序 - 首页 ============
+  function viewEnterpriseMini() {
+    const view = $('#view');
+    view.innerHTML = `
+      <div class="mini-office-wrap">
+        <div class="mini-phone">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right">
+              <span class="sig"></span>
+              <span class="wifi"></span>
+              <span class="batt">88</span>
+            </span>
+          </div>
+          <div class="mini-navheader">
+            <span class="nav-title">民匠有约 · 企业端</span>
+            <span style="width:24px"></span>
+          </div>
+          <div class="mini-banner">
+            <div class="mini-header">
+              <div class="mini-avatar">
+                <div class="avatar-enter">企</div>
+              </div>
+              <div class="mini-info">
+                <div class="mini-name">某某建设集团</div>
+                <div class="mini-auth">
+                  <span>🛡️</span>
+                  <span>企业已认证</span>
+                </div>
+              </div>
+              <div class="mini-icons">
+                <span>🔔<span class="badge-dot">3</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="margin-bottom:16px">工作台</div>
+            <div class="mc-grid">
+              <div class="mc-item mc-item-primary" onclick="location.hash='#/enterprise/mini/safety'" style="cursor:pointer">
+                <div class="mc-icon">⚠️</div>
+                <div class="mc-label">特种作业</div>
+                <div class="mc-desc">作业全流程管理</div>
+              </div>
+            </div>
+            <div style="margin-top:12px;padding:12px;background:#FFFBE6;border-radius:8px;font-size:12px;color:#906000;line-height:1.6">
+              企业端小程序目前仅支持「特种作业」模块，其余模块敬请期待。
+            </div>
+          </div>
+          <div class="mini-footer">
+            <div>客服电话 400-158-7877  工作时间 9:00-18:00</div>
+            <div><a>ICP证书号 浙B2-20240405</a>   <a>营业执照</a></div>
+            <div>杭州市钱塘区人社局监督电话：0571-89537370</div>
+          </div>
+          <div class="mini-tabbar">
+            <div class="tab-item active">
+              <div class="tab-ico">🏠</div>
+              <div class="tab-txt">首页</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-ico">📋</div>
+              <div class="tab-txt">工作台</div>
+            </div>
+            <div class="tab-item">
+              <div class="tab-ico">👤</div>
+              <div class="tab-txt">我的</div>
+            </div>
+          </div>
+        </div>
+        <div class="side-desc-panel mini-side-panel">
+          <div class="sdp-title">企业端小程序说明</div>
+          <ul>
+            <li><b>1·入口：</b>企业端小程序首页目前只有「特种作业」一个入口，点击后进入作业管理模块。</li>
+            <li><b>2·包含功能：</b>特种作业模块包含企业首页、门店管理、安管员管理、监护人管理、企业作业管理 5 个二级菜单。</li>
+            <li><b>3·账号：</b>企业端登录账号为管理总台已认证且被打上特种作业标记的企业账号。</li>
+            <li><b>4·交互：</b>移动端操作与 PC 端一致，支持新增、编辑、删除、查看、筛选、分配等交互。</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============ 企业端小程序 - 特种作业（功能模块入口） ============
+  function viewEnterpriseMiniSafety() {
+    const view = $('#view');
+    const menus = [
+      { key: 'home', label: '企业首页', icon: '🏢', desc: '数据概览' },
+      { key: 'stores', label: '门店管理', icon: '🏬', desc: '门店维护' },
+      { key: 'officers', label: '安管员管理', icon: '👷', desc: '安管员维护' },
+      { key: 'guardians', label: '监护人管理', icon: '🧑‍🔧', desc: '监护人维护' },
+      { key: 'tasks', label: '企业作业管理', icon: '📋', desc: '作业全流程' },
+    ];
+    view.innerHTML = `
+      <div class="mini-office-wrap">
+        <div class="mini-phone">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right">
+              <span class="sig"></span>
+              <span class="wifi"></span>
+              <span class="batt">88</span>
+            </span>
+          </div>
+          <div class="mini-navheader">
+            <span class="back-btn" onclick="location.hash='#/enterprise/mini'">‹</span>
+            <span class="nav-title">特种作业</span>
+            <span style="width:24px"></span>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="margin-bottom:16px">功能模块</div>
+            <div class="mc-grid">
+              ${menus.map((m) => `
+                <div class="mc-item" onclick="location.hash='#/enterprise/mini/safety/${m.key}'" style="cursor:pointer">
+                  <div class="mc-icon">${m.icon}</div>
+                  <div class="mc-label">${m.label}</div>
+                  <div class="mc-desc">${m.desc}</div>
+                </div>`).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="side-desc-panel mini-side-panel">
+          <div class="sdp-title">特种作业模块说明</div>
+          <ul>
+            <li>本模块将企业端后台的「企业首页、门店管理、安管员管理、监护人管理、企业作业管理」功能移植到小程序，移动端随时处理业务。</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============ 企业端小程序 - 企业首页 ============
+  function viewEnterpriseMiniSafetyHome() {
+    const view = $('#view');
+    const ent = (DB.enterprises && DB.enterprises[0]) || {};
+    const works = (DB.works || []).filter((w) => w.enterpriseId === ent.id);
+    const ongoing = works.filter((w) => w.status === '进行中').length;
+    const pending = works.filter((w) => w.status === '待审核').length;
+    view.innerHTML = `
+      <div class="mini-office-wrap">
+        <div class="mini-phone">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right"><span class="sig"></span><span class="wifi"></span><span class="batt">88</span></span>
+          </div>
+          <div class="mini-navheader">
+            <span class="back-btn" onclick="location.hash='#/enterprise/mini/safety'">‹</span>
+            <span class="nav-title">企业首页</span>
+            <span style="width:24px"></span>
+          </div>
+          <div class="mini-banner" style="padding:16px;background:linear-gradient(135deg,#1f7ae0 0%,#409EFF 100%);color:#fff">
+            <div style="font-size:15px;font-weight:600">${esc(ent.name || '—')}</div>
+            <div style="font-size:12px;opacity:.85;margin-top:4px">${esc(ent.address || '—')}</div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="margin-bottom:14px">数据概览</div>
+            <div class="m-stat-grid">
+              <div class="m-stat-item"><div class="m-stat-num">${works.length}</div><div class="m-stat-label">作业总数</div></div>
+              <div class="m-stat-item"><div class="m-stat-num">${ongoing}</div><div class="m-stat-label">进行中</div></div>
+              <div class="m-stat-item"><div class="m-stat-num">${pending}</div><div class="m-stat-label">待审核</div></div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="mc-title" style="margin-bottom:14px">快捷入口</div>
+            <div class="mc-grid">
+              <div class="mc-item" onclick="location.hash='#/enterprise/mini/safety/stores'" style="cursor:pointer"><div class="mc-icon">🏬</div><div class="mc-label">门店管理</div></div>
+              <div class="mc-item" onclick="location.hash='#/enterprise/mini/safety/officers'" style="cursor:pointer"><div class="mc-icon">👷</div><div class="mc-label">安管员管理</div></div>
+              <div class="mc-item" onclick="location.hash='#/enterprise/mini/safety/guardians'" style="cursor:pointer"><div class="mc-icon">🧑‍🔧</div><div class="mc-label">监护人管理</div></div>
+              <div class="mc-item" onclick="location.hash='#/enterprise/mini/safety/tasks'" style="cursor:pointer"><div class="mc-icon">📋</div><div class="mc-label">企业作业管理</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="side-desc-panel mini-side-panel">
+          <div class="sdp-title">企业首页说明</div>
+          <ul>
+            <li>展示当前登录企业的作业总数、进行中、待审核、已完成、门店数、安管员等指标。</li>
+            <li>提供快捷入口，直达门店、安管员、监护人、企业作业管理页面。</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  // ============ 企业端小程序 - 门店管理 ============
+  function viewEnterpriseMiniStores() {
+    const view = $('#view');
+    const render = () => {
+      API.listStores().then((res) => {
+        const list = res.data;
+        const items = list.map((s) => {
+          const entName = (DB.enterprises.find((e) => e.id === s.enterpriseId) || {}).name || '—';
+          return `
+          <div class="mini-list-item">
+            <div class="mini-li-top"><span class="mini-li-type">${esc(s.name)}</span><span class="mini-li-status done">启用</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">所属企业</span><span class="mini-li-val">${esc(entName)}</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">门店地址</span><span class="mini-li-val">${esc(s.address)}</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">门店管理员</span><span class="mini-li-val">${esc(s.manager || '—')} / ${esc(s.phone || '—')}</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">描述</span><span class="mini-li-val">${esc(s.desc || '—')}</span></div>
+            <div class="mini-li-actions">
+              <button class="mini-btn-mini" data-act="edit" data-id="${s.id}">修改</button>
+              <button class="mini-btn-mini danger" data-act="delete" data-id="${s.id}">删除</button>
+            </div>
+          </div>`;
+        }).join('') || '<div class="mini-rec-empty">暂无门店数据</div>';
+        view.innerHTML = `
+          <div class="mini-office-wrap">
+            <div class="mini-phone">
+              <div class="mini-statusbar">
+                <span>15:17</span>
+                <span class="sb-right"><span class="sig"></span><span class="wifi"></span><span class="batt">88</span></span>
+              </div>
+              <div class="mini-navheader">
+                <span class="back-btn" onclick="location.hash='#/enterprise/mini/safety'">‹</span>
+                <span class="nav-title">门店管理</span>
+                <span style="width:24px"></span>
+              </div>
+              <div class="mini-toolbar">
+                <span></span>
+                <button class="mini-btn-mini primary" id="m-add">+ 新增门店</button>
+              </div>
+              <div class="mini-list">${items}</div>
+              <div class="mini-bottom-tip">仅展示当前企业下的门店；删除需判断是否存在进行中作业。</div>
+            </div>
+            <div class="side-desc-panel mini-side-panel">
+              <div class="sdp-title">门店管理说明</div>
+              <ul>
+                <li>门店名称、地址为必填；所属企业自动回填当前登录企业。</li>
+                <li>删除时若存在进行中作业则不允许删除。</li>
+              </ul>
+            </div>
+          </div>`;
+        bindMiniStoreEvents();
+      });
+    };
+    function bindMiniStoreEvents() {
+      view.querySelector('#m-add').onclick = () => modalMiniStore(null, render);
+      view.querySelectorAll('[data-act="edit"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listStores().then((res) => modalMiniStore(res.data.find((x) => x.id === id), render));
+      });
+      view.querySelectorAll('[data-act="delete"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listWorks().then((res) => {
+          const ongoing = res.data.some((w) => w.storeId === id && (w.status === '进行中' || w.status === '待开始'));
+          if (ongoing) { toast('该门店存在进行中的作业，无法删除', 'error'); return; }
+          confirmDialog('确定删除该门店吗？', () => API.deleteStore(id).then(() => { toast('删除成功'); render(); }));
+        });
+      });
+    }
+    render();
+  }
+  function modalMiniStore(s, onDone) {
+    const isEdit = !!s;
+    const d = s || { name: '', address: '', manager: '', phone: '', desc: '' };
+    const body = `
+      <div class="form-row"><div class="fl">门店名称<span class="req">*</span></div><div class="fr"><input class="input" id="s-name" value="${esc(d.name)}" placeholder="请输入门店名称"></div></div>
+      <div class="form-row"><div class="fl">门店地址<span class="req">*</span></div><div class="fr"><input class="input" id="s-addr" value="${esc(d.address)}" placeholder="请输入门店地址"></div></div>
+      <div class="form-row"><div class="fl">门店管理员</div><div class="fr"><input class="input" id="s-mgr" value="${esc(d.manager)}" placeholder="请输入门店管理员"></div></div>
+      <div class="form-row"><div class="fl">门店联系方式</div><div class="fr"><input class="input" id="s-phone" value="${esc(d.phone)}" placeholder="请输入联系方式"></div></div>
+      <div class="form-row"><div class="fl">门店描述</div><div class="fr"><textarea class="input" id="s-desc" placeholder="请输入门店描述">${esc(d.desc)}</textarea></div></div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="s-ok">确定</button>`;
+    const { node, close } = openModal(isEdit ? '修改门店' : '新增门店', body, foot);
+    node.querySelectorAll('.btn')[0].onclick = close;
+    $('#s-ok').onclick = () => {
+      const data = { id: d.id, name: $('#s-name').value.trim(), address: $('#s-addr').value.trim(), manager: $('#s-mgr').value.trim(), phone: $('#s-phone').value.trim(), desc: $('#s-desc').value.trim() };
+      if (!data.name || !data.address) { toast('请填写必填项', 'error'); return; }
+      // 自动回填当前企业
+      const ent = (DB.enterprises && DB.enterprises[0]) || {};
+      data.enterpriseId = ent.id;
+      const fn = isEdit ? API.updateStore(data) : API.createStore(data);
+      fn.then(() => { close(); toast(isEdit ? '修改成功' : '新增成功'); onDone && onDone(); });
+    };
+  }
+
+  // ============ 企业端小程序 - 安管员管理 ============
+  function viewEnterpriseMiniOfficers() {
+    const view = $('#view');
+    const render = () => {
+      API.listOfficers().then((res) => {
+        const list = res.data;
+        const items = list.map((o) => `
+          <div class="mini-list-item">
+            <div class="mini-li-top"><span class="mini-li-type">${esc(o.name)}</span><span class="mini-li-status done">启用</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">手机号</span><span class="mini-li-val">${esc(o.phone)}</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">创建时间</span><span class="mini-li-val">${esc(o.createdAt || '—')}</span></div>
+            <div class="mini-li-actions">
+              <button class="mini-btn-mini" data-act="qr" data-id="${o.id}">二维码</button>
+              <button class="mini-btn-mini" data-act="edit" data-id="${o.id}">修改</button>
+              <button class="mini-btn-mini danger" data-act="delete" data-id="${o.id}">删除</button>
+            </div>
+          </div>`).join('') || '<div class="mini-rec-empty">暂无安管员数据</div>';
+        view.innerHTML = `
+          <div class="mini-office-wrap">
+            <div class="mini-phone">
+              <div class="mini-statusbar">
+                <span>15:17</span>
+                <span class="sb-right"><span class="sig"></span><span class="wifi"></span><span class="batt">88</span></span>
+              </div>
+              <div class="mini-navheader">
+                <span class="back-btn" onclick="location.hash='#/enterprise/mini/safety'">‹</span>
+                <span class="nav-title">安管员管理</span>
+                <span style="width:24px"></span>
+              </div>
+              <div class="mini-toolbar">
+                <span></span>
+                <button class="mini-btn-mini primary" id="m-add">+ 新增安管员</button>
+              </div>
+              <div class="mini-list">${items}</div>
+              <div class="mini-bottom-tip">安管员登录小程序审核作业；点击二维码可下载。</div>
+            </div>
+            <div class="side-desc-panel mini-side-panel">
+              <div class="sdp-title">安管员管理说明</div>
+              <ul>
+                <li>新增只需录入姓名和手机号。</li>
+                <li>点击「二维码」可下载携带企业名称与作业区域的二维码，用于作业人员扫码进入小程序。</li>
+              </ul>
+            </div>
+          </div>`;
+        bindMiniOfficerEvents();
+      });
+    };
+    function bindMiniOfficerEvents() {
+      view.querySelector('#m-add').onclick = () => modalMiniOfficer(null, render);
+      view.querySelectorAll('[data-act="edit"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listOfficers().then((res) => modalMiniOfficerEdit(res.data.find((x) => x.id === id), render));
+      });
+      view.querySelectorAll('[data-act="delete"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        confirmDialog('确定删除该安管员吗？', () => API.deleteOfficer(id).then(() => { toast('删除成功'); render(); }));
+      });
+      view.querySelectorAll('[data-act="qr"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listOfficers().then((res) => {
+          const o = res.data.find((x) => x.id === id);
+          showMiniOfficerQR(o);
+        });
+      });
+    }
+    render();
+  }
+  function modalMiniOfficer(o, onDone) {
+    const d = o || { name: '', phone: '' };
+    const body = `
+      <div class="form-row"><div class="fl">姓名<span class="req">*</span></div><div class="fr"><input class="input" id="o-name" value="${esc(d.name)}" placeholder="请输入姓名"></div></div>
+      <div class="form-row"><div class="fl">手机号<span class="req">*</span></div><div class="fr"><input class="input" id="o-phone" value="${esc(d.phone)}" placeholder="请输入手机号"></div></div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="o-ok">确定</button>`;
+    const { node, close } = openModal(o ? '修改安管员' : '新增安管员', body, foot);
+    node.querySelectorAll('.btn')[0].onclick = close;
+    $('#o-ok').onclick = () => {
+      const data = { name: $('#o-name').value.trim(), phone: $('#o-phone').value.trim() };
+      if (!data.name || !data.phone) { toast('请填写必填项', 'error'); return; }
+      if (o) {
+        const idx = DB.officers.findIndex((x) => x.id === o.id);
+        if (idx >= 0) DB.officers[idx] = { ...DB.officers[idx], ...data };
+        close(); toast('修改成功'); onDone && onDone();
+      } else {
+        API.createOfficer(data).then(() => { close(); toast('新增成功'); onDone && onDone(); });
+      }
+    };
+  }
+  function modalMiniOfficerEdit(o, onDone) { modalMiniOfficer(o, onDone); }
+  function showMiniOfficerQR(o) {
+    const ent = (DB.enterprises && DB.enterprises[0]) || {};
+    const areaName = (DB.areas && DB.areas.find((a) => a.id === ent.areaId)) ? DB.areas.find((a) => a.id === ent.areaId).name : '—';
+    const N = 21, cell = 12, size = N * cell;
+    let seed = ((o && o.id) || 1) * 2654435761 % 2147483647;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const isFinder = (r, c) => {
+      const inBox = (br, bc) => r >= br && r < br + 7 && c >= bc && c < bc + 7;
+      return inBox(0, 0) || inBox(0, N - 7) || inBox(N - 7, 0);
+    };
+    let cells = '';
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      if (isFinder(r, c)) continue;
+      if (rnd() > 0.5) cells += `<rect x="${c * cell}" y="${r * cell}" width="${cell}" height="${cell}" fill="#000"/>`;
+    }
+    const finder = (br, bc) => {
+      const x = bc * cell, y = br * cell;
+      return `<rect x="${x}" y="${y}" width="${7 * cell}" height="${7 * cell}" fill="#000"/>
+        <rect x="${x + cell}" y="${y + cell}" width="${5 * cell}" height="${5 * cell}" fill="#fff"/>
+        <rect x="${x + 2 * cell}" y="${y + 2 * cell}" width="${3 * cell}" height="${3 * cell}" fill="#000"/>`;
+    };
+    const qrSvg = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" style="background:#fff">${cells}${finder(0, 0)}${finder(0, N - 7)}${finder(N - 7, 0)}</svg>`;
+    const body = `
+      <div style="text-align:center;padding:8px 0">
+        <div style="display:inline-block;padding:16px;background:#fff;border:1px solid #ebeef5;border-radius:8px">${qrSvg}</div>
+        <div style="margin-top:16px;font-size:14px;font-weight:600;color:#303133">${esc(ent.name || '当前企业')}</div>
+        <div style="font-size:12px;color:#606266;margin-top:4px">作业区域：${esc(areaName)}</div>
+        <div style="font-size:12px;color:#606266;margin-top:2px">安管员：${esc((o && o.name) || '—')} · ${esc((o && o.phone) || '—')}</div>
+      </div>`;
+    openModal('安管员二维码', body, '');
+  }
+
+  // ============ 企业端小程序 - 监护人管理 ============
+  function viewEnterpriseMiniGuardians() {
+    const view = $('#view');
+    const render = () => {
+      API.listGuardians().then((res) => {
+        const list = res.data;
+        const items = list.map((g) => `
+          <div class="mini-list-item">
+            <div class="mini-li-top"><span class="mini-li-type">${esc(g.name)}</span><span class="mini-li-status done">启用</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">手机号</span><span class="mini-li-val">${esc(g.phone)}</span></div>
+            <div class="mini-li-row"><span class="mini-li-label">创建时间</span><span class="mini-li-val">${esc(g.createdAt || '—')}</span></div>
+            <div class="mini-li-actions">
+              <button class="mini-btn-mini" data-act="edit" data-id="${g.id}">修改</button>
+              <button class="mini-btn-mini danger" data-act="delete" data-id="${g.id}">删除</button>
+            </div>
+          </div>`).join('') || '<div class="mini-rec-empty">暂无监护人数据</div>';
+        view.innerHTML = `
+          <div class="mini-office-wrap">
+            <div class="mini-phone">
+              <div class="mini-statusbar">
+                <span>15:17</span>
+                <span class="sb-right"><span class="sig"></span><span class="wifi"></span><span class="batt">88</span></span>
+              </div>
+              <div class="mini-navheader">
+                <span class="back-btn" onclick="location.hash='#/enterprise/mini/safety'">‹</span>
+                <span class="nav-title">监护人管理</span>
+                <span style="width:24px"></span>
+              </div>
+              <div class="mini-toolbar">
+                <span></span>
+                <button class="mini-btn-mini primary" id="m-add">+ 新增监护人</button>
+              </div>
+              <div class="mini-list">${items}</div>
+              <div class="mini-bottom-tip">监护人可在「企业作业管理」中分配给待审核作业。</div>
+            </div>
+            <div class="side-desc-panel mini-side-panel">
+              <div class="sdp-title">监护人管理说明</div>
+              <ul>
+                <li>新增监护人只需录入姓名和手机号。</li>
+                <li>监护人可在企业作业管理列表的「分配监护人」中进行授权。</li>
+              </ul>
+            </div>
+          </div>`;
+        bindMiniGuardianEvents();
+      });
+    };
+    function bindMiniGuardianEvents() {
+      view.querySelector('#m-add').onclick = () => modalMiniGuardian(null, render);
+      view.querySelectorAll('[data-act="edit"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listGuardians().then((res) => modalMiniGuardianEdit(res.data.find((x) => x.id === id), render));
+      });
+      view.querySelectorAll('[data-act="delete"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        confirmDialog('确定删除该监护人吗？', () => API.deleteGuardian(id).then(() => { toast('删除成功'); render(); }));
+      });
+    }
+    render();
+  }
+  function modalMiniGuardian(g, onDone) {
+    const d = g || { name: '', phone: '' };
+    const body = `
+      <div class="form-row"><div class="fl">姓名<span class="req">*</span></div><div class="fr"><input class="input" id="g-name" value="${esc(d.name)}" placeholder="请输入姓名"></div></div>
+      <div class="form-row"><div class="fl">手机号<span class="req">*</span></div><div class="fr"><input class="input" id="g-phone" value="${esc(d.phone)}" placeholder="请输入手机号"></div></div>`;
+    const foot = `<button class="btn">取消</button><button class="btn btn-primary" id="g-ok">确定</button>`;
+    const { node, close } = openModal(g ? '修改监护人' : '新增监护人', body, foot);
+    node.querySelectorAll('.btn')[0].onclick = close;
+    $('#g-ok').onclick = () => {
+      const data = { name: $('#g-name').value.trim(), phone: $('#g-phone').value.trim() };
+      if (!data.name || !data.phone) { toast('请填写必填项', 'error'); return; }
+      const fn = g ? API.updateGuardian({ id: g.id, ...data }) : API.createGuardian(data);
+      fn.then(() => { close(); toast(g ? '修改成功' : '新增成功'); onDone && onDone(); });
+    };
+  }
+  function modalMiniGuardianEdit(g, onDone) { modalMiniGuardian(g, onDone); }
+
+  // ============ 企业端小程序 - 企业作业管理 ============
+  function viewEnterpriseMiniTasks() {
+    const view = $('#view');
+    let state = { status: '全部', type: '全部' };
+    const render = () => {
+      API.listWorks().then((res) => {
+        let rows = res.data;
+        if (state.status !== '全部') rows = rows.filter((r) => r.status === state.status);
+        if (state.type !== '全部') rows = rows.filter((r) => r.type === state.type);
+        const entName = (id) => (DB.enterprises.find((e) => e.id === id) || {}).name || '—';
+        const areaName = (id) => (DB.areas.find((a) => a.id === id) || {}).name || '—';
+        const storeName = (id) => (DB.stores.find((s) => s.id === id) || {}).name || '—';
+        const items = rows.map((r) => {
+          const officers = (r.assignedOfficers || []).length;
+          const guardians = (r.assignedGuardians || []).length;
+          const actions = r.status === '待审核'
+            ? `<div class="mini-li-actions">
+                <button class="mini-btn-mini" data-act="rule" data-id="${r.id}">核查规则</button>
+                <button class="mini-btn-mini" data-act="assign-o" data-id="${r.id}">分配安管员</button>
+                <button class="mini-btn-mini" data-act="assign-g" data-id="${r.id}">分配监护人</button>
+              </div>` : '';
+          return `
+            <div class="mini-list-item" data-task-item="${r.id}" style="cursor:pointer">
+              <div class="mini-li-top"><span class="mini-li-type">${esc(r.type)}</span><span class="mini-li-status ${statusClassForMini(r.status)}">${esc(r.status)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(r.name)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">企业</span><span class="mini-li-val">${esc(entName(r.enterpriseId))}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(areaName(r.areaId))}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">门店</span><span class="mini-li-val">${esc(storeName(r.storeId))}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(r.contractor)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(r.address || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(r.leader)}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业周期</span><span class="mini-li-val">${esc((r.startTime || '').split(' ')[0] || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((r.startTime || '').split(' ')[1] || '—')} - ${esc((r.endTime || '').split(' ')[1] || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">核查规则</span><span class="mini-li-val">${esc(r.auditRuleLabel || '—')}</span></div>
+              <div class="mini-li-row"><span class="mini-li-label">安管员</span><span class="mini-li-val"><a href="javascript:;" style="color:#1f7ae0;text-decoration:underline" data-show-officers="${r.id}">${officers || '—'}</a></span></div>
+              <div class="mini-li-row"><span class="mini-li-label">监护人</span><span class="mini-li-val"><a href="javascript:;" style="color:#1f7ae0;text-decoration:underline" data-show-guardians="${r.id}">${guardians || '—'}</a></span></div>
+              ${actions}
+            </div>`;
+        }).join('') || '<div class="mini-rec-empty">暂无作业数据</div>';
+        view.innerHTML = `
+          <div class="mini-office-wrap">
+            <div class="mini-phone">
+              <div class="mini-statusbar">
+                <span>15:17</span>
+                <span class="sb-right"><span class="sig"></span><span class="wifi"></span><span class="batt">88</span></span>
+              </div>
+              <div class="mini-navheader">
+                <span class="back-btn" onclick="location.hash='#/enterprise/mini/safety'">‹</span>
+                <span class="nav-title">企业作业管理</span>
+                <span style="width:24px"></span>
+              </div>
+              <div class="mini-filter-bar">
+                <select class="mini-filter-select" id="f-status">
+                  <option value="全部">全部状态</option>
+                  <option>待审核</option><option>待开始</option><option>进行中</option>
+                  <option>已完成</option><option>已拒绝</option><option>已结束</option>
+                </select>
+                <select class="mini-filter-select" id="f-type">
+                  <option value="全部">全部类型</option>
+                  <option>动火作业</option><option>高处作业</option><option>临时用电作业</option>
+                </select>
+              </div>
+              <div class="mini-list">${items}</div>
+              <div class="mini-bottom-tip">待审核作业可分配安管员、监护人并设置核查规则。</div>
+            </div>
+            <div class="side-desc-panel mini-side-panel">
+              <div class="sdp-title">企业作业管理说明</div>
+              <ul>
+                <li>状态为「待审核」的作业，可操作：核查规则、分配安管员、分配监护人。</li>
+                <li>安管员/监护人列展示数量，点击数字可查看详情。</li>
+              </ul>
+            </div>
+          </div>`;
+        bindMiniTaskEvents();
+      });
+    };
+    function bindMiniTaskEvents() {
+      view.querySelector('#f-status').value = state.status;
+      view.querySelector('#f-type').value = state.type;
+      view.querySelector('#f-status').onchange = (e) => { state.status = e.target.value; render(); };
+      view.querySelector('#f-type').onchange = (e) => { state.type = e.target.value; render(); };
+      view.querySelectorAll('[data-act="rule"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listWorks().then((res) => {
+          const r = res.data.find((x) => x.id === id);
+          if (r) modalAuditRule(r);
+        });
+      });
+      view.querySelectorAll('[data-act="assign-o"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listWorks().then((res) => {
+          const r = res.data.find((x) => x.id === id);
+          if (r) modalAssignOfficers(r);
+        });
+      });
+      view.querySelectorAll('[data-act="assign-g"]').forEach((b) => b.onclick = () => {
+        const id = Number(b.dataset.id);
+        API.listWorks().then((res) => {
+          const r = res.data.find((x) => x.id === id);
+          if (r) modalAssignGuardians(r);
+        });
+      });
+      view.querySelectorAll('[data-show-officers]').forEach((el) => el.onclick = () => {
+        const id = Number(el.dataset.showOfficers);
+        API.listWorks().then((res) => {
+          const r = res.data.find((x) => x.id === id);
+          if (!r) return;
+          const ids = r.assignedOfficers || [];
+          const officers = (DB.officers || []).filter((o) => ids.includes(o.id));
+          const body = `<div style="max-height:400px;overflow:auto"><table class="mini-tbl" style="width:100%"><thead><tr><th>姓名</th><th>手机号</th></tr></thead><tbody>${officers.length ? officers.map((o) => `<tr><td>${esc(o.name || '—')}</td><td>${esc(o.phone || '—')}</td></tr>`).join('') : '<tr><td colspan="2" style="text-align:center;color:#999">暂无</td></tr>'}</tbody></table></div>`;
+          openModal('安管员列表', body, '');
+        });
+      });
+      view.querySelectorAll('[data-show-guardians]').forEach((el) => el.onclick = () => {
+        const id = Number(el.dataset.showGuardians);
+        API.listWorks().then((res) => {
+          const r = res.data.find((x) => x.id === id);
+          if (!r) return;
+          const ids = r.assignedGuardians || [];
+          const guardians = (DB.guardians || []).filter((g) => ids.includes(g.id));
+          const body = `<div style="max-height:400px;overflow:auto"><table class="mini-tbl" style="width:100%"><thead><tr><th>姓名</th><th>手机号</th></tr></thead><tbody>${guardians.length ? guardians.map((g) => `<tr><td>${esc(g.name || '—')}</td><td>${esc(g.phone || '—')}</td></tr>`).join('') : '<tr><td colspan="2" style="text-align:center;color:#999">暂无</td></tr>'}</tbody></table></div>`;
+          openModal('监护人列表', body, '');
+        });
+      });
+      // 点击条目进入作业详情
+      view.querySelectorAll('[data-task-item]').forEach((el) => {
+        el.onclick = (e) => {
+          if (e.target.closest('.mini-li-actions')) return;
+          if (e.target.closest('a')) return;
+          const id = el.dataset.taskItem;
+          location.hash = `#/enterprise/mini/safety/task-detail?id=${id}`;
+        };
+      });
+    }
+    render();
+  }
+
+  // ============ 企业端小程序-作业详情 ============
+  function viewEnterpriseMiniTaskDetail() {
+    const view = $('#view');
+    const id = parseInt((location.hash.split('?')[1] || '').replace('id=', '')) || 1;
+    API.listWorks().then((res) => {
+      const w = res.data.find((x) => x.id === id) || res.data[0];
+      if (!w) { view.innerHTML = '<div class="card"><div class="empty">未找到作业</div></div>'; return; }
+
+      const entName = (DB.enterprises.find((e) => e.id === w.enterpriseId) || {}).name || '—';
+      const storeName = (DB.stores.find((s) => s.id === w.storeId) || {}).name || '—';
+
+      // 施工人列表 —— 与PC端保持一致
+      const wcols = ['姓名', '手机号', '身份证号', '工作内容', '是否需要持证', '是否持证', '证件照', '作业人员保险'];
+      const CERT_PHOTOS = ['assets/cert-photo-1.jpg', 'assets/cert-photo-2.jpg', 'assets/cert-photo-3.jpg'];
+      const wrows = (w.workers || []).map((p, i) => {
+        let certCell;
+        if (p.hasCert === '是') {
+          const certImg = p.name === '张师傅' ? 'assets/cert-fire-1.jpg' : CERT_PHOTOS[i % CERT_PHOTOS.length];
+          certCell = `<img src="${certImg}" alt="证件照" style="width:40px;height:48px;object-fit:cover;border-radius:4px">`;
+        } else { certCell = '—'; }
+        let insCell;
+        if (p.insuranceImg) {
+          insCell = `<img src="${p.insuranceImg}" alt="作业人员保险" style="width:40px;height:48px;object-fit:cover;border-radius:4px">`;
+        } else { insCell = '—'; }
+        return `<tr><td>${esc(p.name)}</td><td>${esc(p.phone)}</td><td class="mono">${esc(p.idCard)}</td><td>${esc(p.task)}</td><td>${esc(p.needCert)}</td><td>${p.hasCert === '否' ? '—' : esc(p.hasCert)}</td><td>${certCell}</td><td>${insCell}</td></tr>`;
+      }).join('');
+
+      // 审核记录
+      const audits = Array.isArray(w.audit) ? w.audit : (w.audit ? [w.audit] : []);
+      const auditCards = audits.length === 0
+        ? '<div class="rec-empty">暂无审核记录</div>'
+        : audits.map((a, i) => {
+            const fireCert = esc(a.fireCert || '—');
+            const reason = esc(a.reason || '—');
+            return `
+              <div class="rec-card ${i === 0 ? 'open' : ''}">
+                <div class="rec-head"><div class="rec-summary"><span class="rec-idx">第${i + 1}条</span>${statusTag(a.status)}<span class="rec-time">${esc(a.time || '—')}</span><span class="rec-name">${esc(a.name)}</span></div><span class="rec-arrow">${icon('chevron-down')}</span></div>
+                <div class="rec-body">
+                  <div class="detail-grid">
+                    <div class="detail-item"><div class="dk">审核时间</div><div class="dv">${esc(a.time || '—')}</div></div>
+                    <div class="detail-item"><div class="dk">安全员姓名</div><div class="dv">${esc(a.name)}</div></div>
+                    <div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(a.phone)}</div></div>
+                    <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(a.org)}</div></div>
+                    <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, a.photos)}</div></div>
+                    <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
+                    <div class="detail-item"><div class="dk">动火作业证书</div><div class="dv">${fireCert}</div></div>
+                    <div class="detail-item"><div class="dk">审核状态</div><div class="dv">${statusTag(a.status)}</div></div>
+                    <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${reason}</div></div>
+                  </div>
+                </div>
+              </div>`;
+          }).join('');
+
+      // 现场核查记录
+      const verifies = Array.isArray(w.verify) ? w.verify : (w.verify ? [w.verify] : []);
+      const verifyCards = verifies.length === 0
+        ? '<div class="rec-empty">暂无核查记录</div>'
+        : verifies.map((v, i) => {
+            const workerPhotoHtml = (() => {
+              const wp = v.workerPhoto;
+              return wp && wp !== '未上传'
+                ? `<img class="fire-ticket-img" src="${v.workerPhotoImg || 'assets/worker-photo-1.jpg'}">`
+                : '<span class="tag tag-danger">未上传</span>';
+            })();
+            const guardianPhotoHtml = (() => {
+              const gp = v.guardianPhoto;
+              return gp && gp !== '未上传'
+                ? `<img class="fire-ticket-img" src="${v.guardianPhotoImg || 'assets/guardian-photo-1.jpg'}">`
+                : '<span class="tag tag-danger">未上传</span>';
+            })();
+            const reasonRow = (v.status === '异常' || v.status === '未通过')
+              ? `<div class="detail-item"><div class="dk" style="color:#F5222D">未通过原因</div><div class="dv" style="color:#F5222D">${esc(v.reason || '—')}</div></div>`
+              : '';
+            return `
+              <div class="rec-card ${i === 0 ? 'open' : ''}">
+                <div class="rec-head"><div class="rec-summary"><span class="rec-idx">第${i + 1}条</span>${statusTag(v.status)}<span class="rec-time">${esc(v.time || '—')}</span><span class="rec-name">${esc(v.name)}</span></div><span class="rec-arrow">${icon('chevron-down')}</span></div>
+                <div class="rec-body">
+                  <div class="detail-grid">
+                    <div class="detail-item"><div class="dk">定位记录</div><div class="dv">${esc(v.location || '—')}</div></div>
+                    <div class="detail-item"><div class="dk">核查人姓名</div><div class="dv">${esc(v.name)}</div></div>
+                    <div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(v.phone)}</div></div>
+                    <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(v.org)}</div></div>
+                    <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, v.photos, VERIFY_POOL)}</div></div>
+                    <div class="detail-item"><div class="dk">作业人员照片</div><div class="dv">${workerPhotoHtml}</div></div>
+                    <div class="detail-item"><div class="dk">监护人照片</div><div class="dv">${guardianPhotoHtml}</div></div>
+                    <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
+                    <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
+                    ${reasonRow}
+                  </div>
+                </div>
+              </div>`;
+          }).join('');
+
+      // 完成记录
+      const comp = w.completion || {};
+      const compWR = comp.workRecord || {};
+      const compOC = comp.officerConfirm || {};
+      const compGC = comp.guardianConfirm || {};
+      const completionPhotosHtml = (photos, label) => {
+        if (!photos || !photos.length) return `<div class="detail-item"><div class="dk">${label}</div><div class="dv">—</div></div>`;
+        return `<div class="detail-item"><div class="dk">${label}</div><div class="dv"><div class="comp-photos">${photos.map((p) => `<img src="${p}" alt="${label}">`).join('')}</div></div></div>`;
+      };
+      const completion = w.status === '已完成' ? `
+        <div class="detail-section">
+          <div class="ds-title">完成记录 <span class="stage-tag stage-post">作业完成</span></div>
+          <div class="comp-card">
+            <div class="comp-item">
+              <div class="comp-label">作业完成记录</div>
+              <div class="comp-grid">
+                <div class="detail-item"><div class="dk">状态</div><div class="dv">${compWR.status ? `<span class="tag ${compWR.status === '已完成' ? 'tag-success' : 'tag-warning'}">${esc(compWR.status)}</span>` : '—'}</div></div>
+                <div class="detail-item"><div class="dk">完成时间</div><div class="dv">${esc(compWR.time || '—')}</div></div>
+                <div class="detail-item"><div class="dk">作业人员</div><div class="dv">${esc(compWR.name || '—')}</div></div>
+                <div class="detail-item"><div class="dk">备注</div><div class="dv">${esc(compWR.remark || '—')}</div></div>
+                ${completionPhotosHtml(compWR.photos, '现场照片')}
+              </div>
+            </div>
+            <div class="comp-item">
+              <div class="comp-label">安管员确认记录</div>
+              <div class="comp-grid">
+                <div class="detail-item"><div class="dk">状态</div><div class="dv">${compOC.status ? `<span class="tag ${compOC.status === '已确认' ? 'tag-success' : 'tag-warning'}">${esc(compOC.status)}</span>` : '—'}</div></div>
+                <div class="detail-item"><div class="dk">确认时间</div><div class="dv">${esc(compOC.time || '—')}</div></div>
+                <div class="detail-item"><div class="dk">确认人</div><div class="dv">${esc(compOC.name || '—')}</div></div>
+                <div class="detail-item"><div class="dk">备注</div><div class="dv">${esc(compOC.remark || '—')}</div></div>
+                ${completionPhotosHtml(compOC.photos, '现场照片')}
+              </div>
+            </div>
+            <div class="comp-item">
+              <div class="comp-label">监护人确认记录</div>
+              <div class="comp-grid">
+                <div class="detail-item"><div class="dk">状态</div><div class="dv">${compGC.status ? `<span class="tag ${compGC.status === '已确认' ? 'tag-success' : 'tag-warning'}">${esc(compGC.status)}</span>` : '—'}</div></div>
+                <div class="detail-item"><div class="dk">确认时间</div><div class="dv">${esc(compGC.time || '—')}</div></div>
+                <div class="detail-item"><div class="dk">确认人</div><div class="dv">${esc(compGC.name || '—')}</div></div>
+                <div class="detail-item"><div class="dk">备注</div><div class="dv">${esc(compGC.remark || '—')}</div></div>
+                ${completionPhotosHtml(compGC.photos, '现场照片')}
+              </div>
+            </div>
+          </div>
+        </div>` : '';
+
+      const fireTicketHtml = (() => {
+        const ft = Array.isArray(w.audit) ? w.audit.find(a => a.fireTicket && a.fireTicket !== '—') : null;
+        return ft ? '<img class="fire-ticket-img" src="assets/work-fireticket.jpg">' : '<span class="tag tag-danger">未上传</span>';
+      })();
+
+      view.innerHTML = `
+        <div class="mini-office-wrap">
+          <div class="mini-phone">
+            <div class="mini-statusbar">
+              <span>15:17</span>
+              <span class="sb-right"><span class="sig"></span><span class="wifi"></span><span class="batt">88</span></span>
+            </div>
+            <div class="mini-navheader">
+              <span class="back-btn" onclick="location.hash='#/enterprise/mini/safety/tasks'">‹</span>
+              <span class="nav-title">作业详情</span>
+              <span style="width:24px"></span>
+            </div>
+            <div class="mini-detail-body">
+              <div class="detail-section">
+                <div class="ds-title">作业信息</div>
+                <div class="detail-grid">
+                  <div class="detail-item"><div class="dk">作业名称</div><div class="dv">${esc(w.name)}</div></div>
+                  <div class="detail-item"><div class="dk">作业类型</div><div class="dv">${typeTag(w.type)}</div></div>
+                  <div class="detail-item"><div class="dk">企业名称</div><div class="dv">${esc(entName)}</div></div>
+                  <div class="detail-item"><div class="dk">门店名称</div><div class="dv">${esc(storeName)}</div></div>
+                  <div class="detail-item"><div class="dk">施工地址</div><div class="dv">${esc(w.address)}</div></div>
+                  <div class="detail-item"><div class="dk">施工单位</div><div class="dv">${esc(w.contractor)}</div></div>
+                  <div class="detail-item"><div class="dk">施工负责人</div><div class="dv">${esc(w.leader)}</div></div>
+                  <div class="detail-item"><div class="dk">负责人手机号</div><div class="dv">${esc(w.leaderPhone)}</div></div>
+                  <div class="detail-item"><div class="dk">作业周期</div><div class="dv">${esc((w.startTime || '').split(' ')[0] || '—')}</div></div>
+                  <div class="detail-item"><div class="dk">作业时间</div><div class="dv">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</div></div>
+                  <div class="detail-item"><div class="dk">作业状态</div><div class="dv">${statusTag(w.status)}</div></div>
+                  <div class="detail-item"><div class="dk">动火票</div><div class="dv">${fireTicketHtml}</div></div>
+                </div>
+              </div>
+              <div class="detail-section">
+                <div class="ds-title">施工人列表</div>
+                <div class="table-wrap"><table class="tbl"><thead><tr>${wcols.map((c) => `<th>${c}</th>`).join('')}</tr></thead><tbody>${wrows || '<tr><td colspan="8" style="text-align:center;color:#999">暂无</td></tr>'}</tbody></table></div>
+              </div>
+              <div class="detail-section">
+                <div class="ds-title">审核记录 <span class="stage-tag stage-pre">作业前</span> <span class="rec-count">${audits.length}条</span></div>
+                ${auditCards}
+              </div>
+              <div class="detail-section">
+                <div class="ds-title">现场核查记录 <span class="stage-tag stage-during">作业中</span> <span class="rec-count">${verifies.length}条</span></div>
+                ${verifyCards}
+              </div>
+              ${completion}
+            </div>
+          </div>
+          <div class="side-desc-panel mini-side-panel">
+            <div class="sdp-title">作业详情说明</div>
+            <ul>
+              <li><b>1·作业信息/施工人列表：</b>作业信息全部来自作业人员上传的数据。</li>
+              <li><b>2·审核/核查记录：</b>审核和核查记录展示安管员审核结果和现场核查结果，可有多条，点击默认展开第一条，其余记录自动折叠。</li>
+              <li><b>3·完成记录：</b>仅已完成状态展示，包含作业完成记录、安管员确认记录、监护人确认记录。</li>
+            </ul>
+          </div>
+        </div>`;
+      // 折叠交互
+      view.querySelectorAll('.rec-card .rec-head').forEach((head) => {
+        head.onclick = () => head.parentElement.classList.toggle('open');
+      });
+    });
+  }
+
+  function statusClassForMini(s) {
+    if (s === '待审核' || s === '待开始') return 'pending';
+    if (s === '进行中') return 'doing';
+    if (s === '已完成' || s === '已结束') return 'done';
+    if (s === '已拒绝') return 'reject';
+    return '';
+  }
+
   // ============ App Shell 渲染（只渲染一次） ============
+  function resolveGroupIndex(group) {
+    // group 允许为数字索引，或 NAV 中的 title 字符串
+    if (typeof group === 'number') return group;
+    return NAV.findIndex((g) => g.title === group);
+  }
   function renderShell() {
     const cur = (location.hash || '#/').split('?')[0];
-    const activeGroup = (ROUTES[cur] || ROUTES['#/']).group;
+    const activeGroup = resolveGroupIndex((ROUTES[cur] || ROUTES['#/']).group);
     const navHtml = NAV.map((g, gi) => {
       const expanded = gi === activeGroup ? 'expanded' : '';
       const items = g.items.map((it) => {

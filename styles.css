@@ -353,9 +353,23 @@ textarea.input{height:80px;padding:8px 12px;resize:vertical;line-height:1.5}
 .mini-list-item:active{transform:scale(.99)}
 .mini-li-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#c0c4cc}
 .mini-li-arrow svg{width:16px;height:16px}
-.mini-li-actions{display:flex;gap:8px;justify-content:flex-end;padding:8px 0 2px}
+.mini-li-actions{display:flex;gap:8px;justify-content:flex-end;padding:8px 0 2px;flex-wrap:wrap}
 .mini-btn-mini{padding:4px 14px;border:none;border-radius:4px;font-size:12px;color:#fff;background:#1890ff;cursor:pointer;transition:opacity .15s}
 .mini-btn-mini:active{opacity:.8}
+.mini-btn-mini.primary{background:#409EFF}
+.mini-btn-mini.danger{background:#F56C6C}
+.mini-toolbar{display:flex;align-items:center;justify-content:flex-end;padding:10px 12px;background:#fff;border-bottom:1px solid #f0f0f0}
+.mini-bottom-tip{padding:10px 12px;font-size:12px;color:#909399;background:#FFFBE6;border-top:1px solid #FFE58F;line-height:1.6}
+.m-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 2px}
+.m-stat-item{background:#f5f7fa;border-radius:8px;padding:12px 8px;text-align:center}
+.m-stat-num{font-size:18px;font-weight:600;color:#1f7ae0}
+.m-stat-label{font-size:11px;color:#909399;margin-top:4px}
+.mc-item-primary{background:linear-gradient(135deg,#1f7ae0,#409EFF);color:#fff}
+.mc-item-primary .mc-label{color:#fff}
+.mc-item-primary .mc-icon{background:rgba(255,255,255,.2);color:#fff}
+.mc-desc{font-size:11px;color:#909399;margin-top:4px;text-align:center}
+.avatar-enter{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1f7ae0,#409EFF);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.mini-li-status.done{background:#F6FFED;color:#52C41A}
 
 /* ===== Mini Popup ===== */
 .mini-popup-wrap{width:320px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
@@ -378,9 +392,24 @@ textarea.input{height:80px;padding:8px 12px;resize:vertical;line-height:1.5}
 .mini-photo-placeholder{width:64px;height:64px;border-radius:6px;background:#e6f7ff;border:1px solid #91d5ff;display:flex;align-items:center;justify-content:center;font-size:10px;color:#1890ff}
 .mini-photo-hint{font-size:11px;color:#999;margin-top:4px;width:100%}
 .mini-form-static{padding:8px 10px;border:1px solid #ebeef5;border-radius:6px;font-size:13px;color:#67c23a;background:#f0f9eb}
-.mini-filter-bar{padding:8px 12px;background:#f5f7fa}
+.mini-filter-bar{padding:8px 12px;background:#f5f7fa;display:flex;gap:8px}
+.mini-filter-bar .mini-filter-select{flex:1}
 .mini-filter-select{width:100%;padding:6px 8px;border:1px solid #dcdfe6;border-radius:4px;font-size:12px;color:#333;background:#fff;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23999' d='M5 6L0 0h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px}
 .mini-detail-content{padding-bottom:80px}
+.mini-detail-body{flex:1;overflow:auto;background:#f5f5f5;padding:10px;font-size:12px}
+.mini-detail-body .detail-section{margin-bottom:14px;background:#fff;border-radius:8px;padding:12px}
+.mini-detail-body .ds-title{font-size:14px;margin-bottom:10px}
+.mini-detail-body .detail-grid{grid-template-columns:1fr;gap:8px 12px}
+.mini-detail-body .detail-item{padding:4px 0;font-size:12px;line-height:1.8}
+.mini-detail-body .detail-item .dk{font-size:12px}
+.mini-detail-body .table-wrap{overflow-x:auto}
+.mini-detail-body table.tbl{min-width:auto;width:100%;font-size:11px}
+.mini-detail-body table.tbl th,.mini-detail-body table.tbl td{padding:6px 8px;font-size:11px;white-space:normal}
+.mini-detail-body .rec-card .rec-head{padding:8px 10px}
+.mini-detail-body .rec-card .rec-body{padding:0 10px}
+.mini-detail-body .rec-card.open .rec-body{padding:8px 10px}
+.mini-detail-body .comp-card{padding:8px}
+.mini-detail-body .comp-grid{grid-template-columns:1fr}
 .mini-status-banner{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:10px;margin-bottom:12px}
 .mini-status-banner.pending{background:#FFF7E6;color:#FA8C16}
 .mini-status-banner .mini-status-text{font-size:15px;font-weight:600}
