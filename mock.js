@@ -69,7 +69,7 @@ window.DB = (function () {
       ],
       verify: [
         { time: '2026-08-04 10:15', name: '张安管', phone: '13800138001', org: 'A区商业广场', location: '杭州市上城区', photos: 3, videos: 1, status: '通过', reason: '', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg', guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg', records: '现场核查通过' },
-        { time: '2026-08-05 15:20', name: '张安管', phone: '13800138001', org: 'A区商业广场', location: '杭州市上城区', photos: 2, videos: 1, status: '异常', reason: '安全带挂钩松动', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg', guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg', records: '安全带挂钩松动，需整改' },
+        { time: '2026-08-05 15:20', name: '张安管', phone: '13800138001', org: 'A区商业广场', location: '杭州市上城区', photos: 2, videos: 1, status: '未通过', reason: '安全带挂钩松动', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-1.jpg', guardianPhoto: '已上传', guardianPhotoImg: 'assets/guardian-photo-1.jpg', records: '安全带挂钩松动，需整改' },
       ],
     },
     {
@@ -144,7 +144,7 @@ window.DB = (function () {
         { time: '2026-08-03 13:30', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, fireTicket: '—', fireCert: '—', status: '通过', reason: '', records: '绝缘检测合格' },
       ],
       verify: [
-        { time: '2026-08-04 16:00', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, status: '异常', reason: '配电箱防护缺失', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-3.jpg', guardianPhoto: '未上传', records: '配电箱防护缺失，需整改' },
+        { time: '2026-08-04 16:00', name: '李安管', phone: '13800138002', org: 'B区住宅小区', photos: 2, videos: 1, status: '未通过', reason: '配电箱防护缺失', workerPhoto: '已上传', workerPhotoImg: 'assets/worker-photo-3.jpg', guardianPhoto: '未上传', records: '配电箱防护缺失，需整改' },
       ],
     },
     {

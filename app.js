@@ -3343,8 +3343,13 @@
               return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-guardian-photo="${r.id}">${r.guardianPhoto || '未上传'}</span>`;
             } },
           { title: '现场核查状态', render: (r) => {
-              const st = r.aiStatus || (r.fireCert === '已上传' ? '通过' : '异常');
-              const cls = st === '通过' ? 'tag-success' : 'tag-danger';
+              // 取该作业现场核查记录里最新一条的状态
+              const verifies = Array.isArray(r.verify) ? r.verify : (r.verify ? [r.verify] : []);
+              const latest = verifies.length > 0 ? verifies[verifies.length - 1] : null;
+              const rawSt = latest ? (latest.status || '') : '';
+              if (!rawSt) return '<span class="tag">—</span>';
+              const st = rawSt === '异常' ? '未通过' : rawSt;
+              const cls = st === '通过' ? 'tag-success' : (st === '未通过' ? 'tag-danger' : 'tag-info');
               return `<span class="tag ${cls}">${esc(st)}</span>`;
             } },
           { title: '特种作业证书', render: (r) => {
@@ -3902,7 +3907,7 @@
         ${verifies.length === 0 ? '<div class="rec-empty">暂无核查记录</div>' : verifies.map((v, i) => `
           <div class="rec-card ${i === 0 ? 'open' : ''}">
             <div class="rec-head">
-              <div class="rec-summary"><span class="rec-idx">第${i + 1}条</span>${statusTag(v.status)}<span class="rec-time">${esc(v.time || '—')}</span><span class="rec-name">${esc(v.name)}</span></div>
+              <div class="rec-summary"><span class="rec-idx">第${i + 1}条</span>${statusTag(v.status === '异常' ? '未通过' : v.status)}<span class="rec-time">${esc(v.time || '—')}</span><span class="rec-name">${esc(v.name)}</span></div>
               <span class="rec-arrow">${icon('chevron-down')}</span>
             </div>
             <div class="rec-body">
@@ -3915,7 +3920,7 @@
                 <div class="detail-item"><div class="dk">作业人员照片</div><div class="dv">${(() => { const wp = v.workerPhoto; return wp && wp !== '未上传' ? '<img class="fire-ticket-img" src="' + (v.workerPhotoImg || 'assets/worker-photo-1.jpg') + '" onclick="window.open(\'' + (v.workerPhotoImg || 'assets/worker-photo-1.jpg') + '\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
                 <div class="detail-item"><div class="dk">监护人照片</div><div class="dv">${(() => { const gp = v.guardianPhoto; return gp && gp !== '未上传' ? '<img class="fire-ticket-img" src="' + (v.guardianPhotoImg || 'assets/guardian-photo-1.jpg') + '" onclick="window.open(\'' + (v.guardianPhotoImg || 'assets/guardian-photo-1.jpg') + '\',\'_blank\')">' : '<span class="tag tag-danger">未上传</span>'; })()}</div></div>
                 <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
-                <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
+                <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status === '异常' ? '未通过' : v.status)}</div></div>
                 ${(v.status === '异常' || v.status === '未通过') ? `<div class="detail-item"><div class="dk" style="color:#F5222D">未通过原因</div><div class="dv" style="color:#F5222D">${esc(v.reason || '—')}</div></div>` : ''}
                 <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-pc-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
               </div>
@@ -3985,7 +3990,7 @@
     // 右侧浮动说明面板
     const aiItems = scope === 'enterprise' ? `
         <li><b>3·审核记录：</b>小程序上传过来的数据，其中现场图片和现场视频调用智慧应急，先由AI判断是否存在违规，如果有直接判定为审核不通过，折叠行的状态标记和审核状态都自动显示为已拒绝，【不通过原因】直接显示【审核自动拒绝】；ai审核通过的会进入待安管员审核流程，拒绝原因展示审核拒绝时手动填写的内容。</li>
-        <li><b>4·现场核查记录：</b>AI识别图片视频，不通过则状态标记为【异常】，核查人和手机号都为上传视频的安管员信息，作业区域是安管员手动输入的地址，目前仅展示异常不做后续处理，后续可能会增加异常告警之类的功能。</li>` : '';
+        <li><b>4·现场核查记录：</b>状态为安管员小程序上手动审核的结果；未通过原因是安管员小程序上手动输入的信息；如果安管员未审核，则状态为横杠；查看详情按钮打开ai检测结果。</li>` : '';
     const sidePanel = h(`<div class="side-desc-panel">
       <div class="sdp-title">查看</div>
       <ul>
@@ -4741,12 +4746,19 @@
   // ============ 企业端小程序 - 企业作业管理 ============
   function viewEnterpriseMiniTasks() {
     const view = $('#view');
-    let state = { status: '全部', type: '全部' };
+    // 默认选择「待审核」状态；切换到「全部」时展示所有数据
+    let state = { status: '待审核', type: '全部' };
     const render = () => {
       API.listWorks().then((res) => {
         let rows = res.data;
         if (state.status !== '全部') rows = rows.filter((r) => r.status === state.status);
         if (state.type !== '全部') rows = rows.filter((r) => r.type === state.type);
+        // 按作业上传时间（startTime）倒序排列，最新上传的排在最前
+        rows = rows.slice().sort((a, b) => {
+          const ta = new Date(a.startTime || a.createdAt || 0).getTime() || 0;
+          const tb = new Date(b.startTime || b.createdAt || 0).getTime() || 0;
+          return tb - ta;
+        });
         const entName = (id) => (DB.enterprises.find((e) => e.id === id) || {}).name || '—';
         const areaName = (id) => (DB.areas.find((a) => a.id === id) || {}).name || '—';
         const storeName = (id) => (DB.stores.find((s) => s.id === id) || {}).name || '—';
@@ -4808,6 +4820,7 @@
               <ul>
                 <li>状态为「待审核」的作业，可操作：核查规则、分配安管员、分配监护人。</li>
                 <li>安管员/监护人列展示数量，点击数字可查看详情。</li>
+                <li>搜索条件默认选择「待审核」，然后按作业上传时间倒序；选择「全部」状态则列表所有数据按作业上传时间倒序即可。</li>
               </ul>
             </div>
           </div>`;
@@ -4920,7 +4933,7 @@
                     <div class="detail-item"><div class="dk">作业区域</div><div class="dv">${esc(a.org)}</div></div>
                     <div class="detail-item"><div class="dk">现场图片</div><div class="dv">${renderPhotoGallery(w.type, a.photos)}</div></div>
                     <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
-                    <div class="detail-item"><div class="dk">动火作业证书</div><div class="dv">${fireCert}</div></div>
+                    <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-mini-ai-review="audit-${i}-${a.photos}-${a.videos}">查看详情</div></div></div>
                     <div class="detail-item"><div class="dk">审核状态</div><div class="dv">${statusTag(a.status)}</div></div>
                     <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">${reason}</div></div>
                   </div>
@@ -4950,7 +4963,7 @@
               : '';
             return `
               <div class="rec-card ${i === 0 ? 'open' : ''}">
-                <div class="rec-head"><div class="rec-summary"><span class="rec-idx">第${i + 1}条</span>${statusTag(v.status)}<span class="rec-time">${esc(v.time || '—')}</span><span class="rec-name">${esc(v.name)}</span></div><span class="rec-arrow">${icon('chevron-down')}</span></div>
+                <div class="rec-head"><div class="rec-summary"><span class="rec-idx">第${i + 1}条</span>${statusTag(v.status === '异常' ? '未通过' : v.status)}<span class="rec-time">${esc(v.time || '—')}</span><span class="rec-name">${esc(v.name)}</span></div><span class="rec-arrow">${icon('chevron-down')}</span></div>
                 <div class="rec-body">
                   <div class="detail-grid">
                     <div class="detail-item"><div class="dk">定位记录</div><div class="dv">${esc(v.location || '—')}</div></div>
@@ -4961,7 +4974,8 @@
                     <div class="detail-item"><div class="dk">作业人员照片</div><div class="dv">${workerPhotoHtml}</div></div>
                     <div class="detail-item"><div class="dk">监护人照片</div><div class="dv">${guardianPhotoHtml}</div></div>
                     <div class="detail-item"><div class="dk">现场视频</div><div class="dv">${icon('video')}</div></div>
-                    <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status)}</div></div>
+                    <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><div class="view-detail-link" data-mini-ai-review="verify-${i}-${v.photos}-${v.videos}">查看详情</div></div></div>
+                    <div class="detail-item"><div class="dk">核查状态</div><div class="dv">${statusTag(v.status === '异常' ? '未通过' : v.status)}</div></div>
                     ${reasonRow}
                   </div>
                 </div>
@@ -5076,6 +5090,18 @@
       // 折叠交互
       view.querySelectorAll('.rec-card .rec-head').forEach((head) => {
         head.onclick = () => head.parentElement.classList.toggle('open');
+      });
+      // 查看详情（AI 检测结果）
+      view.querySelectorAll('[data-mini-ai-review]').forEach((el) => {
+        el.onclick = () => {
+          const parts = el.dataset.miniAiReview.split('-');
+          const recordType = parts[0];
+          const recordIndex = Number(parts[1]);
+          const photoCnt = Number(parts[2]);
+          const videoCnt = Number(parts[3]);
+          if (photoCnt === 0 && videoCnt === 0) { toast('暂无审核数据', 'warning'); return; }
+          showPcAiReview(photoCnt, videoCnt, recordType, recordIndex);
+        };
       });
     });
   }
