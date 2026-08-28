@@ -3645,6 +3645,7 @@
     const customHours = work.auditCustomHours || 3;
     const notifySms = currentIsFree ? false : (work.auditNotifySms === true);
     const notifyMini = currentIsFree ? false : (work.auditNotifyMini === true);
+    const notifyRowStyle = currentIsFree ? 'display:none' : '';
     const body = `
       <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>1</span></span>作业名称</div><div class="fr"><div style="padding:6px 0;color:#606266">${esc(work.name)}</div></div></div>
       <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>2</span></span>核查规则<span class="req">*</span></div><div class="fr">
@@ -3661,20 +3662,23 @@
           <span style="color:#606266">小时核查一次</span>
         </div>
       </div>
-      <div class="form-row"><div class="fl"><span class="pin-num pin-inline"><span>4</span></span>核查提醒</div><div class="fr" style="display:flex;align-items:center;gap:20px">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
-          <input type="checkbox" id="notify-sms" ${notifySms ? 'checked' : ''} ${currentIsFree ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
-          <span>短信提醒</span>
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
-          <input type="checkbox" id="notify-mini" ${notifyMini ? 'checked' : ''} ${currentIsFree ? 'disabled' : ''} style="width:16px;height:16px;accent-color:#409EFF">
-          <span>小程序提醒</span>
-        </label>
-      </div></div>
+      <div id="rule-notify-row" class="form-row" style="${notifyRowStyle}">
+        <div class="fl"><span class="pin-num pin-inline"><span>4</span></span>核查提醒<span class="req">*</span></div>
+        <div class="fr" style="display:flex;align-items:center;gap:20px">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
+            <input type="checkbox" id="notify-sms" ${notifySms ? 'checked' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+            <span>短信提醒</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:#606266">
+            <input type="checkbox" id="notify-mini" ${notifyMini ? 'checked' : ''} style="width:16px;height:16px;accent-color:#409EFF">
+            <span>小程序提醒</span>
+          </label>
+        </div>
+      </div>
       <div class="modal-desc" style="margin-top:16px;width:auto;background:#FFF9E6;border:1px solid #FFE58F;border-radius:6px;padding:14px 16px;font-size:13px;color:#606266;line-height:1.7">
         <div class="md-title" style="font-size:14px;font-weight:700;color:#D48806;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #FFD591">说明</div>
         <ul style="list-style:none;padding:0;margin:0">
-          <li style="margin-bottom:8px">设置核查规则，用于管控安管员按规则去进行现场核查，该规则仅对安管员小程序进行中的作业生效，下拉框选项的1、2、4小时及自由核查为内置选项，自由核查为默认选中，如果选了自由核查，则不会产生核查提醒，即使勾选了也无效</li>
+          <li style="margin-bottom:8px">设置核查规则，用于管控安管员按规则去进行现场核查，该规则仅对安管员小程序进行中的作业生效，下拉框选项的1、2、4小时及自由核查为内置选项，自由核查为默认选中，选择【自由核查】时不展示核查提醒；其他规则选项会出现核查提醒且为必填项</li>
           <li style="margin-bottom:8px">自定义规则可以由企业自己填写核查间隔时间，支持一位小数（如0.5、1.5）</li>
           <li style="margin-bottom:0">核查提醒默认不勾选，短信提醒暂时不发短信，小程序提醒会在区域作业列表进行中的作业打上提醒标签</li>
         </ul>
@@ -3684,14 +3688,14 @@
     const presetSel = node.querySelector('#rule-preset');
     const customRow = node.querySelector('#rule-custom-row');
     const customHoursInput = node.querySelector('#rule-custom-hours');
+    const notifyRow = node.querySelector('#rule-notify-row');
     const notifySmsCk = node.querySelector('#notify-sms');
     const notifyMiniCk = node.querySelector('#notify-mini');
     presetSel.onchange = () => {
       const val = presetSel.value;
       customRow.style.display = val === 'custom' ? 'flex' : 'none';
       const isFree = val === 'free';
-      notifySmsCk.disabled = isFree;
-      notifyMiniCk.disabled = isFree;
+      notifyRow.style.display = isFree ? 'none' : 'flex';
       if (isFree) {
         notifySmsCk.checked = false;
         notifyMiniCk.checked = false;
