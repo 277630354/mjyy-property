@@ -4116,7 +4116,11 @@
             const r = rows.find((x) => x.id === id);
             if (act === 'view') { openModal('安管员详情', `<div class="detail-grid"><div class="detail-item"><div class="dk">姓名</div><div class="dv">${esc(r.name)}</div></div><div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(r.phone)}</div></div><div class="detail-item"><div class="dk">创建时间</div><div class="dv">${esc(r.createdAt)}</div></div></div>`, `<button class="btn btn-primary" onclick="this.closest('.overlay').remove()">关闭</button>`); }
             else if (act === 'edit') modalOfficerEdit(r, render);
-            else if (act === 'delete') confirmDialog(`确定删除安管员「${r.name}」吗？`, () => API.deleteOfficer(id).then(() => { toast('删除成功'); render(); }));
+            else if (act === 'delete') {
+              const busy = DB.works.find((w) => ['待审核', '待开始', '进行中'].includes(w.status) && (w.assignedOfficers || []).includes(id));
+              if (busy) { toast('该账号存在进行中的作业，禁止删除', 'error'); return; }
+              confirmDialog(`确定删除安管员「${r.name}」吗？`, () => API.deleteOfficer(id).then(() => { toast('删除成功'); render(); }));
+            }
           },
         });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
@@ -4128,7 +4132,7 @@
             <li><b>安管员是用来登录小程序端，审核作业人员上传作业内容的。</b></li>
             <li><b>1·新增：</b>只需要录入姓名和手机号即可，必填，无限限配置，所有安管员功能相同，全部可以登录小程序查看所有作业，审核，上传照片视频。</li>
             <li><b>2·修改和查看：</b>修改和新增页面一致，内容回填；查看多展示一个创建时间。</li>
-            <li><b>3·删除：</b>删除按钮默认不开放，因为涉及到该安管员审核和核查的历史记录，如果同意删除该安管员同时也删除该人的操作历史记录，则可以开放删除按钮。</li>
+            <li><b>3·删除：</b>当安管员名下存在待审核、待开始、进行中这三个状态的作业时不允许删除，页面提示【该账号存在进行中的作业，禁止删除】。</li>
             <li><b>4·生成二维码：</b>点击后生成二维码，携带企业名称，作业区域，用于给作业人员扫描进入小程序上传作业信息。</li>
             <li><b>5·二维码与作业区域：</b>该二维码需要判断是否有作业区域，如果G端未绑定该企业，则作业区域为空，此时仍可以扫描二维码进行作业，但该条作业信息只存在于企业端，不会同步到G端的作业列表，在小程序上也只有企业的安管员能看到，G端安管员没有该作业信息。</li>
           </ul>
@@ -4232,7 +4236,11 @@
             const r = rows.find((x) => x.id === id);
             if (act === 'view') { openModal('监护人详情', `<div class="detail-grid"><div class="detail-item"><div class="dk">姓名</div><div class="dv">${esc(r.name)}</div></div><div class="detail-item"><div class="dk">手机号</div><div class="dv">${esc(r.phone)}</div></div><div class="detail-item"><div class="dk">创建时间</div><div class="dv">${esc(r.createdAt)}</div></div></div>`, `<button class="btn btn-primary" onclick="this.closest('.overlay').remove()">关闭</button>`); }
             else if (act === 'edit') modalGuardianEdit(r, render);
-            else if (act === 'delete') confirmDialog(`确定删除监护人「${r.name}」吗？`, () => API.deleteGuardian(id).then(() => { toast('删除成功'); render(); }));
+            else if (act === 'delete') {
+              const busy = DB.works.find((w) => ['待审核', '待开始', '进行中'].includes(w.status) && (w.assignedGuardians || []).includes(id));
+              if (busy) { toast('该账号存在进行中的作业，禁止删除', 'error'); return; }
+              confirmDialog(`确定删除监护人「${r.name}」吗？`, () => API.deleteGuardian(id).then(() => { toast('删除成功'); render(); }));
+            }
           },
         });
         node.querySelectorAll('[data-pg]').forEach((b) => b.onclick = () => { const p = b.dataset.pg; state.page = (p === 'prev' ? state.page - 1 : p === 'next' ? state.page + 1 : Number(p)); if (state.page >= 1) renderTbl(); });
@@ -4244,7 +4252,7 @@
             <li><b>监护人是作业现场负责监督作业安全的人员，需要在作业期间全程在场。</b></li>
             <li><b>1·新增：</b>只需要录入姓名和手机号即可，必填，无限限配置。</li>
             <li><b>2·修改和查看：</b>修改和新增页面一致，内容回填；查看多展示一个创建时间。</li>
-            <li><b>3·删除：</b>删除按钮默认不开放，因为涉及到该监护人参与的历史作业记录。</li>
+            <li><b>3·删除：</b>当监护人名下存在待审核、待开始、进行中这三个状态的作业时不允许删除，页面提示【该账号存在进行中的作业，禁止删除】。</li>
             <li><b>4·分配监护人：</b>在企业作业管理列表中，待审核的作业可以分配监护人。</li>
           </ul>
         </div>`);
@@ -4607,6 +4615,8 @@
       });
       view.querySelectorAll('[data-act="delete"]').forEach((b) => b.onclick = () => {
         const id = Number(b.dataset.id);
+        const busy = DB.works.find((w) => ['待审核', '待开始', '进行中'].includes(w.status) && (w.assignedOfficers || []).includes(id));
+        if (busy) { toast('该账号存在进行中的作业，禁止删除', 'error'); return; }
         confirmDialog('确定删除该安管员吗？', () => API.deleteOfficer(id).then(() => { toast('删除成功'); render(); }));
       });
       view.querySelectorAll('[data-act="qr"]').forEach((b) => b.onclick = () => {
@@ -4726,6 +4736,8 @@
       });
       view.querySelectorAll('[data-act="delete"]').forEach((b) => b.onclick = () => {
         const id = Number(b.dataset.id);
+        const busy = DB.works.find((w) => ['待审核', '待开始', '进行中'].includes(w.status) && (w.assignedGuardians || []).includes(id));
+        if (busy) { toast('该账号存在进行中的作业，禁止删除', 'error'); return; }
         confirmDialog('确定删除该监护人吗？', () => API.deleteGuardian(id).then(() => { toast('删除成功'); render(); }));
       });
     }
