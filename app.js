@@ -4572,7 +4572,6 @@
             <div class="mini-li-row"><span class="mini-li-label">手机号</span><span class="mini-li-val">${esc(o.phone)}</span></div>
             <div class="mini-li-row"><span class="mini-li-label">创建时间</span><span class="mini-li-val">${esc(o.createdAt || '—')}</span></div>
             <div class="mini-li-actions">
-              <button class="mini-btn-mini" data-act="qr" data-id="${o.id}">二维码</button>
               <button class="mini-btn-mini" data-act="edit" data-id="${o.id}">修改</button>
               <button class="mini-btn-mini danger" data-act="delete" data-id="${o.id}">删除</button>
             </div>
