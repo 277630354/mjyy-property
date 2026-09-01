@@ -4593,13 +4593,12 @@
                 <button class="mini-btn-mini primary" id="m-add">+ 新增安管员</button>
               </div>
               <div class="mini-list">${items}</div>
-              <div class="mini-bottom-tip">安管员登录小程序审核作业；点击二维码可下载。</div>
+              <div class="mini-bottom-tip">安管员登录小程序审核作业。</div>
             </div>
             <div class="side-desc-panel mini-side-panel">
               <div class="sdp-title">安管员管理说明</div>
               <ul>
                 <li>新增只需录入姓名和手机号。</li>
-                <li>点击「二维码」可下载携带企业名称与作业区域的二维码，用于作业人员扫码进入小程序。</li>
               </ul>
             </div>
           </div>`;
