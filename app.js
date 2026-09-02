@@ -4476,11 +4476,9 @@
       API.listStores().then((res) => {
         const list = res.data;
         const items = list.map((s) => {
-          const entName = (DB.enterprises.find((e) => e.id === s.enterpriseId) || {}).name || '—';
           return `
           <div class="mini-list-item">
             <div class="mini-li-top"><span class="mini-li-type">${esc(s.name)}</span><span class="mini-li-status done">启用</span></div>
-            <div class="mini-li-row"><span class="mini-li-label">所属企业</span><span class="mini-li-val">${esc(entName)}</span></div>
             <div class="mini-li-row"><span class="mini-li-label">门店地址</span><span class="mini-li-val">${esc(s.address)}</span></div>
             <div class="mini-li-row"><span class="mini-li-label">门店管理员</span><span class="mini-li-val">${esc(s.manager || '—')} / ${esc(s.phone || '—')}</span></div>
             <div class="mini-li-row"><span class="mini-li-label">描述</span><span class="mini-li-val">${esc(s.desc || '—')}</span></div>
