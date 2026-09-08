@@ -4285,12 +4285,12 @@
         <div style="margin-top:14px;font-size:13px;color:#606266;line-height:1.7;text-align:left;background:#fdf6ec;border:1px solid #faecd8;border-radius:6px;padding:10px 12px">请作业人员到达指定特种作业现场后，扫描本二维码完成信息登记，首次使用名匠有约小程序请先注册认证并上传对应作业证书。</div>
       </div>`;
     const foot = `<button class="btn">关闭</button><button class="btn btn-primary" id="qr-save">下载二维码</button>`;
-    const { node, close } = openModal('安管员二维码', body, foot);
+    const { node, close } = openModal('特种作业二维码', body, foot);
     node.querySelectorAll('.btn')[0].onclick = close;
     $('#qr-save').onclick = () => {
       const link = document.createElement('a');
       link.href = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(qrSvg);
-      link.download = `安管员二维码_${ent.name || '企业'}.svg`;
+      link.download = `特种作业二维码_${ent.name || '企业'}.svg`;
       link.click();
       toast('二维码已下载');
     };
