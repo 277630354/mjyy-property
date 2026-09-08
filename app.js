@@ -3037,7 +3037,7 @@
     const supRowHtml = (s, idx) => `
           <div class="form-row sup-row" data-idx="${idx}">
             <div class="fr sup-fields">
-              <input class="input sup-dept" placeholder="主管部门" value="${esc(s.dept || '')}">
+              <input class="input sup-dept" placeholder="部门名称" value="${esc(s.dept || '')}">
               <input class="input sup-name" placeholder="姓名" value="${esc(s.name || '')}">
               <input class="input sup-phone" placeholder="手机号" value="${esc(s.phone || '')}">
               <span class="btn-text danger sup-del" style="margin-left:4px" data-del="${idx}">删除</span>
