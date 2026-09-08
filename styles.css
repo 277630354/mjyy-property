@@ -90,12 +90,14 @@ ul,li{list-style:none}
 
 /* ===== Table ===== */
 .table-wrap{background:#fff;border:1px solid var(--border);border-bottom:none;border-radius:var(--radius);overflow-x:auto}
-table.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:1800px}
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:14px;min-width:1800px}
 table.tbl th{background:#fafafa;color:var(--text-secondary);font-weight:500;text-align:left;padding:12px 10px;white-space:nowrap;border-bottom:1px solid var(--border)}
 table.tbl td{padding:12px 10px;color:var(--text-regular);border-bottom:1px solid var(--border);vertical-align:middle}
 table.tbl tbody tr:hover{background:#f5f7fa}
 table.tbl tbody tr:last-child td{border-bottom:none}
 table.tbl .actions{display:flex;gap:4px;flex-wrap:nowrap;white-space:nowrap}
+table.tbl th.col-fixed,table.tbl td.col-fixed{position:sticky;background:#fff;z-index:2;box-shadow:1px 0 0 0 var(--border);white-space:nowrap}
+table.tbl th.col-fixed{background:#fafafa;z-index:3}
 .tnum{font-variant-numeric:tabular-nums}
 
 /* ===== Tags / status ===== */
@@ -395,6 +397,8 @@ textarea.input{height:80px;padding:8px 12px;resize:vertical;line-height:1.5}
 .mini-form-static{padding:8px 10px;border:1px solid #ebeef5;border-radius:6px;font-size:13px;color:#67c23a;background:#f0f9eb}
 .mini-filter-bar{padding:8px 12px;background:#f5f7fa;display:flex;gap:8px}
 .mini-filter-bar .mini-filter-select{flex:1}
+.mini-filter-input{width:100%;padding:6px 10px;border:1px solid #dcdfe6;border-radius:4px;font-size:12px;color:#333;background:#fff;outline:none}
+.mini-filter-input::placeholder{color:#c0c4cc}
 .mini-filter-select{width:100%;padding:6px 8px;border:1px solid #dcdfe6;border-radius:4px;font-size:12px;color:#333;background:#fff;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%23999' d='M5 6L0 0h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;padding-right:24px}
 .mini-detail-content{padding-bottom:80px}
 .mini-detail-body{flex:1;overflow:auto;background:#f5f5f5;padding:10px;font-size:12px}

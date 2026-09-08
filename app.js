@@ -172,14 +172,30 @@
     const pages = Math.max(1, Math.ceil(total / pageSize));
     const cur = Math.min(page, pages);
     const pageRows = rows.slice((cur - 1) * pageSize, cur * pageSize);
-    const ths = columns.map((c) => `<th>${c.titleHtml != null ? c.titleHtml : esc(c.title)}</th>`).join('');
+    // 计算 sticky left 值（fixedLeft 列，从左到右累加 width）
+    let accLeft = 0;
+    const colMeta = columns.map((c) => {
+      const fixed = !!c.fixedLeft;
+      const left = fixed ? accLeft : null;
+      if (fixed) accLeft += c.width || 120; // 默认宽度兜底
+      return { fixed, left };
+    });
+    const ths = columns.map((c, i) => {
+      const meta = colMeta[i];
+      if (!meta.fixed) return `<th>${c.titleHtml != null ? c.titleHtml : esc(c.title)}</th>`;
+      return `<th class="col-fixed" style="left:${meta.left}px">${c.titleHtml != null ? c.titleHtml : esc(c.title)}</th>`;
+    }).join('');
     let trs;
     if (!pageRows.length) {
       trs = `<tr><td colspan="${columns.length}" class="empty">${emptyText}</td></tr>`;
     } else {
       trs = pageRows.map((r) => {
-        const tds = columns.map((c) => {
-          let v = c.render ? c.render(r) : esc(r[c.key]);
+        const tds = columns.map((c, i) => {
+          const v = c.render ? c.render(r) : esc(r[c.key]);
+          const meta = colMeta[i];
+          if (meta.fixed) {
+            return `<td class="col-fixed" style="left:${meta.left}px">${v}</td>`;
+          }
           return `<td>${v}</td>`;
         }).join('');
         return `<tr data-id="${r.id}">${tds}</tr>`;
@@ -1220,6 +1236,25 @@
         <div class="mini-li-row"><span class="mini-li-label">作业时间</span><span class="mini-li-val">${esc((w.startTime || '').split(' ')[1] || '—')} - ${esc((w.endTime || '').split(' ')[1] || '—')}</span></div>
         <div class="mini-li-arrow">${icon('chevron')}</div>
       </div>`).join('');
+    const itemsArea = MINI_AREA_WORKS.map((w) => {
+      const finishBtn = w.status === '已完成' ? '<div class="mini-li-actions"><span class="mini-btn-mini primary">请上传作业完结证明</span></div>' : '';
+      return `
+      <div class="mini-list-item">
+        <div class="mini-li-top"><span class="mini-li-type">${esc(w.type)}</span><div style="display:flex;align-items:center;gap:8px"><span class="mini-li-status ${miniAreaStatusClass(w.status)}">${esc(w.status)}</span>${(w.status === '待开始' || w.status === '进行中') ? '<span class="mini-add-btn" style="margin-left:0">+</span>' : ''}</div></div>
+        ${w.status === '进行中' ? '<div style="margin:-4px 0 8px 0"><span class="mini-li-tag-urgent">请尽快完成核查</span></div>' : ''}
+        <div class="mini-li-row"><span class="mini-li-label">作业名称</span><span class="mini-li-val">${esc(w.name)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">企业名称</span><span class="mini-li-val">${esc(w.enterprise)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业区域</span><span class="mini-li-val">${esc(w.areaName || '')}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">施工单位</span><span class="mini-li-val">${esc(w.constructionUnit || '')}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">施工地址</span><span class="mini-li-val">${esc(w.address)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">施工负责人</span><span class="mini-li-val">${esc(w.leader)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">负责人手机号</span><span class="mini-li-val">${esc(w.leaderPhone)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业开始时间</span><span class="mini-li-val">${esc(w.startTime)}</span></div>
+        <div class="mini-li-row"><span class="mini-li-label">作业结束时间</span><span class="mini-li-val">${esc(w.endTime)}</span></div>
+        ${finishBtn}
+        <div class="mini-li-arrow">${icon('chevron')}</div>
+      </div>`;
+    }).join('');
     view.innerHTML = `
       <div class="mini-office-wrap">
         <div class="mini-phone">
@@ -1267,6 +1302,64 @@
             <li><b>5·请尽快完成核查：</b>企业配置了核查规则后，安管员到达指定时间超时未上传核查信息，则进入小程序自动出现弹框提醒，且在区域作业列表，进行中的作业会打上【请尽快完成核查】的标签。</li>
             <li><b>6·请上传作业完结证明：</b>安管员和作业人员小程序端的已完成作业都有上传完结证明按钮，点击该按钮上传现场照片提交即可，安管员端的确认人就是当前登录的安管员姓名，作业端只有负责人登录小程序才会出现这个按钮，团队内其余人员登录不显示，确认人回填当前登录的负责人姓名；该按钮为一次性操作，点击上传后按钮消失，不支持修改，提交的记录展示在作业详情最底部的【完成记录】模块。</li>
           </ul>
+        </div>
+        <div class="mini-phone mini-phone-static">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right">
+              <span class="sig"></span>
+              <span class="wifi"></span>
+              <span class="batt">88</span>
+            </span>
+          </div>
+          <div class="mini-navheader">
+            <span class="back-btn">‹</span>
+            <span class="nav-title">安管员</span>
+            <span></span>
+          </div>
+          <div class="mini-tabs">
+            <div class="tab active">待审核作业</div>
+            <div class="tab">区域作业</div>
+          </div>
+          <div class="mini-filter-bar">
+            <input class="mini-filter-input" placeholder="按企业名称搜索">
+          </div>
+          <div class="mini-tab-content">
+            <div class="mini-list">${items}</div>
+          </div>
+        </div>
+        <div class="mini-phone mini-phone-static">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right">
+              <span class="sig"></span>
+              <span class="wifi"></span>
+              <span class="batt">88</span>
+            </span>
+          </div>
+          <div class="mini-navheader">
+            <span class="back-btn">‹</span>
+            <span class="nav-title">安管员</span>
+            <span></span>
+          </div>
+          <div class="mini-tabs">
+            <div class="tab">待审核作业</div>
+            <div class="tab active">区域作业</div>
+          </div>
+          <div class="mini-filter-bar">
+            <input class="mini-filter-input" placeholder="按企业名称搜索">
+            <select class="mini-filter-select">
+              <option>全部状态</option>
+              <option>待开始</option>
+              <option>进行中</option>
+              <option>已完成</option>
+              <option>已拒绝</option>
+              <option>已结束</option>
+            </select>
+          </div>
+          <div class="mini-tab-content">
+            <div class="mini-list">${itemsArea}</div>
+          </div>
         </div>
       </div>
     `;
@@ -2790,6 +2883,20 @@
               <div class="mini-req-row"><span class="mini-req-label">记录日期：</span><span class="mini-req-value">2026/8/24</span></div>
             </div>
           </div>
+          <div class="mini-req-panel">
+            <div class="mini-req-title">需求说明</div>
+            <ol class="mini-req-list">
+              <li>1·智慧应急和特种作业从企业端剥离，做成一个新后台（暂时不做）</li>
+              <li>2·作业管理的作业与区域放在最前列且固定，并将所有状态列放前面</li>
+              <li>3·二维码名字更改，且加上海报和去现场扫码的提醒与上传作业证书的提醒</li>
+              <li>4·添加施工人，需要查询库里该人员的作业证书自动回填，没有证书则需要先上传（总台证书有问题，暂时无法联动）</li>
+              <li>5·G端作业区域增加主管部门</li>
+            </ol>
+            <div class="mini-req-meta">
+              <div class="mini-req-row"><span class="mini-req-label">需求来源：</span><span class="mini-req-value">王腾飞</span></div>
+              <div class="mini-req-row"><span class="mini-req-label">记录日期：</span><span class="mini-req-value">2026/9/5</span></div>
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -3309,10 +3416,37 @@
         const areaName = (id) => (DB.areas.find((a) => a.id === id) || {}).name || '—';
         const storeName = (id) => (DB.stores.find((s) => s.id === id) || {}).name || '—';
         const columns = [
+          { title: '企业', render: (r) => esc(entName(r.enterpriseId)), fixedLeft: true, width: 140 },
+          { title: '作业区域', render: (r) => esc(areaName(r.areaId)), fixedLeft: true, width: 140 },
+          { title: '作业票', render: (r) => {
+              const uploaded = r.fireTicket || r.fireTicketImg;
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
+            }, width: 100 },
+          { title: '特种作业证书', render: (r) => {
+              const uploaded = r.fireCert === '已上传';
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-cert="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
+            }, width: 110 },
+          { title: '作业状态', render: (r) => statusTag(r.status), width: 90 },
+          { title: '作业人员照片', render: (r) => {
+              const uploaded = r.workerPhoto === '已上传';
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-worker-photo="${r.id}">${r.workerPhoto || '未上传'}</span>`;
+            }, width: 110 },
+          { title: '监护人照片', render: (r) => {
+              const uploaded = r.guardianPhoto === '已上传';
+              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-guardian-photo="${r.id}">${r.guardianPhoto || '未上传'}</span>`;
+            }, width: 110 },
+          { title: '现场核查状态', render: (r) => {
+              // 取该作业现场核查记录里最新一条的状态
+              const verifies = Array.isArray(r.verify) ? r.verify : (r.verify ? [r.verify] : []);
+              const latest = verifies.length > 0 ? verifies[verifies.length - 1] : null;
+              const rawSt = latest ? (latest.status || '') : '';
+              if (!rawSt) return '<span class="tag">—</span>';
+              const st = rawSt === '异常' ? '未通过' : rawSt;
+              const cls = st === '通过' ? 'tag-success' : (st === '未通过' ? 'tag-danger' : 'tag-info');
+              return `<span class="tag ${cls}">${esc(st)}</span>`;
+            }, width: 110 },
           { title: '作业名称', key: 'name' },
           { title: '作业类型', render: (r) => typeTag(r.type) },
-          { title: '企业', render: (r) => esc(entName(r.enterpriseId)) },
-          { title: '作业区域', render: (r) => esc(areaName(r.areaId)) },
           { title: '门店名称', render: (r) => esc(storeName(r.storeId)) },
           { title: '施工地址', key: 'address' },
           { title: '施工单位', key: 'contractor' },
@@ -3331,33 +3465,6 @@
               if (!n) return '—';
               return `<a href="javascript:;" class="guardian-count" data-id="${r.id}" style="color:#1f7ae0;font-weight:500;text-decoration:underline;cursor:pointer">${n}</a>`;
             } },
-          { title: '作业票', render: (r) => {
-              const uploaded = r.fireTicket || r.fireTicketImg;
-              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-ticket="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
-            } },
-          { title: '作业人员照片', render: (r) => {
-              const uploaded = r.workerPhoto === '已上传';
-              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-worker-photo="${r.id}">${r.workerPhoto || '未上传'}</span>`;
-            } },
-          { title: '监护人照片', render: (r) => {
-              const uploaded = r.guardianPhoto === '已上传';
-              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-guardian-photo="${r.id}">${r.guardianPhoto || '未上传'}</span>`;
-            } },
-          { title: '现场核查状态', render: (r) => {
-              // 取该作业现场核查记录里最新一条的状态
-              const verifies = Array.isArray(r.verify) ? r.verify : (r.verify ? [r.verify] : []);
-              const latest = verifies.length > 0 ? verifies[verifies.length - 1] : null;
-              const rawSt = latest ? (latest.status || '') : '';
-              if (!rawSt) return '<span class="tag">—</span>';
-              const st = rawSt === '异常' ? '未通过' : rawSt;
-              const cls = st === '通过' ? 'tag-success' : (st === '未通过' ? 'tag-danger' : 'tag-info');
-              return `<span class="tag ${cls}">${esc(st)}</span>`;
-            } },
-          { title: '特种作业证书', render: (r) => {
-              const uploaded = r.fireCert === '已上传';
-              return `<span class="fire-cert-tag ${uploaded ? 'uploaded' : 'not-uploaded'}" data-fire-cert="${r.id}">${uploaded ? '已上传' : '未上传'}</span>`;
-            } },
-          { title: '作业状态', render: (r) => statusTag(r.status) },
           { title: '操作', render: (r) => `<div class="actions"><button class="btn-text" data-act="view">查看</button>${opt.scope === 'enterprise' && r.status === '待审核' ? '<button class="btn-text" data-act="rule">核查规则</button><button class="btn-text" data-act="assign">分配安管员</button><button class="btn-text" data-act="assign-guardian">分配监护人</button>' : ''}</div>` },
         ];
         const { node } = renderTable({
@@ -4173,6 +4280,7 @@
       <div style="text-align:center;padding:8px 0">
         <div style="display:inline-block;padding:16px;background:#fff;border:1px solid #ebeef5;border-radius:8px">${qrSvg}</div>
         <div style="margin-top:20px;font-size:16px;font-weight:600;color:#303133">${esc(ent.name || '当前企业')}</div>
+        <div style="margin-top:14px;font-size:13px;color:#606266;line-height:1.7;text-align:left;background:#fdf6ec;border:1px solid #faecd8;border-radius:6px;padding:10px 12px">请作业人员到达指定特种作业现场后，扫描本二维码完成信息登记，首次使用名匠有约小程序请先注册认证并上传对应作业证书。</div>
       </div>`;
     const foot = `<button class="btn">关闭</button><button class="btn btn-primary" id="qr-save">下载二维码</button>`;
     const { node, close } = openModal('安管员二维码', body, foot);
