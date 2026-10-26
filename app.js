@@ -67,6 +67,9 @@
       { label: '小程序首页', icon: 'home', route: '#/enterprise/mini' },
       { label: '特种作业', icon: 'clipboard-list', route: '#/enterprise/mini/safety' },
     ]},
+    { title: '动火优化内容', icon: 'file-text', items: [
+      { label: '企业作业管理', icon: 'clipboard-list', route: '#/fire-opt/tasks' },
+    ]},
     { title: '需求更新', icon: 'file-text', items: [
       { label: '需求说明', icon: 'file-text', route: '#/worker/mini/requirements' },
     ]},
@@ -102,6 +105,7 @@
     '#/enterprise/mini/safety/guardians': { view: viewEnterpriseMiniGuardians, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '监护人管理'] },
     '#/enterprise/mini/safety/tasks': { view: viewEnterpriseMiniTasks, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业作业管理'] },
     '#/enterprise/mini/safety/task-detail': { view: viewEnterpriseMiniTaskDetail, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业作业详情'] },
+    '#/fire-opt/tasks': { view: viewFireOptTasks, group: '动火优化内容', crumb: ['动火优化内容', '企业作业管理'] },
   };
 
   // ============ 工具函数 ============
@@ -5286,6 +5290,268 @@
     view.innerHTML = `<div class="loading">加载中…</div>`;
     route.view();
     window.scrollTo(0, 0);
+  }
+
+  // ============ 动火优化内容 - 企业作业管理（静态页面） ============
+  function viewFireOptTasks() {
+    const view = $('#view');
+    view.innerHTML = `
+      <div class="card">
+        <div class="toolbar">
+          <div class="field"><span class="label">作业状态</span>
+            <select class="select" style="min-width:100px">
+              <option>全部</option><option>待审核</option><option>待开始</option><option>进行中</option><option>已完成</option><option>已拒绝</option><option>已结束</option>
+            </select>
+          </div>
+          <div class="field"><span class="label">作业类型</span>
+            <select class="select" style="min-width:100px">
+              <option>全部</option><option>动火</option><option>高处</option><option>临电</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" style="margin-left:8px">${icon('search')}搜索</button>
+          <button class="btn" style="margin-left:4px">${icon('refresh')}清空</button>
+          <div class="spacer"></div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="tbl" style="min-width:2200px">
+            <thead>
+              <tr>
+                <th style="width:40px">#</th>
+                <th style="width:140px">企业</th>
+                <th style="width:140px">作业区域</th>
+                <th style="width:100px">园区监护人照片</th>
+                <th style="width:110px">现场核查状态</th>
+                <th style="width:140px">作业名称</th>
+                <th style="width:80px">作业类型</th>
+                <th style="width:110px">门店名称</th>
+                <th style="width:180px">施工地址</th>
+                <th style="width:90px">施工单位</th>
+                <th style="width:90px">施工负责人</th>
+                <th style="width:70px">施工人数</th>
+                <th style="width:150px">作业周期</th>
+                <th style="width:100px">作业时间</th>
+                <th style="width:90px">核查规则</th>
+                <th style="width:70px">安管员</th>
+                <th style="width:100px">园区监护人</th>
+                <th style="width:100px">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-danger">未通过</span></td>
+                <td>德清作业1</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-17 2026-05-17</td>
+                <td>19:30-21:00</td>
+                <td>自由核查</td>
+                <td>2</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-success">已通过</span></td>
+                <td>德清作业1</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-17 2026-05-17</td>
+                <td>17:00-18:00</td>
+                <td>自由核查</td>
+                <td>0</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-info">—</span></td>
+                <td>德清作业2</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-15 2026-05-15</td>
+                <td>16:30-17:30</td>
+                <td>自由核查</td>
+                <td>2</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-danger">未通过</span></td>
+                <td>德清作业1</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>14:30-15:30</td>
+                <td>自由核查</td>
+                <td>0</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-success">已通过</span></td>
+                <td>德清作业2</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>11:00-12:00</td>
+                <td>自由核查</td>
+                <td>0</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-danger">未通过</span></td>
+                <td>德清作业7</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>10:00-11:00</td>
+                <td>自由核查</td>
+                <td>2</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-success">已通过</span></td>
+                <td>德清作业7</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>08:30-10:00</td>
+                <td>自由核查</td>
+                <td>0</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-success">已通过</span></td>
+                <td>德清作业7</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>08:15-09:00</td>
+                <td>自由核查</td>
+                <td>0</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-info">—</span></td>
+                <td>德清作业8</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>11:00-14:00</td>
+                <td>自由核查</td>
+                <td>0</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>湖州同成企业管理有限公司</td>
+                <td>德清县地理信息产业园区</td>
+                <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+                <td><span class="tag tag-danger">未通过</span></td>
+                <td>德清作业1</td>
+                <td><span class="tag tag-info">动火作业</span></td>
+                <td>德清分238</td>
+                <td>杭州市德清区下街3</td>
+                <td>个人1</td>
+                <td>陈乃万</td>
+                <td>2</td>
+                <td>2026-05-09 2026-05-09</td>
+                <td>10:00-11:00</td>
+                <td>自由核查</td>
+                <td>2</td>
+                <td>0</td>
+                <td><div class="actions"><button class="btn-text">查看详情</button></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" style="display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0">
+          <span style="color:#606266;font-size:13px">共 20 条</span>
+          <span style="color:#606266;font-size:13px">10条/页</span>
+          <button class="btn" style="padding:4px 10px">1</button>
+          <button class="btn" style="padding:4px 10px">2</button>
+          <button class="btn" style="padding:4px 8px">›</button>
+          <span style="color:#606266;font-size:13px">前往</span>
+          <input class="input" style="width:50px;padding:4px 6px;text-align:center" value="1">
+          <span style="color:#606266;font-size:13px">页</span>
+        </div>
+      </div>
+    `;
   }
 
   // 初始化
