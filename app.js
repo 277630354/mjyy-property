@@ -69,6 +69,10 @@
     ]},
     { title: '动火优化内容', icon: 'file-text', items: [
       { label: '企业作业管理', icon: 'clipboard-list', route: '#/fire-opt/tasks' },
+      { label: '作业详情', icon: 'file-text', route: '#/fire-opt/task-detail' },
+      { label: '作业详情导出', icon: 'file-text', route: '#/fire-opt/task-export' },
+      { label: '导出样式', icon: 'file-text', route: '#/fire-opt/pdf-style' },
+      { label: '作业人员扫码页面', icon: 'smartphone', route: '#/fire-opt/worker-scan' },
     ]},
     { title: '需求更新', icon: 'file-text', items: [
       { label: '需求说明', icon: 'file-text', route: '#/worker/mini/requirements' },
@@ -106,6 +110,10 @@
     '#/enterprise/mini/safety/tasks': { view: viewEnterpriseMiniTasks, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业作业管理'] },
     '#/enterprise/mini/safety/task-detail': { view: viewEnterpriseMiniTaskDetail, group: '企业端小程序', crumb: ['企业端小程序', '特种作业', '企业作业详情'] },
     '#/fire-opt/tasks': { view: viewFireOptTasks, group: '动火优化内容', crumb: ['动火优化内容', '企业作业管理'] },
+    '#/fire-opt/task-detail': { view: viewFireOptTaskDetail, group: '动火优化内容', crumb: ['动火优化内容', '作业详情'] },
+    '#/fire-opt/task-export': { view: viewFireOptTaskExport, group: '动火优化内容', crumb: ['动火优化内容', '作业详情导出'] },
+    '#/fire-opt/pdf-style': { view: viewFireOptPdfStyle, group: '动火优化内容', crumb: ['动火优化内容', '导出样式'] },
+    '#/fire-opt/worker-scan': { view: viewFireOptWorkerScan, group: '动火优化内容', crumb: ['动火优化内容', '作业人员扫码页面'] },
   };
 
   // ============ 工具函数 ============
@@ -5319,7 +5327,7 @@
                 <th style="width:40px">#</th>
                 <th style="width:140px">企业</th>
                 <th style="width:140px">作业区域</th>
-                <th style="width:100px">园区监护人照片</th>
+                <th style="width:100px">💧园区监护人照片</th>
                 <th style="width:110px">现场核查状态</th>
                 <th style="width:140px">作业名称</th>
                 <th style="width:80px">作业类型</th>
@@ -5332,7 +5340,7 @@
                 <th style="width:100px">作业时间</th>
                 <th style="width:90px">核查规则</th>
                 <th style="width:70px">安管员</th>
-                <th style="width:100px">园区监护人</th>
+                <th style="width:100px">💧园区监护人</th>
                 <th style="width:100px">操作</th>
               </tr>
             </thead>
@@ -5549,6 +5557,515 @@
           <span style="color:#606266;font-size:13px">前往</span>
           <input class="input" style="width:50px;padding:4px 6px;text-align:center" value="1">
           <span style="color:#606266;font-size:13px">页</span>
+        </div>
+      </div>
+      <div class="card desc-panel desc-panel-sm" style="margin-top:16px">
+        <div class="card-title">字段说明</div>
+        <ul>
+          <li><b>1·文案修改：</b>监护人照片改为「园区监护人照片」、监护人改为「园区监护人」。</li>
+          <li><b>2·园区监护人数据来源：</b>作业人员扫码上传作业信息时会上传监护人照片、姓名、手机号，列表回填姓名和手机号。</li>
+        </ul>
+      </div>
+    `;
+  }
+
+  // ============ 动火优化内容 - 作业详情（静态页面） ============
+  function viewFireOptTaskDetail() {
+    const view = $('#view');
+    view.innerHTML = `
+      <div class="card">
+        <div class="card-title">作业详情</div>
+        <div class="detail-grid" style="grid-template-columns:1fr 1fr;gap:12px 32px;margin-top:16px">
+          <div class="detail-item"><div class="dk">施工地址</div><div class="dv">杭州市钱塘区下沙街道</div></div>
+          <div class="detail-item"><div class="dk">施工单位</div><div class="dv">个人</div></div>
+          <div class="detail-item"><div class="dk">施工负责人</div><div class="dv">朱金冬</div></div>
+          <div class="detail-item"><div class="dk">负责人手机号</div><div class="dv">15738829292</div></div>
+          <div class="detail-item"><div class="dk">作业周期</div><div class="dv">2026-09-17 ~ 2026-09-17</div></div>
+          <div class="detail-item"><div class="dk">作业时间</div><div class="dv">13:56 ~ 14:00</div></div>
+          <div class="detail-item"><div class="dk">作业状态</div><div class="dv"><span class="tag tag-success">已完成</span></div></div>
+          <div class="detail-item"><div class="dk">特种作业证状态</div><div class="dv"><span class="fire-cert-tag uploaded">已上传</span></div></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="dk" style="font-size:13px;color:#606266;margin-bottom:6px">动火票</div>
+          <div style="width:120px;height:120px;border:1px solid #ebeef5;border-radius:6px;overflow:hidden;background:#f5f7fa;display:flex;align-items:center;justify-content:center;font-size:11px;color:#c0c4cc">动火票图片</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">施工人员列表</div>
+        <div style="overflow-x:auto">
+          <table class="tbl" style="min-width:900px;margin-top:8px">
+            <thead>
+              <tr>
+                <th>人员类型</th><th>姓名</th><th>手机号</th><th>身份证号</th><th>内容</th>
+                <th>是否需要持证</th><th>是否持证</th><th>证件照</th><th>作业人员照片</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="tag tag-warning">负责人</span></td>
+                <td>朱金冬</td>
+                <td>15738829292</td>
+                <td>4108********1014</td>
+                <td>电焊</td>
+                <td>是</td>
+                <td>是</td>
+                <td><span class="fire-cert-tag uploaded">已上传</span></td>
+                <td><span class="fire-cert-tag uploaded">已上传</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-title"><span style="margin-right:8px">审核记录</span><span style="color:#909399;font-size:12px">作业前</span><span style="margin-left:8px;color:#909399;font-size:12px">1 条</span></div>
+        <div style="border-left:3px solid #409eff;padding:12px 16px;margin:12px 0;background:#fafbfc;border-radius:4px">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+            <span class="tag tag-success">通过</span>
+            <span style="color:#606266;font-size:13px">2026-09-17 13:56:22</span>
+            <span style="color:#606266;font-size:13px">朱金冬</span>
+          </div>
+          <div class="detail-grid" style="grid-template-columns:1fr 1fr;gap:10px 32px">
+            <div class="detail-item"><div class="dk">审核时间</div><div class="dv">2026-09-17 14:10:33</div></div>
+            <div class="detail-item"><div class="dk">安全员姓名</div><div class="dv">123-张三</div></div>
+            <div class="detail-item"><div class="dk">手机号</div><div class="dv">14552244984</div></div>
+            <div class="detail-item"><div class="dk">作业区域</div><div class="dv">钱塘金沙湖</div></div>
+            <div class="detail-item"><div class="dk">园区监护人姓名</div><div class="dv">李四</div></div>
+            <div class="detail-item"><div class="dk">园区监护人手机号</div><div class="dv">13800138000</div></div>
+            <div class="detail-item"><div class="dk">园区监护人照片</div><div class="dv"><span class="fire-cert-tag uploaded">已上传</span></div></div>
+            <div class="detail-item"><div class="dk">现场图片</div><div class="dv"><span class="fire-cert-tag uploaded">已上传</span></div></div>
+            <div class="detail-item"><div class="dk">现场视频</div><div class="dv"><span class="fire-cert-tag uploaded">1 个</span></div></div>
+            <div class="detail-item"><div class="dk">审核状态</div><div class="dv"><span class="tag tag-success">通过</span></div></div>
+            <div class="detail-item"><div class="dk">不通过原因</div><div class="dv">—</div></div>
+            <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><a style="color:#409eff;cursor:pointer">查看详情</a></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-title"><span style="margin-right:8px">现场核查记录</span><span style="color:#909399;font-size:12px">作业中</span><span style="margin-left:8px;color:#909399;font-size:12px">1 条</span></div>
+        <div style="border-left:3px solid #e6a23c;padding:12px 16px;margin:12px 0;background:#fafbfc;border-radius:4px">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+            <span class="tag tag-warning">待审核</span>
+            <span style="color:#606266;font-size:13px">2026-09-17 14:16:38</span>
+            <span style="color:#606266;font-size:13px">企业安管员</span>
+          </div>
+          <div class="detail-grid" style="grid-template-columns:1fr 1fr;gap:10px 32px">
+            <div class="detail-item"><div class="dk">园区监护人照片</div><div class="dv"><span class="fire-cert-tag uploaded">已上传</span></div></div>
+            <div class="detail-item"><div class="dk">核查人</div><div class="dv">企业安管员</div></div>
+            <div class="detail-item"><div class="dk">核查时间</div><div class="dv">2026-09-17 14:16:38</div></div>
+            <div class="detail-item"><div class="dk">现场定位</div><div class="dv">杭州市钱塘区下沙街道</div></div>
+            <div class="detail-item"><div class="dk">现场图片</div><div class="dv"><span class="fire-cert-tag uploaded">已上传</span></div></div>
+            <div class="detail-item"><div class="dk">现场视频</div><div class="dv"><span class="fire-cert-tag uploaded">1 个</span></div></div>
+            <div class="detail-item"><div class="dk">核查状态</div><div class="dv"><span class="tag tag-warning">待审核</span></div></div>
+            <div class="detail-item"><div class="dk">检测记录</div><div class="dv"><a style="color:#409eff;cursor:pointer">查看详情</a></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card desc-panel desc-panel-sm" style="margin-top:16px">
+        <div class="card-title">字段说明</div>
+        <ul>
+          <li><b>1·审核记录增加字段：</b>园区监护人姓名、园区监护人手机号、园区监护人照片。</li>
+          <li><b>2·现场核查记录文案修改：</b>监护人照片改为「园区监护人照片」。</li>
+        </ul>
+      </div>
+    `;
+  }
+
+  // ============ 动火优化内容 - 作业详情导出（静态页面） ============
+  function viewFireOptTaskExport() {
+    const view = $('#view');
+    const stat = (label) => label === '已完成' ? '<span class="tag tag-success">已完成</span>' : label === '进行中' ? '<span class="tag tag-primary">进行中</span>' : label === '待开始' ? '<span class="tag tag-info">待开始</span>' : label === '待审核' ? '<span class="tag tag-warning">待审核</span>' : `<span class="tag">${label}</span>`;
+    const rows = [
+      { status: '待审核', verify: '未通过', offic: 2, gu: 0, opMore: false },
+      { status: '待开始', verify: '已通过', offic: 0, gu: 0, opMore: false },
+      { status: '进行中', verify: '—', offic: 2, gu: 0, opMore: false },
+      { status: '待开始', verify: '未通过', offic: 0, gu: 0, opMore: false },
+      { status: '已完成', verify: '已通过', offic: 0, gu: 0, opMore: true },
+      { status: '已完成', verify: '未通过', offic: 2, gu: 0, opMore: true },
+      { status: '已完成', verify: '已通过', offic: 0, gu: 0, opMore: true },
+      { status: '已完成', verify: '已通过', offic: 0, gu: 0, opMore: true },
+      { status: '进行中', verify: '—', offic: 0, gu: 0, opMore: false },
+      { status: '已完成', verify: '未通过', offic: 2, gu: 0, opMore: true },
+    ];
+    const renderRow = (r, i) => {
+      const verifyTag = r.verify === '未通过' ? '<span class="tag tag-danger">未通过</span>' : r.verify === '已通过' ? '<span class="tag tag-success">已通过</span>' : '<span class="tag tag-info">—</span>';
+      const op = r.opMore
+        ? '<div class="actions"><button class="btn-text">查看详情</button><button class="btn-text">下载</button></div>'
+        : '<div class="actions"><button class="btn-text">查看详情</button></div>';
+      return `
+      <tr>
+        <td>${i + 1}</td>
+        <td>湖州同成企业管理有限公司</td>
+        <td>德清县地理信息产业园区</td>
+        <td><span class="fire-cert-tag not-uploaded">未上传</span></td>
+        <td>${verifyTag}</td>
+        <td>德清作业${['1','1','2','1','2','7','7','7','8','1'][i]}</td>
+        <td><span class="tag tag-info">动火作业</span></td>
+        <td>德清分238</td>
+        <td>杭州市德清区下街3</td>
+        <td>个人1</td>
+        <td>陈乃万</td>
+        <td>2</td>
+        <td>2026-05-${['17','17','15','09','09','09','09','09','09','09'][i]} 2026-05-${['17','17','15','09','09','09','09','09','09','09'][i]}</td>
+        <td>${['19:30-21:00','17:00-18:00','16:30-17:30','14:30-15:30','11:00-12:00','10:00-11:00','08:30-10:00','08:15-09:00','11:00-14:00','10:00-11:00'][i]}</td>
+        <td>自由核查</td>
+        <td>${r.offic}</td>
+        <td>${r.gu}</td>
+        <td>${stat(r.status)}</td>
+        <td>${op}</td>
+      </tr>`;
+    };
+    view.innerHTML = `
+      <div class="card">
+        <div class="toolbar">
+          <div class="field"><span class="label">作业状态</span>
+            <select class="select" style="min-width:100px">
+              <option>全部</option><option>待审核</option><option>待开始</option><option>进行中</option><option>已完成</option><option>已拒绝</option><option>已结束</option>
+            </select>
+          </div>
+          <div class="field"><span class="label">作业类型</span>
+            <select class="select" style="min-width:100px">
+              <option>全部</option><option>动火</option><option>高处</option><option>临电</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" style="margin-left:8px">${icon('search')}搜索</button>
+          <button class="btn" style="margin-left:4px">${icon('refresh')}清空</button>
+          <div class="spacer"></div>
+          <button class="btn btn-primary">批量导出</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="tbl" style="min-width:2400px">
+            <thead>
+              <tr>
+                <th style="width:40px">#</th>
+                <th style="width:140px">企业</th>
+                <th style="width:140px">作业区域</th>
+                <th style="width:110px">💧园区监护人照片</th>
+                <th style="width:110px">现场核查状态</th>
+                <th style="width:140px">作业名称</th>
+                <th style="width:80px">作业类型</th>
+                <th style="width:110px">门店名称</th>
+                <th style="width:180px">施工地址</th>
+                <th style="width:90px">施工单位</th>
+                <th style="width:90px">施工负责人</th>
+                <th style="width:70px">施工人数</th>
+                <th style="width:150px">作业周期</th>
+                <th style="width:100px">作业时间</th>
+                <th style="width:90px">核查规则</th>
+                <th style="width:70px">安管员</th>
+                <th style="width:70px">💧园区监护人</th>
+                <th style="width:90px">作业状态</th>
+                <th style="width:100px">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(renderRow).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" style="display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0">
+          <span style="color:#606266;font-size:13px">共 20 条</span>
+          <span style="color:#606266;font-size:13px">10条/页</span>
+          <button class="btn" style="padding:4px 10px">1</button>
+          <button class="btn" style="padding:4px 10px">2</button>
+          <button class="btn" style="padding:4px 8px">›</button>
+          <span style="color:#606266;font-size:13px">前往</span>
+          <input class="input" style="width:50px;padding:4px 6px;text-align:center" value="1">
+          <span style="color:#606266;font-size:13px">页</span>
+        </div>
+      </div>
+      <div class="card desc-panel desc-panel-sm" style="margin-top:16px">
+        <div class="card-title">字段说明</div>
+        <ul>
+          <li><b>1·批量下载与行下载：</b>已完成的作业操作列增加下载按钮，顶部增加批量下载按钮；点击批量下载按钮自动锁定搜索条件作业状态为已完成。</li>
+          <li><b>2·下载内容范围：</b>下载内容为作业详情页面全量信息，包含所有审核记录和所有现场核查记录；所有照片都要，但视频不需要（视频展示已上传文案即可）。</li>
+        </ul>
+      </div>
+    `;
+  }
+
+  // ============ 动火优化内容 - 导出样式 PDF（静态页面） ============
+  function viewFireOptPdfStyle() {
+    const view = $('#view');
+    view.innerHTML = `
+      <style>
+        .pdf-page{width:794px;background:#fff;margin:12px auto;padding:56px 60px;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif;color:#1f1f1f;font-size:13px;line-height:1.75;box-shadow:0 2px 12px rgba(0,0,0,.12);border-radius:4px}
+        .pdf-title{text-align:center;font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:2px;color:#1a1a1a}
+        .pdf-subtitle{text-align:center;font-size:13px;color:#888;margin-bottom:36px;border-bottom:1px solid #d9d9d9;padding-bottom:14px}
+        .pdf-h2{font-size:15px;font-weight:700;color:#1f1f1f;border-left:4px solid #1a1a1a;padding-left:10px;margin:28px 0 14px}
+        .pdf-grid{display:grid;grid-template-columns:180px 1fr 180px 1fr;row-gap:10px;column-gap:18px;border:1px solid #e8e8e8;border-top:none}
+        .pdf-grid .pdf-label{background:#f5f5f5;border-top:1px solid #e8e8e8;border-left:1px solid #e8e8e8;padding:8px 12px;color:#666;font-size:12px}
+        .pdf-grid .pdf-val{border-top:1px solid #e8e8e8;border-right:1px solid #e8e8e8;padding:8px 12px;color:#1f1f1f;font-size:13px}
+        .pdf-grid .pdf-label:nth-child(4n+1){border-left:1px solid #e8e8e8}
+        .pdf-status{display:inline-block;padding:1px 10px;border:1px solid #52c41a;color:#389e0d;font-size:12px;border-radius:2px;background:#f6ffed}
+        .pdf-status.gray{border-color:#d9d9d9;color:#666;background:#fafafa}
+        .pdf-img-row{display:flex;gap:16px}
+        .pdf-img-row .pdf-img-cell{flex:1}
+        .pdf-img-placeholder{width:140px;height:100px;border:1px dashed #bfbfbf;background:#fafafa;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:11px;margin-top:6px;border-radius:2px}
+        .pdf-img-label{color:#666;font-size:12px;margin-bottom:4px}
+        .pdf-table{width:100%;border-collapse:collapse;font-size:12.5px}
+        .pdf-table th,.pdf-table td{border:1px solid #e8e8e8;padding:7px 10px;text-align:left}
+        .pdf-table th{background:#fafafa;color:#555;font-weight:600}
+        .pdf-record{border:1px solid #e8e8e8;margin-bottom:14px;background:#fff}
+        .pdf-record-head{background:#fafafa;padding:8px 14px;border-bottom:1px solid #e8e8e8;font-size:13px;display:flex;gap:14px;align-items:center}
+        .pdf-record-head .pdf-rec-no{font-weight:600;color:#1f1f1f}
+        .pdf-record-head .pdf-rec-tag{padding:0 8px;border:1px solid #52c41a;color:#389e0d;border-radius:2px;font-size:11px;background:#f6ffed}
+        .pdf-record-head .pdf-rec-tag.orange{border-color:#faad14;color:#d48806;background:#fffbe6}
+        .pdf-record-head .pdf-rec-tag.gray{border-color:#d9d9d9;color:#888;background:#fafafa}
+        .pdf-record-head .pdf-rec-meta{color:#666;font-size:12px}
+        .pdf-record-body{padding:14px}
+        .pdf-record-grid{display:grid;grid-template-columns:1fr 1fr;row-gap:12px;column-gap:24px}
+        .pdf-record-grid .pdf-rk{color:#666;font-size:12px;margin-bottom:3px}
+        .pdf-record-grid .pdf-rv{color:#1f1f1f;font-size:13px}
+        .pdf-footer{text-align:center;color:#999;font-size:11px;margin-top:40px;border-top:1px dashed #d9d9d9;padding-top:10px}
+        .pdf-badge{display:inline-block;padding:1px 6px;font-size:11px;border-radius:2px;background:#f0f0f0;color:#555;margin-left:6px}
+      </style>
+      <div class="pdf-page">
+        <div class="pdf-title">特种作业详情单</div>
+        <div class="pdf-subtitle">作业编号：ZY202609170001　　打印时间：2026-10-26 10:00</div>
+
+        <!-- 作业信息 -->
+        <div class="pdf-h2">一、作业信息</div>
+        <div class="pdf-grid">
+          <div class="pdf-label">作业名称</div><div class="pdf-val">金沙湖动火作业</div>
+          <div class="pdf-label">作业类型</div><div class="pdf-val">动火作业</div>
+          <div class="pdf-label">企业名称</div><div class="pdf-val">湖州民匠有约企业管理有限公司</div>
+          <div class="pdf-label">门店名称</div><div class="pdf-val">金沙湖门店</div>
+          <div class="pdf-label">施工地址</div><div class="pdf-val">杭州市钱塘区下沙街道</div>
+          <div class="pdf-label">施工单位</div><div class="pdf-val">个人</div>
+          <div class="pdf-label">施工负责人</div><div class="pdf-val">朱金冬</div>
+          <div class="pdf-label">负责人手机号</div><div class="pdf-val">15738829292</div>
+          <div class="pdf-label">作业周期</div><div class="pdf-val">2026-09-17 ~ 2026-09-17</div>
+          <div class="pdf-label">作业时间</div><div class="pdf-val">13:56 ~ 14:00</div>
+          <div class="pdf-label">作业状态</div><div class="pdf-val"><span class="pdf-status">已完成</span></div>
+          <div class="pdf-label">特种作业证状态</div><div class="pdf-val"><span class="pdf-status">已上传</span></div>
+        </div>
+
+        <!-- 动火票 -->
+        <div class="pdf-h2">二、动火票</div>
+        <div class="pdf-img-row">
+          <div class="pdf-img-cell">
+            <div class="pdf-img-label">动火票照片</div>
+            <div class="pdf-img-placeholder">动火票图片 120×90</div>
+          </div>
+          <div class="pdf-img-cell" style="display:flex;align-items:flex-end">
+            <div style="color:#888;font-size:12px">备注：动火票由作业人员到达现场后拍摄上传。</div>
+          </div>
+        </div>
+
+        <!-- 施工人员列表 -->
+        <div class="pdf-h2">三、施工人员列表</div>
+        <table class="pdf-table">
+          <thead>
+            <tr>
+              <th>人员类型</th><th>姓名</th><th>手机号</th><th>身份证号</th><th>作业内容</th>
+              <th>是否需持证</th><th>是否持证</th><th>证件照</th><th>作业人员照片</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>负责人</td><td>朱金冬</td><td>15738829292</td><td>4108********1014</td>
+              <td>电焊</td><td>是</td><td>是</td>
+              <td>已上传</td><td>已上传</td>
+            </tr>
+            <tr>
+              <td>作业人员</td><td>王师傅</td><td>13900001111</td><td>3301********2233</td>
+              <td>焊接作业</td><td>是</td><td>是</td>
+              <td>已上传</td><td>已上传</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 审核记录 -->
+        <div class="pdf-h2">四、审核记录 <span class="pdf-badge">作业前 · 共 1 条</span></div>
+        <div class="pdf-record">
+          <div class="pdf-record-head">
+            <span class="pdf-rec-no">第 1 条</span>
+            <span class="pdf-rec-tag">通过</span>
+            <span class="pdf-rec-meta">提交时间：2026-09-17 13:56:22　　提交人：朱金冬</span>
+          </div>
+          <div class="pdf-record-body">
+            <div class="pdf-record-grid">
+              <div><div class="pdf-rk">审核时间</div><div class="pdf-rv">2026-09-17 14:10:33</div></div>
+              <div><div class="pdf-rk">安全员姓名</div><div class="pdf-rv">123-张三</div></div>
+              <div><div class="pdf-rk">手机号</div><div class="pdf-rv">14552244984</div></div>
+              <div><div class="pdf-rk">作业区域</div><div class="pdf-rv">钱塘金沙湖</div></div>
+              <div><div class="pdf-rk">园区监护人姓名</div><div class="pdf-rv">李四</div></div>
+              <div><div class="pdf-rk">园区监护人手机号</div><div class="pdf-rv">13800138000</div></div>
+              <div><div class="pdf-rk">园区监护人照片</div><div class="pdf-rv">已上传</div></div>
+              <div><div class="pdf-rk">审核状态</div><div class="pdf-rv"><span class="pdf-status">通过</span></div></div>
+              <div class="pdf-img-cell">
+                <div class="pdf-img-label">现场图片</div>
+                <div class="pdf-img-placeholder">现场图片 140×100</div>
+              </div>
+              <div class="pdf-img-cell">
+                <div class="pdf-img-label">现场视频</div>
+                <div class="pdf-img-placeholder">视频缩略图</div>
+              </div>
+              <div><div class="pdf-rk">不通过原因</div><div class="pdf-rv" style="color:#999">—</div></div>
+              <div><div class="pdf-rk">检测记录</div><div class="pdf-rv">AI 检测无异常</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 现场核查记录 -->
+        <div class="pdf-h2">五、现场核查记录 <span class="pdf-badge">作业中 · 共 1 条</span></div>
+        <div class="pdf-record">
+          <div class="pdf-record-head">
+            <span class="pdf-rec-no">第 1 条</span>
+            <span class="pdf-rec-tag orange">待审核</span>
+            <span class="pdf-rec-meta">提交时间：2026-09-17 14:16:38　　核查人：企业安管员</span>
+          </div>
+          <div class="pdf-record-body">
+            <div class="pdf-record-grid">
+              <div><div class="pdf-rk">定位记录</div><div class="pdf-rv">浙江省杭州市钱塘区下沙街道国通大厦</div></div>
+              <div><div class="pdf-rk">核查人姓名</div><div class="pdf-rv">企业安管员</div></div>
+              <div><div class="pdf-rk">手机号</div><div class="pdf-rv">15555555555</div></div>
+              <div><div class="pdf-rk">作业区域</div><div class="pdf-rv">金沙湖国通</div></div>
+              <div class="pdf-img-cell">
+                <div class="pdf-img-label">现场图片</div>
+                <div class="pdf-img-placeholder">现场图片 140×100</div>
+              </div>
+              <div><div class="pdf-rk">作业人员照片</div><div class="pdf-rv" style="color:#999">—</div></div>
+              <div><div class="pdf-rk">园区监护人照片</div><div class="pdf-rv" style="color:#999">—</div></div>
+              <div class="pdf-img-cell">
+                <div class="pdf-img-label">现场视频</div>
+                <div class="pdf-img-placeholder">视频缩略图</div>
+              </div>
+              <div><div class="pdf-rk">核查状态</div><div class="pdf-rv"><span class="pdf-rec-tag orange">待审核</span></div></div>
+              <div><div class="pdf-rk">检测记录</div><div class="pdf-rv">AI 检测结果查看详情</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pdf-footer">本单据由系统自动生成　｜　湖州民匠有约企业管理有限公司　｜　第 1 页 / 共 1 页</div>
+      </div>
+    `;
+  }
+
+  // ============ 动火优化内容 - 作业人员扫码页面（纯静态） ============
+  function viewFireOptWorkerScan() {
+    const view = $('#view');
+    view.innerHTML = `
+      <style>
+        .worker-scan-form{background:#fff;border-radius:10px;margin:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+        .worker-scan-form .form-section-title{font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#409EFF 0%,#1E55B8 100%);padding:10px 14px;border-radius:8px;margin:-14px -14px 14px}
+        .worker-scan-form .mini-form-row{margin-bottom:0;padding:10px 0;border-bottom:1px solid #f5f5f5}
+        .worker-scan-form .mini-form-row:last-of-type{border-bottom:none}
+        .worker-scan-form .mini-li-label{width:88px;flex:none;color:#606266;font-size:13px}
+        .worker-scan-form .mini-li-label .mini-req{color:#F56C6C;margin-left:2px;font-size:12px}
+        .worker-scan-form .mini-form-input{flex:1;font-size:13px;padding:8px 10px}
+        .worker-scan-form .mini-form-input.disabled{background:#f5f5f5;color:#999}
+        .worker-scan-form .mini-form-select{flex:1;font-size:13px;padding:8px 28px 8px 10px}
+        .worker-scan-form .mini-form-range{gap:8px}
+        .worker-scan-form .mini-form-range .mini-form-input{text-align:center}
+        .worker-scan-form .mini-upload-box{flex:1;padding:14px;border:1px dashed #d9d9d9;border-radius:6px;color:#999;text-align:center;font-size:13px;background:#fafafa}
+        .worker-scan-submit{padding:14px;margin-top:8px}
+        .worker-scan-submit button{width:100%;height:46px;border:none;border-radius:23px;background:linear-gradient(135deg,#52C41A 0%,#389E0D 100%);color:#fff;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(82,196,26,.3)}
+        .worker-scan-submit button:active{opacity:.85}
+        .mini-phone-scroll{flex:1;overflow-y:auto;overflow-x:hidden}
+      </style>
+      <div class="mini-office-wrap">
+        <div class="mini-phone mini-phone-static">
+          <div class="mini-statusbar">
+            <span>15:17</span>
+            <span class="sb-right">
+              <span class="sig"></span>
+              <span class="wifi"></span>
+              <span class="batt">88</span>
+            </span>
+          </div>
+          <div class="mini-navheader">
+            <span class="back-btn">‹</span>
+            <span class="nav-title">作业详情</span>
+            <span></span>
+          </div>
+          <div class="mini-phone-scroll">
+            <div class="worker-scan-form">
+              <div class="form-section-title">作业信息</div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">作业名称<span class="mini-req">*</span></label>
+                <input class="mini-form-input" type="text" value="未来科技城A栋动火作业" disabled>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">作业类型<span class="mini-req">*</span></label>
+                <div class="mini-form-select" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;10&quot; height=&quot;6&quot; viewBox=&quot;0 0 10 6&quot;%3E%3Cpath fill=&quot;%23999&quot; d=&quot;M5 6L0 0h10z&quot;/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;padding:8px 28px 8px 10px;color:#333;font-size:13px">动火作业</div>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">企业名称<span class="mini-req">*</span></label>
+                <input class="mini-form-input disabled" type="text" value="中建八局第一建设有限公司" disabled>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">作业区域<span class="mini-req">*</span></label>
+                <div class="mini-form-select" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;10&quot; height=&quot;6&quot; viewBox=&quot;0 0 10 6&quot;%3E%3Cpath fill=&quot;%23999&quot; d=&quot;M5 6L0 0h10z&quot;/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;padding:8px 28px 8px 10px;color:#333;font-size:13px">A区商业广场</div>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">门店名称<span class="mini-req">*</span></label>
+                <div class="mini-form-select" style="background-image:url('data:image/svg+xml,%3Csvg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;10&quot; height=&quot;6&quot; viewBox=&quot;0 0 10 6&quot;%3E%3Cpath fill=&quot;%23999&quot; d=&quot;M5 6L0 0h10z&quot;/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 10px center;padding:8px 28px 8px 10px;color:#333;font-size:13px">A栋3楼装修门店</div>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">施工单位</label>
+                <input class="mini-form-input" type="text" value="杭州鑫达建筑工程有限公司" disabled>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">施工地址<span class="mini-req">*</span></label>
+                <input class="mini-form-input" type="text" value="杭州市余杭区未来科技城A栋" disabled>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">施工负责人<span class="mini-req">*</span></label>
+                <input class="mini-form-input" type="text" value="张伟" disabled>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">负责人手机号<span class="mini-req">*</span></label>
+                <input class="mini-form-input" type="text" value="13800138000" disabled>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">园区监护人<span class="mini-req">*</span></label>
+                <input class="mini-form-input" type="text" placeholder="请输入园区监护人姓名">
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">园区监护人手机号<span class="mini-req">*</span></label>
+                <input class="mini-form-input" type="text" placeholder="请输入园区监护人手机号">
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">园区监护人照片<span class="mini-req">*</span></label>
+                <div class="mini-upload-box">📷 点击上传照片</div>
+              </div>
+
+              <div class="mini-form-row">
+                <label class="mini-li-label">作业周期<span class="mini-req">*</span></label>
+                <div class="mini-form-range">
+                  <input class="mini-form-input" type="text" value="2026/08/06" disabled>
+                  <span class="mini-range-sep">至</span>
+                  <input class="mini-form-input" type="text" value="2026/08/06" disabled>
+                </div>
+              </div>
+            </div>
+            <div class="worker-scan-submit">
+              <button>提交</button>
+            </div>
+          </div>
+        </div>
+        <div class="side-desc-panel mini-side-panel">
+          <div class="sdp-title">作业人员扫码页面说明</div>
+          <ul>
+            <li><b>1·园区监护人：</b>作业人员需录入园区监护人姓名、手机号并上传监护人现场照片。</li>
+            <li><b>2·作业人员扫码：</b>扫码后已登录状态直接进入作业详情填写页面，如果是新号，扫码后输入手机号和验证码，点击登录按钮后直接进入作业详情填写页面，不需要认证流程，也不需要选择身份页面。</li>
+          </ul>
         </div>
       </div>
     `;
