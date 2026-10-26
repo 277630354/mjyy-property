@@ -5942,6 +5942,15 @@
 
         <div class="pdf-footer">本单据由系统自动生成　｜　湖州民匠有约企业管理有限公司　｜　第 1 页 / 共 1 页</div>
       </div>
+      <div class="card desc-panel desc-panel-sm" style="margin-top:16px">
+        <div class="card-title">PDF 导出规范</div>
+        <ul>
+          <li><b>1·单份导出：</b>PDF 文件名：作业名称。</li>
+          <li><b>2·多份批量导出：</b>以企业名称命名的文件夹，里面是作业名称的 PDF。</li>
+          <li><b>3·PDF 标题：</b>打开后标题固定为「特种作业详情单」即可。</li>
+          <li><b>4·PDF 内容模块：</b>主要分为五个模块——作业信息、施工人列表、审核记录（作业前）、现场核查记录（作业中）、完成记录（作业完成）。</li>
+        </ul>
+      </div>
     `;
   }
 
