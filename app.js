@@ -73,6 +73,7 @@
       { label: '作业详情导出', icon: 'file-text', route: '#/fire-opt/task-export' },
       { label: '导出样式', icon: 'file-text', route: '#/fire-opt/pdf-style' },
       { label: '作业人员扫码页面', icon: 'smartphone', route: '#/fire-opt/worker-scan' },
+      { label: '禁止作业时间', icon: 'clock', route: '#/fire-opt/store-ban-time' },
     ]},
     { title: '需求更新', icon: 'file-text', items: [
       { label: '需求说明', icon: 'file-text', route: '#/worker/mini/requirements' },
@@ -114,6 +115,7 @@
     '#/fire-opt/task-export': { view: viewFireOptTaskExport, group: '动火优化内容', crumb: ['动火优化内容', '作业详情导出'] },
     '#/fire-opt/pdf-style': { view: viewFireOptPdfStyle, group: '动火优化内容', crumb: ['动火优化内容', '导出样式'] },
     '#/fire-opt/worker-scan': { view: viewFireOptWorkerScan, group: '动火优化内容', crumb: ['动火优化内容', '作业人员扫码页面'] },
+    '#/fire-opt/store-ban-time': { view: viewFireOptStoreBanTime, group: '动火优化内容', crumb: ['动火优化内容', '禁止作业时间'] },
   };
 
   // ============ 工具函数 ============
@@ -5949,6 +5951,134 @@
           <li><b>2·多份批量导出：</b>以企业名称命名的文件夹，里面是作业名称的 PDF。</li>
           <li><b>3·PDF 标题：</b>打开后标题固定为「特种作业详情单」即可。</li>
           <li><b>4·PDF 内容模块：</b>主要分为五个模块——作业信息、施工人列表、审核记录（作业前）、现场核查记录（作业中）、完成记录（作业完成）。</li>
+        </ul>
+      </div>
+    `;
+  }
+
+  // ============ 动火优化内容 - 禁止作业时间（纯静态） ============
+  function viewFireOptStoreBanTime() {
+    const view = $('#view');
+    view.innerHTML = `
+      <style>
+        .store-ban-list .tbl{min-width:960px}
+        .store-ban-list .add-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:2000;display:flex;align-items:center;justify-content:center}
+        .store-ban-list .add-modal{background:#fff;border-radius:8px;width:480px;box-shadow:0 8px 32px rgba(0,0,0,.18);overflow:hidden}
+        .store-ban-list .add-modal-head{padding:14px 20px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:600}
+        .store-ban-list .add-modal-body{padding:20px}
+        .store-ban-list .add-modal-foot{padding:12px 20px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:10px}
+        .store-ban-list .modal-form-row{display:flex;align-items:center;margin-bottom:14px}
+        .store-ban-list .modal-form-row .fl{width:92px;color:#606266;font-size:13px;text-align:right;padding-right:12px;flex:none}
+        .store-ban-list .modal-form-row .fl .req{color:#F56C6C;margin-left:2px}
+        .store-ban-list .modal-form-row .fr{flex:1}
+        .store-ban-list .modal-form-row .fr .input{width:100%}
+        .store-ban-list .modal-time-range{display:flex;align-items:center;gap:6px}
+        .store-ban-list .modal-time-range .input{flex:1}
+        .store-ban-list .ban-tag{display:inline-block;padding:2px 8px;background:#fff1f0;color:#f5222d;border:1px solid #ffa39e;border-radius:4px;font-size:12px}
+      </style>
+      <div class="card store-ban-list">
+        <div class="toolbar">
+          <button class="btn btn-primary">+ 新增</button>
+          <div class="spacer"></div>
+        </div>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th style="width:140px">门店名称</th>
+              <th style="width:180px">门店地址</th>
+              <th style="width:120px">门店描述</th>
+              <th style="width:160px">禁止作业时间段</th>
+              <th style="width:160px">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>一号楼</td>
+              <td>江汉区建设大道100号栋</td>
+              <td>A区商业广场一号店</td>
+              <td><span class="ban-tag">22:00 - 06:00</span></td>
+              <td><div class="actions"><button class="btn-text">查看</button><button class="btn-text">修改</button><button class="btn-text">删除</button></div></td>
+            </tr>
+            <tr>
+              <td>二期工程</td>
+              <td>武昌区中南路300号栋</td>
+              <td>B区住宅区二期门店</td>
+              <td>—</td>
+              <td><div class="actions"><button class="btn-text">查看</button><button class="btn-text">修改</button><button class="btn-text">删除</button></div></td>
+            </tr>
+            <tr>
+              <td>三号厂房</td>
+              <td>洪山区雄楚路300号栋</td>
+              <td>C区工业园区三号门店</td>
+              <td><span class="ban-tag">00:00 - 06:00</span></td>
+              <td><div class="actions"><button class="btn-text">查看</button><button class="btn-text">修改</button><button class="btn-text">删除</button></div></td>
+            </tr>
+            <tr>
+              <td>消防通道</td>
+              <td>江汉区解放大道200号B1</td>
+              <td>A区商业广场通道门店</td>
+              <td>—</td>
+              <td><div class="actions"><button class="btn-text">查看</button><button class="btn-text">修改</button><button class="btn-text">删除</button></div></td>
+            </tr>
+            <tr>
+              <td>配电房</td>
+              <td>武昌区中南路300号地库</td>
+              <td>B区住宅小区配电门店</td>
+              <td><span class="ban-tag">18:00 - 08:00</span></td>
+              <td><div class="actions"><button class="btn-text">查看</button><button class="btn-text">修改</button><button class="btn-text">删除</button></div></td>
+            </tr>
+            <tr>
+              <td>三号车间</td>
+              <td>洪山区关山大道500号车间</td>
+              <td>C区工业园区三号车间</td>
+              <td>—</td>
+              <td><div class="actions"><button class="btn-text">查看</button><button class="btn-text">修改</button><button class="btn-text">删除</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" style="display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0">
+          <span style="color:#606266;font-size:13px">共 6 条</span>
+          <span style="color:#606266;font-size:13px">10条/页</span>
+          <button class="btn" style="padding:4px 10px">1</button>
+          <button class="btn" style="padding:4px 8px;opacity:.5">›</button>
+        </div>
+      </div>
+
+      <!-- 新增门店弹框（静态） -->
+      <div class="add-modal-bg">
+        <div class="add-modal">
+          <div class="add-modal-head">新增门店 <span style="cursor:pointer;color:#999;font-size:18px">×</span></div>
+          <div class="add-modal-body">
+            <div class="modal-form-row"><div class="fl">门店名称<span class="req">*</span></div><div class="fr"><input class="input" placeholder="请输入门店名称"></div></div>
+            <div class="modal-form-row"><div class="fl">门店地址<span class="req">*</span></div><div class="fr"><input class="input" placeholder="请输入门店地址"></div></div>
+            <div class="modal-form-row"><div class="fl">门店管理员</div><div class="fr"><input class="input" placeholder="请输入门店管理员"></div></div>
+            <div class="modal-form-row"><div class="fl">门店联系方式</div><div class="fr"><input class="input" placeholder="请输入联系方式"></div></div>
+            <div class="modal-form-row">
+              <div class="fl">禁止作业时间段</div>
+              <div class="fr">
+                <div class="modal-time-range">
+                  <input class="input" type="time" value="22:00">
+                  <span style="color:#999">至</span>
+                  <input class="input" type="time" value="06:00">
+                </div>
+                <div style="color:#909399;font-size:12px;margin-top:4px">非必填，不填写则该门店无禁止作业时间限制</div>
+              </div>
+            </div>
+            <div class="modal-form-row"><div class="fl">所属企业</div><div class="fr"><select class="select" style="width:100%"><option>某某建设集团</option></select></div></div>
+            <div class="modal-form-row"><div class="fl">门店描述</div><div class="fr"><textarea class="input" rows="3" placeholder="请输入门店描述" style="resize:none"></textarea></div></div>
+          </div>
+          <div class="add-modal-foot">
+            <button class="btn">取消</button>
+            <button class="btn btn-primary">确定</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card desc-panel desc-panel-sm" style="margin-top:16px">
+        <div class="card-title">禁止作业时间说明</div>
+        <ul>
+          <li><b>1·新增门店在列表和新增页面都加一个字段【禁止作业时间】：</b>类型为时间段，非必填，不填写则没有限制。</li>
+          <li><b>2·作业人员扫码进行作业申请时：</b>若选择的门店设置了禁止作业时间区间，则选择作业时间时，组件的该禁止作业时间段置灰不可选择，且选择时提示【xx-xx禁止作业】。</li>
         </ul>
       </div>
     `;
